@@ -4,6 +4,56 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.15.0 — 2026-08-23
+
+### Added
+
+- `prompts/project-onboarding.md`: Ninth prompt, "Project Onboarding". Puts a model through an eight-phase, read-only intake of an unfamiliar project before it is allowed to change anything: structure map, identity and purpose, a full read of every documentation file, technical foundation (dependencies, scripts, build, test, deploy), architecture traced from real entry points rather than from the docs, conventions derived from the code itself, a documentation-versus-reality cross-check, and an explicit risks-and-unknowns pass. Phases 1 through 8 forbid all writes, installs, and state-changing version control commands.
+- The deliverable is not a chat briefing. Everything established is merged into `PRD.md`, the single file the prompt is permitted to write, so the understanding survives the session. The merge is additive: it preserves intent and rationale that cannot be reconstructed from code, matches the PRD's existing heading structure and tone, and where findings contradict the PRD it keeps both and marks the conflict for a human to resolve rather than silently correcting the document from code. No other file is touched, including the README and these patch notes; errors found elsewhere are reported instead.
+- `js/prompts-data.js`: Regenerated to include `project-onboarding`.
+
+### Changed
+
+- `README.md`: Added `prompts/project-onboarding.md` to the Files table and the file structure tree.
+- `docs/PRD.md`: Recorded this release in the version history.
+
+---
+
+## v1.14.0 — 2026-07-06
+
+### Changed
+
+- `prompts/github-wiki-setup.md`: Renamed the "Changelog" wiki page to "Patch Notes" (`Patch-Notes.md`) throughout the prompt's frontmatter description, on-page description, and prompt text, to match this site's own terminology (`docs/PATCHNOTES.md`) rather than the more generic "Changelog" label.
+- `js/prompts-data.js`: Regenerated to mirror the renamed page.
+
+---
+
+## v1.13.0 — 2026-07-06
+
+### Changed
+
+- `prompts/github-wiki-setup.md`: Reworked into "GitHub Wiki Sync" (title and description regenerated to match). Added an update mode: if the wiki repo already exists, the prompt pulls the current pages, diffs them against the README, PRD, PATCHNOTES, DESIGN, and any other project docs, and summarizes outdated sections, missing features, stale links, and content drift before editing anything. Page creation is no longer a fixed set beyond Home, Product Overview, and Changelog; the prompt now uses judgment on wiki information architecture, creating pages like FAQ, Roadmap, Architecture, Getting Started, Troubleshooting, or API Reference wherever a topic is distinct and cohesive. Added a step to create or keep a `_Sidebar.md` page in sync with the full current page structure.
+- `js/prompts-data.js`: Regenerated to mirror the reworked `github-wiki-setup.md`.
+- Also caught and fixed two more em dashes in the prompt's body text, in the Product Overview and Changelog descriptions, that were missed in the previous pass, replacing both with parentheses per the site's em dash prohibition.
+- `README.md`: Updated the `github-wiki-setup.md` Files table description to match the reworked prompt.
+- `docs/PRD.md`: Recorded this release in the version history.
+
+---
+
+## v1.12.0 — 2026-07-06
+
+### Added
+
+- `prompts/github-wiki-setup.md`: Eighth prompt, "GitHub Wiki Setup". Reviews every documentation markdown file in a project, then sets up a GitHub wiki sourced from them. Checks first whether the wiki repo is initialized (GitHub only creates it after one manual page is added via the web UI) and stops to ask if it isn't. Curates, rather than dumps verbatim, content into a Home page (overview plus table of contents), a Product Overview page (stable current-state PRD sections), a Changelog page (condensed patch notes), and any other page mapping to a distinct PRD section. Rewrites internal/planning language for a public audience and drops internal-only notes.
+- `js/prompts-data.js`: Regenerated to include `github-wiki-setup`.
+
+### Changed
+
+- `README.md`: Added `prompts/github-wiki-setup.md` to the Files table and file structure tree.
+- `docs/PRD.md`: Recorded this release in the version history.
+
+---
+
 ## v1.11.0 — 2026-07-05
 
 ### Fixed

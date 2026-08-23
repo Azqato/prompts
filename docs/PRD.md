@@ -180,6 +180,10 @@ When publishing the new prompt to GitHub Pages, that push is the author's decisi
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.15.0 | 2026-08-23 | Added the Project Onboarding prompt (`prompts/project-onboarding.md`), the ninth prompt: an eight-phase read-only intake of an unfamiliar project that merges its findings into `PRD.md` rather than reporting them to chat, additively and flagging contradictions instead of overwriting them. |
+| 1.14.0 | 2026-07-06 | Renamed the GitHub Wiki Sync prompt's "Changelog" page to "Patch Notes" (`Patch-Notes.md`) to match this site's own terminology. |
+| 1.13.0 | 2026-07-06 | Reworked the GitHub Wiki Setup prompt into GitHub Wiki Sync, adding an update mode (diff existing wiki pages against current docs before editing), open-ended page creation based on wiki information architecture, and a maintained `_Sidebar.md`. |
+| 1.12.0 | 2026-07-06 | Added the GitHub Wiki Setup prompt (`prompts/github-wiki-setup.md`), the eighth prompt. |
 | 1.11.0 | 2026-07-05 | Fixed a mobile/tablet header bug found by running the Mobile Audit prompt against the live site: `.sidebar-sticky` kept its desktop `height: 100vh` below 1024px, making the collapsed header full-viewport-tall with its content vertically centered inside; `.sidebar-nav` also squeezed into a narrow column beside the logo instead of wrapping full-width. Fixed both in `css/style.css`. |
 | 1.10.0 | 2026-07-05 | Added the Mobile Audit prompt (`prompts/mobile-responsive-audit.md`), the seventh prompt. |
 | 1.9.0 | 2026-06-27 | Added an optional `hidden` frontmatter flag. Hidden prompts are dropped from the sidebar and home list but stay reachable by direct link. Retired Consolidate Documents, Docs Folder Audit, and Documentation Audit from navigation while preserving their pages. |
