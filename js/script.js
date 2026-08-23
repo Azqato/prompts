@@ -194,6 +194,18 @@ function wireCopyButton() {
   });
 }
 
+/* ---------- Redirects ---------- */
+
+/* Retired slug -> current slug. When a prompt is renamed, its old slug is
+   added here so links, bookmarks, and anything shared before the rename
+   keep resolving. Entries are permanent: the links they serve live outside
+   this repo, so there is no point at which removing one is safe. The
+   redirect rewrites the hash to the current slug, so the address bar ends
+   up canonical. See docs/PRD.md, "Renaming Prompts". */
+const REDIRECTS = {
+  'github-wiki-setup': 'github-wiki'
+};
+
 /* ---------- Routing ---------- */
 
 function currentSlug() {
@@ -208,6 +220,15 @@ function route() {
     setActiveLink('');
     return;
   }
+  // A retired slug rewrites the hash to the current one, which fires
+  // hashchange and re-enters route() with the canonical slug. Guarded on
+  // the target existing so a stale redirect can never bounce the reader
+  // into a dead end; if it does not resolve, fall through to the home view.
+  if (Object.prototype.hasOwnProperty.call(REDIRECTS, slug) && findPrompt(REDIRECTS[slug])) {
+    window.location.replace('#/' + REDIRECTS[slug]);
+    return;
+  }
+
   const p = findPrompt(slug);
   if (p) {
     renderDetail(p);

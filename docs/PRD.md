@@ -174,12 +174,37 @@ This is the canonical process for adding a new prompt, and how additions should 
 
 When publishing the new prompt to GitHub Pages, that push is the author's decision and an action taken on the repository, not an instruction embedded in any prompt. The embedded prompt text must never tell its own reader to push or publish (section 11).
 
+### Renaming Prompts
+
+A prompt's slug is its public URL (`index.html#/<slug>`). Once the site is published, those URLs are outside this repo's control: they sit in bookmarks, chat history, and anywhere the prompt has been shared. Changing a slug therefore breaks links that cannot be found or fixed from here.
+
+The rule is that a slug change is always paired with a redirect, never done bare. Renames are not avoided, since a stale name is a worse cost than a redirect entry, but the old URL must keep working.
+
+When a prompt's title changes in a way that makes its slug or filename wrong:
+
+1. Rename the `.md` file in `prompts/` to match the new slug, using `git mv` so the file's history is preserved
+2. Update the `slug` for that entry in `js/prompts-data.js`. The `raw` value is resynced from the renamed `.md` file rather than hand-edited, so the two cannot drift
+3. Add the old slug to the `REDIRECTS` map in `js/script.js`, mapping it to the new one. The router rewrites the hash to the current slug, so a reader arriving on an old link lands on the right page with a canonical address bar
+4. Update the Files table and the file structure tree in `README.md`
+5. Add a version entry to `docs/PATCHNOTES.md` recording the old name, the new name, and the redirect
+
+Rules for the `REDIRECTS` map:
+
+- **Entries are permanent.** There is no point at which removing one becomes safe, because the links it serves are not visible from this repo. The map only grows.
+- **Never point a redirect at another redirect.** If a prompt is renamed twice, update the first entry to point at the current slug rather than chaining them. Every entry resolves to a real prompt in one hop.
+- **Never reuse a retired slug** for a different prompt. The old URL would silently deliver the wrong content, which is worse than a broken link.
+- The router guards every redirect on its target existing, so a stale entry falls through to the home view rather than trapping the reader in a dead end.
+
+Historical records are not rewritten during a rename. Earlier patch notes and version history rows keep the name the prompt had at the time, since they are a record of what happened rather than a description of the current state.
+
 ---
 
 ## 13. Version History
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.17.0 | 2026-08-23 | Added a `REDIRECTS` map to the router so renamed prompts keep their old URLs working, and made the redirect practice canonical in section 12. Completed the GitHub Wiki rename (`github-wiki-setup` to `github-wiki`) behind that redirect. Widened the content area to 75vw on wide screens with an 820px floor. |
+| 1.16.0 | 2026-08-23 | Renamed the "GitHub Wiki Sync" prompt to "GitHub Wiki". Slug and filename unchanged so existing direct links keep working. |
 | 1.15.0 | 2026-08-23 | Added the Project Onboarding prompt (`prompts/project-onboarding.md`), the ninth prompt: an eight-phase read-only intake of an unfamiliar project that merges its findings into `PRD.md` rather than reporting them to chat, additively and flagging contradictions instead of overwriting them. |
 | 1.14.0 | 2026-07-06 | Renamed the GitHub Wiki Sync prompt's "Changelog" page to "Patch Notes" (`Patch-Notes.md`) to match this site's own terminology. |
 | 1.13.0 | 2026-07-06 | Reworked the GitHub Wiki Setup prompt into GitHub Wiki Sync, adding an update mode (diff existing wiki pages against current docs before editing), open-ended page creation based on wiki information architecture, and a maintained `_Sidebar.md`. |

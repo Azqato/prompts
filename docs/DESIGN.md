@@ -99,8 +99,10 @@ Persistent on desktop. Contains:
 
 ### Content Area
 
-**Max width:** 820px
+**Max width:** `max(820px, calc(75vw - 56px))` on the text column, set by `--content-max`
 **Padding:** 32px top/bottom, 28px left/right on desktop; 20px on mobile
+
+The content block is capped at `--content-max` plus its 56px of horizontal padding, so the block itself measures 75vw once the viewport is wide enough. Below roughly 1170px the `max()` floor holds the text column at 820px, which keeps line length readable on laptops and leaves the mobile layout completely unchanged. Above that, the column grows with the viewport so wide screens are not left with a narrow strip of content and a large empty margin. The floor is what makes this safe at the 1023px breakpoint, where the sidebar collapses to a full-width top nav and a bare `75vw` would otherwise shrink the content instead of widening it.
 
 ---
 

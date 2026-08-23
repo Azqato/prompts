@@ -4,6 +4,38 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.17.0 — 2026-08-23
+
+### Added
+
+- `js/script.js`: A `REDIRECTS` map and a redirect step in `route()`. A retired slug now rewrites the hash to the current one, which re-enters the router and renders the right prompt with a canonical address bar. Every redirect is guarded on its target existing, so a stale entry falls through to the home view instead of trapping the reader in a dead end. First entry: `github-wiki-setup` to `github-wiki`.
+- `docs/PRD.md`: New "Renaming Prompts" subsection in section 12, making the redirect practice canonical. A slug is a public URL, so a slug change is always paired with a redirect rather than done bare. Documents the five-step rename procedure and four rules for the map: entries are permanent, redirects never chain, retired slugs are never reused for a different prompt, and every redirect is guarded on its target. Also records that historical patch notes and version history rows are not rewritten during a rename.
+- `README.md`: New "Renaming a Prompt" section summarizing the practice and pointing at the PRD for the full procedure.
+
+### Changed
+
+- `prompts/github-wiki-setup.md` renamed to `prompts/github-wiki.md`, with the slug changed from `github-wiki-setup` to `github-wiki` so it matches the title set in v1.16.0. Renamed with `git mv` to preserve file history. The old URL (`index.html#/github-wiki-setup`) keeps working through the new redirect map. This is the rename that v1.16.0 deliberately deferred for lack of a redirect mechanism.
+- `js/prompts-data.js`: Updated the slug for that entry. The `raw` value was resynced from the renamed `.md` file rather than hand-edited.
+- `README.md`: Updated the Files table and file structure tree to the new filename.
+- `css/style.css`: Widened the content area. `--content-max` changed from a flat `820px` to `max(820px, calc(75vw - 56px))`, so the content block measures 75vw on wide screens while the 820px floor holds line length steady on laptops. The floor also protects the layout below the 1023px breakpoint, where the sidebar collapses to a full-width top nav and a bare `75vw` would have shrunk the content instead of widening it. Mobile rendering is unchanged.
+- `docs/DESIGN.md`: Updated the Content Area max width spec and documented why the `max()` floor is load-bearing.
+- `docs/PRD.md`: Recorded this release in the version history.
+
+---
+
+## v1.16.0 — 2026-08-23
+
+### Changed
+
+- `prompts/github-wiki-setup.md`: Renamed the prompt from "GitHub Wiki Sync" to "GitHub Wiki". The frontmatter `description` and body were left as they are, since both still describe the prompt accurately. The slug stays `github-wiki-setup` so existing direct links (`index.html#/github-wiki-setup`) keep working, and the filename is unchanged.
+- `js/prompts-data.js`: Resynced the `github-wiki-setup` entry from its source `.md` file.
+- `README.md`: Updated the Files table description to the new title.
+- `docs/PRD.md`: Recorded this release in the version history.
+
+Earlier patch notes and version history rows that mention "GitHub Wiki Sync" were deliberately left alone. They are a record of what the prompt was called at the time.
+
+---
+
 ## v1.15.0 — 2026-08-23
 
 ### Added

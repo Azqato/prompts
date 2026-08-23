@@ -24,7 +24,13 @@
   --font-mono: 'SF Mono', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
 
   --sidebar-width: 220px;
-  --content-max: 820px;
+
+  /* Text column width. Holds at 820px on smaller screens so line length
+     stays readable and mobile is untouched, then grows on wide screens so
+     the content block lands at 75vw once there is room for it. The 56px
+     is the horizontal padding on .content, subtracted here and added back
+     in the max-width so the block, not the text, measures 75vw. */
+  --content-max: max(820px, calc(75vw - 56px));
 }
 
 /* Reset / base */
