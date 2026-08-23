@@ -254,18 +254,44 @@ code {
 .prompt-list {
   display: flex;
   flex-direction: column;
+  gap: 12px;
 }
 
 .prompt-list-item {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--color-border);
+  padding: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+/* 2px gradient bar across the top of the card, revealed on hover.
+   Absolutely positioned rather than a real border so the card does
+   not shift by 2px when it appears. */
+.prompt-list-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-purple));
+  opacity: 0;
+  transition: opacity 0.15s ease;
 }
 
 .prompt-list-item:hover {
-  background: none;
+  background: var(--color-card-hover);
+  border-color: rgba(0, 212, 160, 0.5);
+}
+
+.prompt-list-item:hover::before {
+  opacity: 1;
 }
 
 .prompt-list-title {

@@ -16,7 +16,7 @@ No frameworks, no build tools, no dependencies. Pure HTML, CSS, and vanilla Java
 
 ## How It Works
 
-Prompts live as markdown files, not as hand-written HTML pages. There is one shared `index.html` shell. It uses hash-based routing (`index.html#/em-dash-audit`) to show either the home list or a single prompt.
+Prompts live as markdown files, not as hand-written HTML pages. There is one shared `index.html` shell. It uses hash-based routing (`index.html#/documentation`) to show either the home list or a single prompt.
 
 Browsers block `fetch()` of local files when a page is opened from disk (`file://`), so the prompt markdown is also embedded in `prompts-data.js`, which the browser loads with a normal `<script>` tag. This is what lets the site run with no server and no dependencies. The `.md` files in `prompts/` remain the readable, editable source; `prompts-data.js` mirrors them.
 
@@ -31,16 +31,11 @@ Browsers block `fetch()` of local files when a page is opened from disk (`file:/
 | `js/prompts-data.js` | Embedded copy of every prompt markdown file, loaded via `<script>` so the site works offline and on `file://`. |
 | `js/script.js` | Parses the embedded markdown, builds the sidebar, handles routing and copy-to-clipboard. |
 | `prompts/add-prompt.md` | Add Prompt prompt: add a new prompt to the site by providing the raw text; Claude Code generates the title, description, and updates all required files. |
-| `prompts/em-dash-audit.md` | Em dash audit prompt: find and replace em dashes in all forms across all project files. |
-| `prompts/consolidate-documents.md` | Consolidate Documents prompt: consolidate all documentation into four core files and enforce the correct folder structure. |
-| `prompts/docs-folder-audit.md` | Docs Folder Audit prompt: crawl the entire codebase, then audit and rewrite every document in /docs to match the current state of the project. |
-| `prompts/documentation-audit.md` | Documentation audit prompt: create or update the full documentation suite for any project. |
-| `prompts/documentation.md` | Documentation prompt: crawl the codebase, then consolidate all docs into four core files with every supporting document folded into a deeply sectioned PRD. |
+| `prompts/documentation.md` | Documentation prompt: crawl the codebase, then consolidate all docs into four core files with every supporting document, the house conventions, and the writing style folded into a deeply sectioned PRD. |
 | `prompts/mobile-responsive-audit.md` | Mobile Audit prompt: audit every page at multiple breakpoints for overflow and layout bugs, fix root causes, verify with real DOM measurements, then document the fixes. |
 | `prompts/github-wiki.md` | GitHub Wiki prompt: review every documentation file, then set up a new GitHub wiki or diff and update an existing one, with curated pages and a maintained sidebar. |
-| `prompts/project-onboarding.md` | Project Onboarding prompt: read the codebase, structure, and documentation in a read-only pass, then merge everything learned into `PRD.md`. |
 
-`consolidate-documents`, `docs-folder-audit`, and `documentation-audit` are marked `hidden: true` in their frontmatter. They are kept on the backend and stay reachable by direct link (`index.html#/<slug>`) but no longer appear in the sidebar or home list, since the Documentation prompt supersedes them.
+A prompt can set `hidden: true` in its frontmatter to stay reachable by direct link (`index.html#/<slug>`) while dropping out of the sidebar and home list. No prompt currently uses it. Consolidate Documents, Docs Folder Audit, and Documentation Audit were hidden this way from v1.9.0, then deleted in v1.19.0 once the Documentation prompt had fully superseded them. Em Dash Audit and Project Onboarding were retired in v1.23.0 for the same reason, once the Documentation prompt absorbed the writing style rule and the onboarding analysis as PRD sections of its own.
 
 ---
 
@@ -67,14 +62,9 @@ prompts/
 │   └── script.js
 ├── prompts/
 │   ├── add-prompt.md
-│   ├── em-dash-audit.md
-│   ├── consolidate-documents.md
-│   ├── docs-folder-audit.md
-│   ├── documentation-audit.md
 │   ├── documentation.md
 │   ├── mobile-responsive-audit.md
-│   ├── github-wiki.md
-│   └── project-onboarding.md
+│   └── github-wiki.md
 └── docs/
     ├── PRD.md
     ├── DESIGN.md
@@ -89,7 +79,7 @@ Each file in `prompts/` follows this structure:
 
 ```markdown
 ---
-title: Em Dash Audit
+title: Mobile Audit
 description: One-line summary shown in the home list.
 meta: Claude Code Prompt
 ---
@@ -132,7 +122,11 @@ No build step and no server required. Open `index.html` directly in a browser. I
 
 ## Renaming a Prompt
 
-A slug is a public URL (`index.html#/<slug>`), so changing one breaks links that live outside this repo. Renames are fine, but a slug change is always paired with a redirect: add the old slug to the `REDIRECTS` map in `js/script.js`, pointing at the new one. Redirect entries are permanent and are never reused for a different prompt. The full procedure is in `docs/PRD.md` under "Renaming Prompts".
+Rename the `.md` file with `git mv`, update the `slug` in `js/prompts-data.js`, resync its `raw` value from the renamed file, and fix the Files table and tree here. No redirect is needed: the files in `prompts/` are source, not the deployed page, and the router renders the home view for a slug it does not recognize. The full procedure is in `docs/PRD.md` under "Renaming Prompts".
+
+## Removing a Prompt
+
+The public surface of this project is the deployed page, not the source that builds it. Everything in `prompts/` is source, so a prompt is pruned outright: delete the `.md` file, remove its entry from `js/prompts-data.js`, remove its row and tree line here, and grep for any other prompt that mentions it by name. No redirect, no stub. A redirect is only for a genuine public address, meaning the deployed page itself or the paths it serves. The full procedure is in `docs/PRD.md` under "Removing Prompts".
 
 ---
 

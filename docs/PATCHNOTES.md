@@ -1,10 +1,167 @@
-# PATCHNOTES.md — Prompts
+# PATCHNOTES.md - Prompts
 
 All notable changes to this project are documented here. Entries are listed in reverse chronological order. Each version entry includes the version number, date, and a summary of what changed.
 
 ---
 
-## v1.17.0 — 2026-08-23
+## v1.26.0 - 2026-08-23
+
+### Changed
+
+- `prompts/documentation.md`: Repurposed the README specification. The README is now the public front door, written for a general reader rather than a developer, and asks for what the site offers in plain language, who it is for, current status, and where to learn more. Install steps, commands, ports, environment variables, build instructions, version numbers, and dependency lists are explicitly barred from it and belong in `/docs`. This holds for every project regardless of type: developers are served by `PRD.md`, so the README never has to compromise for them.
+- `prompts/documentation.md`: Relocated the evicted technical content rather than duplicating it. The Runbook section now opens by stating that it carries everything a developer needs to run the project, since the README deliberately does not, and assumes a reader who has just cloned the repository. It gained a Prerequisites bullet (runtime, package manager, and system requirements, each at the version the project actually needs rather than the newest available), absorbed installation order, start command, and default port into its local setup bullet, and gained an environment variable reference covering key names, what each does, and whether it is required, never the values.
+- `prompts/documentation.md`: Replaced the "Do not pad" standard. In `/docs`, and in `PRD.md` above all, completeness now beats brevity: a section that restates context to stand on its own is doing its job, because a reader may arrive at it directly and should not have to assemble an answer from three other sections. The standard still bars filler, marketing language, and sentences carrying no new information, on the principle that thorough means more facts rather than more words around the same facts. The README is named as the exception and stays tight.
+- `prompts/documentation.md`: The live site link is now satisfiable by a plain statement that there is no hosted instance, so a required section can no longer invite invention on a project that has never been deployed.
+- `js/prompts-data.js`: Resynced the `documentation` entry from its source `.md` file.
+- `docs/PRD.md`: Recorded this release in the version history.
+
+### Removed
+
+- `prompts/documentation.md`: The `ReadMe` PRD section added alongside the README repurpose. Every bullet in it was already required elsewhere: the tech stack by Technical Requirements, installation and build and deploy by Runbook, and environment variables by both Runbook and Security. Three sections claiming the same facts is the duplication the README change set out to remove, relocated rather than fixed, so the section was dropped and the two bullets it uniquely contributed (prerequisites, default port) were folded into Runbook. This also removed a duplicated artifact line and the `ReadMe` casing inconsistency.
+
+---
+
+## v1.25.0 - 2026-08-23
+
+### Added
+
+- `prompts/documentation.md`: The read-only constraint from the retired Project Onboarding prompt, at the top of "Steps to follow". Steps 1 through 3, the codebase crawl and the read of every existing document, now forbid writing, editing, renaming, deleting, and moving any file, along with installers, migrations, formatters, builds that write output, and any state-changing version control command. Writing begins at step 4 and is limited to the documentation files the prompt names. This was the one part of Project Onboarding not carried over in v1.22.0, on the reasoning that the Documentation prompt exists to write files. Scoping it to the analysis steps rather than the whole run resolves that: the prompt already required a full scan before touching any documentation, and this makes the requirement enforceable instead of advisory.
+- `prompts/documentation.md`: Also carried over the instruction not to skip a step because it looks obvious, and to say so explicitly when a step turns up nothing rather than staying silent.
+
+### Changed
+
+- `prompts/documentation.md`: The steps in "Steps to follow" are now numbered, so the read-only constraint can name the range it applies to. Step 1 gained "read files rather than inferring from their names" and step 2 gained "read each in full", both from the retired prompt.
+- `js/prompts-data.js`: Resynced the `documentation` entry from its source `.md` file.
+- `docs/PRD.md`: Recorded this release in the version history.
+
+---
+
+## v1.24.0 - 2026-08-23
+
+### Removed
+
+- `js/script.js`: All three `REDIRECTS` entries. The map is now empty. `github-wiki-setup` to `github-wiki` (added v1.17.0) and the two added in v1.23.0 all pointed at prompt slugs, and prompt slugs are not a public surface.
+
+### Changed
+
+- Corrected the definition of public facing, which the redirect policy depends on. The public surface of this project is the deployed page, `index.html` and the asset paths it loads. Everything under `prompts/` is source. A prompt's slug is derived from its source filename rather than being a contract of its own, so renaming or removing a prompt is an internal change and needs no redirect. The router already renders the home view for an unrecognized slug, so an old hash resolves to a working page.
+- `js/script.js`: The `REDIRECTS` map is kept, empty, with its comment rewritten to explain when an entry would be warranted. The mechanism costs one property lookup per navigation and would otherwise have to be rebuilt if a genuine public address is ever retired.
+- `docs/PRD.md`: Rewrote both procedures in section 12. "Renaming Prompts" no longer pairs a slug change with a redirect and drops the four rules for the map, keeping the permanence, no-chaining, and no-reuse rules scoped to genuine public addresses in "Removing Prompts". "Removing Prompts" now draws the line at the deploy boundary rather than at whether a prompt is visible in the navigation. Updated the section 14 flow description, the section 16 binding rules, the section 18 redirect bullet, and the section 20 working practice.
+- `prompts/documentation.md`: The Deprecation and Removal section defined public facing as anything with an address someone could be holding, which swept in source files. It now draws the line at the deploy boundary, states that a source file is not public facing even when its name appears in a built URL, and requires the PRD to say where the project puts that boundary, since the rule cannot be applied without knowing which side a file is on.
+- `README.md`: Rewrote the "Renaming a Prompt" and "Removing a Prompt" sections to match, and corrected the note added in v1.23.0 that described the two retirements as redirected.
+- `js/prompts-data.js`: Resynced the `documentation` entry from its source `.md` file.
+- `docs/PRD.md`: Recorded this release in the version history.
+
+Patch notes for v1.17.0 and v1.23.0 still describe redirects that no longer exist. They are left as they are, since they record what happened at the time.
+
+---
+
+## v1.23.0 - 2026-08-23
+
+### Removed
+
+- `prompts/em-dash-audit.md`, `prompts/project-onboarding.md`: Retired. The Documentation prompt absorbed both in v1.22.0, the em dash rule as its Writing Style section and the onboarding analysis as its Conventions, Documentation Versus Reality, Risks and Open Questions, and Working Practice sections.
+- `js/prompts-data.js`: Removed the two corresponding entries. Four prompts remain: Add Prompt, Documentation, Mobile Audit, and GitHub Wiki.
+- `README.md`: Removed the two rows from the Files table and the two lines from the file structure tree.
+
+### Added
+
+- `js/script.js`: Two `REDIRECTS` entries, `em-dash-audit` to `documentation` and `project-onboarding` to `documentation`. Unlike the three prompts deleted in v1.19.0, these two were live in the sidebar and home list, so their slugs are public addresses that people may hold. Section 12 of `docs/PRD.md` requires a redirect in that case, not a plain delete. The map now holds three entries.
+
+### Changed
+
+- `prompts/documentation.md`: The description named the Em Dash Audit and Project Onboarding prompts, which no longer exist. Rewritten to describe the same capability without referring to them.
+- `README.md`: The hash routing example used `index.html#/em-dash-audit`, and the prompt markdown format example used the Em Dash Audit frontmatter. Both now use live prompts. Added a note to the hidden prompts paragraph explaining why these two retirements got redirects when the v1.19.0 deletions did not.
+- `docs/PRD.md`: Section 11 referred to the Em Dash Audit prompt as the place the prohibited characters are quoted; it now points at the Writing Style section of the Documentation prompt. Updated the section 13 file counts (12 files, four prompts), the section 18 mirror and redirect map bullets, and closed the open question from v1.22.0.
+- `js/prompts-data.js`: Resynced the `documentation` entry from its source `.md` file.
+
+---
+
+## v1.22.0 - 2026-08-23
+
+### Added
+
+- `prompts/documentation.md`: Absorbed the Project Onboarding and Em Dash Audit prompts as required PRD sections. The prompt now produces a document that covers what those two prompts produced separately, in one pass.
+- `prompts/documentation.md`: New "Conventions" section, deriving the house style from the code rather than from any style guide the project contains. Covers naming, formatting, organization, comment density, error handling, and commit and branching style read from version control history. Where a convention is inconsistent it records which form is dominant and which files deviate, so the next contributor matches the majority rather than the last file they opened.
+- `prompts/documentation.md`: New "Writing Style" section carrying the em dash rule as a default: prohibited in all three forms, searched independently because a search for one will not catch the other, CSS custom properties untouched, the six replacements including the permitted single hyphen, and the exemption for instances that name the character they prohibit. The prompt applies the style to every document it writes, then sweeps the rest of the project and records what it found.
+- `prompts/documentation.md`: New "Documentation Versus Reality" section, recording each discrepancy rather than quietly fixing it, with the code treated as the truth about what is and the documentation as the truth about what was intended. Resolved entries stay in the table with a note on how they were resolved.
+- `prompts/documentation.md`: New "Risks and Open Questions" section, covering what the analysis did not understand, fragile areas, what is dangerous to change, work already in progress, and numbered open questions that are folded back in as answered rather than deleted.
+- `prompts/documentation.md`: New "Working Practice" section, written as concrete instructions rather than principles: what to check before editing, what never to do with the reason attached, a table mapping each kind of change to the file to open first, and how to verify a change.
+- `prompts/documentation.md`: Four new standards in the audit preamble, carried over from Project Onboarding. Merge rather than overwrite, since documentation holds intent that cannot be reconstructed from code. Every policy in the specifications is a default that applies only where the project states no rule of its own, with conflicts flagged rather than silently resolved. Read files rather than inferring from their names, and mark uncertainty as uncertainty. Do not pad.
+
+### Changed
+
+- `prompts/documentation.md`: Frontmatter description and on-page description updated for the wider scope.
+- `README.md`: Updated the Files table row for the Documentation prompt.
+- `js/prompts-data.js`: Resynced the `documentation` entry from its source `.md` file.
+- `docs/PRD.md`: Recorded this release in the version history.
+
+`prompts/em-dash-audit.md` and `prompts/project-onboarding.md` were left in place. Both are live on the site, so their slugs are public addresses, and removing either would need a redirect under the policy in `docs/PRD.md` section 12. Whether they stay as standalone prompts now that the Documentation prompt covers their ground is an open question for the author.
+
+---
+
+## v1.21.0 - 2026-08-23
+
+### Changed
+
+- `prompts/documentation.md`: The removal policy is now a default rather than an override. The prompt checks first whether the project already states a removal rule of its own, in its docs, a contributing guide, or a consistent pattern in the changelog and code. If it does, that rule is documented and left alone, on the grounds that the audit records how a project works rather than overruling how it has decided to work. Where an existing rule and the default differ, both are kept and the difference is flagged for the author instead of one silently replacing the other. The public-facing versus internal rule from v1.20.0 applies only where the project states no rule at all.
+- `js/prompts-data.js`: Resynced the `documentation` entry from its source `.md` file.
+- `docs/PRD.md`: Recorded this release in the version history.
+
+---
+
+## v1.20.0 - 2026-08-23
+
+### Changed
+
+- `prompts/documentation.md`: The Deprecation and Removal section added in v1.19.0 asked the model to state whatever removal rule a project already had. It now prescribes this site's rule instead: a redirect is decided by whether the thing being removed is public facing, not by the fact that it is being removed. Anything with an address someone outside the project could be holding (URL, route, slug, permalink, published artifact, exported name) is retired behind a redirect or equivalent shim. Anything internal is pruned entirely, with no redirect, alias, stub, or tombstone. The prompt tells the model to adapt the mechanism to whatever the project has, to record the reasoning, and to say so explicitly if the project has no redirect mechanism at all.
+- `prompts/documentation.md`: The section also now requires the public surface list to be specific enough to answer the question for any given file, states that compatibility entries are permanent, never chained, and never reused for different content, and records that historical changelog entries are not rewritten when something is deleted.
+- `js/prompts-data.js`: Resynced the `documentation` entry from its source `.md` file.
+- `docs/PRD.md`: Recorded this release in the version history.
+
+---
+
+## v1.19.0 - 2026-08-23
+
+### Removed
+
+- `prompts/consolidate-documents.md`, `prompts/docs-folder-audit.md`, `prompts/documentation-audit.md`: Deleted. All three were documentation prompts superseded by the Documentation prompt, and had been hidden from the sidebar and home list since v1.9.0. No redirects were added. A redirect exists to keep a public URL working, and a prompt that has been off the navigation since v1.9.0 is not one anyone is being handed. Adding three permanent redirect entries would have been maintenance in exchange for nothing.
+- `js/prompts-data.js`: Removed the three corresponding entries. Six prompts remain.
+- `README.md`: Removed the three rows from the Files table and the three lines from the file structure tree.
+
+### Added
+
+- `docs/PRD.md`: New "Removing Prompts" subsection in section 12. The rule is that a redirect is decided by whether the thing being removed is public facing, not by whether it is being removed. A live prompt's slug is a public address and gets retired behind a redirect. Anything already off the navigation is deleted outright. The same test applies to any file in the repository. Includes the five-step delete procedure and the note that historical patch notes are left alone.
+- `README.md`: New "Removing a Prompt" section summarizing the policy and pointing at the PRD for the procedure.
+- `prompts/documentation.md`: New "Deprecation and Removal" section in the required PRD sections, covering the project's removal policy, an explicit list of what is publicly addressable, and a record of retired items. Any project documented with this prompt now has to state its own version of the rule rather than deciding it case by case.
+
+### Changed
+
+- `prompts/documentation.md`: The description compared this prompt to Consolidate Documents and Documentation Audit by name, both now deleted. Rewritten to describe the depth it folds into the PRD without referring to prompts that no longer exist. Also corrected "Tenents" to "Tenets" in the required sections list.
+- `js/prompts-data.js`: Resynced the `documentation` entry from its source `.md` file.
+- `docs/PRD.md`: Updated the section 13 file counts (14 files, six prompts), added the removal rule to section 16, marked item 8 of the section 18 discrepancy table resolved by deletion, rewrote the two bullets in section 18 that described the hidden prompts in the present tense, closed two open questions in section 19, and added the delete case to section 20.
+
+---
+
+## v1.18.0 - 2026-08-23
+
+### Added
+
+- `css/style.css`: Built the card hover treatment on the home prompt list. `docs/DESIGN.md` had specified `--color-card-hover` as a card hover background and `--color-purple` as a gradient accent since v1.0, but neither token was ever referenced and `.prompt-list-item:hover` explicitly set `background: none`. Each list item is now a bordered, rounded card on `--color-surface` with a 12px gap between cards, hovering to `--color-card-hover` with an accent border and a 2px teal to purple gradient bar across the top. The bar is an absolutely positioned `::before` rather than a real `border-top`, so the card does not shift by 2px when it appears, and `overflow: hidden` clips it to the corner radius.
+- `docs/PRD.md`: Sections 13 through 20, written by a full read-only onboarding pass over the repository. Structure map, architecture and flow traced from the code, code conventions derived from the files, the complete list of binding rules with their sources, stack and deployment, a documentation versus reality table, risks and open questions, and a working practice section covering what to check before editing and where to look for each kind of change.
+- `docs/PRD.md`: The single hyphen is now a documented replacement in the section 11 Writing Style table, with a note that the prohibition covers only the em dash character, the `&mdash;` entity, and the double dash, and that instances naming the prohibited character are left in place.
+
+### Changed
+
+- Ran the Em Dash Audit across the project. Replaced 25 literal em dashes with single hyphens: the titles of `docs/PRD.md`, `docs/DESIGN.md`, and `docs/PATCHNOTES.md`, and all 20 version headings in this file. Replaced one prose em dash in the v1.11.0 entry with a comma, three in the section 8 `/docs/` bullets of `docs/PRD.md` with colons, and one double dash used as punctuation in `prompts/documentation-audit.md` with a colon. The em dashes inside the section 11 prohibition list and inside the Em Dash Audit prompt were left alone, since those lines exist to name the character.
+- `prompts/em-dash-audit.md`: The prompt now instructs that a single hyphen is permitted and encouraged where context justifies it, and is preferred in document titles, section headings, and version lines, since it is the closest visual match to the em dash it replaces. Also added an instruction to leave instances that the text needs in order to mean anything.
+- `js/prompts-data.js`: Resynced the `em-dash-audit` and `documentation-audit` entries from their source `.md` files.
+- `docs/DESIGN.md`: Rewrote the Home Page Prompt List component spec for the card layout, added the card hover to the animation allowance in section 13, and bumped the document to 1.6.
+- `docs/PRD.md`: The `**Version:**` header field now tracks the current release rather than sitting at 1.0 forever. Recorded that GitHub Pages publishes `main` at the repository root by manual push, which the onboarding pass could not determine from the repository alone. Marked items 2, 5, and 6 of the section 18 discrepancy table as resolved and rewrote the open questions list.
+
+---
+
+## v1.17.0 - 2026-08-23
 
 ### Added
 
@@ -23,7 +180,7 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
-## v1.16.0 — 2026-08-23
+## v1.16.0 - 2026-08-23
 
 ### Changed
 
@@ -36,7 +193,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.15.0 — 2026-08-23
+## v1.15.0 - 2026-08-23
 
 ### Added
 
@@ -51,7 +208,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.14.0 — 2026-07-06
+## v1.14.0 - 2026-07-06
 
 ### Changed
 
@@ -60,7 +217,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.13.0 — 2026-07-06
+## v1.13.0 - 2026-07-06
 
 ### Changed
 
@@ -72,7 +229,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.12.0 — 2026-07-06
+## v1.12.0 - 2026-07-06
 
 ### Added
 
@@ -86,17 +243,17 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.11.0 — 2026-07-05
+## v1.11.0 - 2026-07-05
 
 ### Fixed
 
-- `css/style.css`: Ran the Mobile Audit prompt against the live site (headless Chrome via CDP, `scrollWidth`/`clientWidth`/`getBoundingClientRect()` measurements at 375–1920px, not screenshots) and found the mobile/tablet header (< 1024px) was badly broken. Root cause: `.sidebar-sticky` sets `height: 100vh` for the desktop vertical sidebar, and the `@media (max-width: 1023px)` block that converts it into a horizontal header never reset that height, so the header stayed full-viewport-tall with its logo/nav/support button vertically centered inside — pushing all page content roughly 1200px below the fold on a typical mobile screen. Added `height: auto` to `.sidebar-sticky` in that media query.
+- `css/style.css`: Ran the Mobile Audit prompt against the live site (headless Chrome via CDP, `scrollWidth`/`clientWidth`/`getBoundingClientRect()` measurements at 375–1920px, not screenshots) and found the mobile/tablet header (< 1024px) was badly broken. Root cause: `.sidebar-sticky` sets `height: 100vh` for the desktop vertical sidebar, and the `@media (max-width: 1023px)` block that converts it into a horizontal header never reset that height, so the header stayed full-viewport-tall with its logo/nav/support button vertically centered inside, pushing all page content roughly 1200px below the fold on a typical mobile screen. Added `height: auto` to `.sidebar-sticky` in that media query.
 - `css/style.css`: Secondary bug in the same header: `.sidebar-nav` shared its row with `.sidebar-logo` instead of dropping to its own line, squeezing the 5 nav links into a ~150px-wide column that stacked one link per row instead of wrapping across the full width (the existing `margin-bottom` on `.sidebar-logo` already implied the intended layout was logo-then-nav-below). Added `flex-basis: 100%` to `.sidebar-nav` in the same media query so it wraps full-width beneath the logo.
 - No page-level horizontal overflow, `overflow` shorthand conflicts, bare `1fr` grid overflow, flex `min-width: auto` overflow, or margin/gap double-spacing were found anywhere else at any of the seven audited breakpoints across the home page and all seven prompt detail pages.
 
 ---
 
-## v1.10.0 — 2026-07-05
+## v1.10.0 - 2026-07-05
 
 ### Added
 
@@ -110,7 +267,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.9.0 — 2026-06-27
+## v1.9.0 - 2026-06-27
 
 ### Added
 
@@ -126,7 +283,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.8.0 — 2026-06-27
+## v1.8.0 - 2026-06-27
 
 ### Added
 
@@ -140,7 +297,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.7.0 — 2026-06-14
+## v1.7.0 - 2026-06-14
 
 ### Added
 
@@ -153,7 +310,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.6.0 — 2026-06-13
+## v1.6.0 - 2026-06-13
 
 ### Changed
 
@@ -166,7 +323,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.5.0 — 2026-06-13
+## v1.5.0 - 2026-06-13
 
 ### Added
 
@@ -179,7 +336,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.4.0 — 2026-06-13
+## v1.4.0 - 2026-06-13
 
 ### Added
 
@@ -192,7 +349,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.3.0 — 2026-06-13
+## v1.3.0 - 2026-06-13
 
 ### Changed
 
@@ -205,7 +362,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.2.0 — 2026-06-13
+## v1.2.0 - 2026-06-13
 
 ### Changed
 
@@ -215,7 +372,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.1.0 — 2026-06-13
+## v1.1.0 - 2026-06-13
 
 ### Added
 
@@ -233,7 +390,7 @@ Earlier patch notes and version history rows that mention "GitHub Wiki Sync" wer
 
 ---
 
-## v1.0.0 — 2026-06-13
+## v1.0.0 - 2026-06-13
 
 **Initial release.**
 

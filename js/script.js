@@ -196,15 +196,19 @@ function wireCopyButton() {
 
 /* ---------- Redirects ---------- */
 
-/* Retired slug -> current slug. When a prompt is renamed, its old slug is
-   added here so links, bookmarks, and anything shared before the rename
-   keep resolving. Entries are permanent: the links they serve live outside
-   this repo, so there is no point at which removing one is safe. The
-   redirect rewrites the hash to the current slug, so the address bar ends
-   up canonical. See docs/PRD.md, "Renaming Prompts". */
-const REDIRECTS = {
-  'github-wiki-setup': 'github-wiki'
-};
+/* Retired address -> current slug. Deliberately empty.
+
+   The public surface of this site is the deployed page, not the source
+   that builds it. A prompt is authored as a .md file in prompts/, and its
+   slug is derived from that filename, so renaming or removing a prompt is
+   an internal change to source and needs no redirect. An unknown slug
+   falls through to the home view, which is the right outcome for one.
+
+   The mechanism is kept for a genuine public-facing address, should one
+   ever be retired. Any entry added here is permanent, never chains, and
+   is never reused to point at different content. See docs/PRD.md,
+   "Renaming Prompts" and "Removing Prompts". */
+const REDIRECTS = {};
 
 /* ---------- Routing ---------- */
 

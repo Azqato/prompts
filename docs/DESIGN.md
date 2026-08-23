@@ -1,6 +1,6 @@
-# DESIGN.md — Prompts
+# DESIGN.md - Prompts
 
-**Version:** 1.0
+**Version:** 1.6
 **Status:** Active
 **Author:** Azqato
 
@@ -192,20 +192,36 @@ JavaScript behavior: on click, use `navigator.clipboard.writeText()` to copy the
 
 ### Home Page Prompt List
 
-On `index.html`, each prompt is listed as a card or row with:
+On `index.html`, each prompt is a card. The list is a vertical flex column with a 12px gap, one card per prompt.
 
 ```
-Layout: vertical list, one item per prompt
-Item:
-  display: flex, align-items: flex-start
-  padding: 16px 0
-  border-bottom: 1px solid --color-border
+Card (.prompt-list-item, an <a> wrapping the whole card):
+  position: relative
+  display: flex, flex-direction: column, align-items: flex-start
+  padding: 16px
+  background: --color-surface
+  border: 1px solid --color-border
+  border-radius: 10px
+  overflow: hidden
+  transition: background 0.15s ease, border-color 0.15s ease
 
-  Left: prompt title as <a> link in --color-accent, weight 600, 1rem
-  Below title: one-line description in --color-text-secondary, 0.875rem
+  Prompt title in --color-accent, weight 600, 1rem
+  Below title: one-line description in --color-text-secondary, 0.875rem,
+    margin-top 4px
 
-  Hover: title underline, bg none
+Hover:
+  background: --color-card-hover
+  border-color: rgba(0,212,160,0.5)
+  title underlines
+  ::before gradient bar fades in (opacity 0 to 1, 0.15s ease)
+
+::before (the gradient top border):
+  absolutely positioned, top/left/right 0, height 2px
+  background: linear-gradient(90deg, --color-accent, --color-purple)
+  opacity 0 by default
 ```
+
+The bar is an absolutely positioned pseudo-element rather than a real `border-top`, so the card does not shift by 2px when it appears. `overflow: hidden` on the card clips the bar to the 10px corner radius.
 
 ---
 
@@ -423,7 +439,7 @@ Loading `prompts/*.md` with `fetch()` would require an HTTP server, because brow
 - No external font loading (system fonts only)
 - No external JavaScript libraries
 - No syntax highlighting libraries (plain monospace text only at v1.0)
-- No animations beyond: copy button state transition, sidebar link hover
+- No animations beyond: copy button state transition, sidebar link hover, prompt card hover (background, border, and gradient bar fade)
 - No em dashes in any copy (see PRD.md Writing Style section)
 - No decorative images or illustrations
 - Do not deviate from the `#00d4a0` teal accent. It is the cross-site brand color
@@ -434,6 +450,7 @@ Loading `prompts/*.md` with `fetch()` would require an HTTP server, because brow
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.6 | 2026-08-23 | Built the card hover treatment that section 2 already documented: the home list items became bordered, rounded cards on `--color-surface` with a 12px gap, hovering to `--color-card-hover` with a teal to purple gradient bar across the top. `--color-card-hover` and `--color-purple` were defined but unused until now. Rewrote the Home Page Prompt List spec to match, and added the card hover to the animation allowance in section 13. Replaced the em dash in this document's title with a hyphen. |
 | 1.5 | 2026-06-27 | Documented the optional `hidden: true` frontmatter key in the prompt markdown template. Hidden prompts are excluded from the sidebar and home list but remain reachable by direct link. |
 | 1.4 | 2026-06-13 | Static assets reorganized into subfolders: `css/style.css` and `js/script.js`, `js/prompts-data.js`. `index.html` references updated. Shell template and CSS file structure section updated. |
 | 1.3 | 2026-06-13 | Sidebar logo updated to "Azqato's Prompts.". Homepage h1 updated to "Claude Code Prompts.". Browser tab title updated to "Azqato's Prompts" on home; prompt pages show only the prompt name. Support button added to bottom of sidebar, pinned via flex column layout on `.sidebar-sticky`. |
