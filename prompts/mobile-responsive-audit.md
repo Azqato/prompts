@@ -28,7 +28,12 @@ Check every page/view at these widths: 375px, 700px, 900px, 1023px (or your main
 - **Redundant spacing when adjacent elements are in a flex/grid container with `gap`**: if a container already has `gap`, don't also add `margin` on a child for spacing, since they stack and double that one gap. Check any element that was moved into a `gap`-based container after being styled for a different original position.
 
 ## 3. Verification methodology, do NOT rely on screenshots alone
-Headless Chrome enforces an effective minimum viewport (~485-500px) even when you request a smaller `--window-size`, and screenshot pixel dimensions don't always match the actual layout viewport. Screenshots below that width will look broken even when there's zero actual overflow, and can also miss real bugs that only show up in specific coordinate ranges. Instead:
+Drive Microsoft Edge rather than Chrome, unless the project states its own
+browser testing rule. Chrome is typically the owner's day-to-day browser and
+driving it disturbs a live session; Edge runs the same engine, so every
+measurement below is identical.
+
+Any headless Chromium browser enforces an effective minimum viewport (~485-500px) even when you request a smaller `--window-size`, and screenshot pixel dimensions don't always match the actual layout viewport. Screenshots below that width will look broken even when there's zero actual overflow, and can also miss real bugs that only show up in specific coordinate ranges. Instead:
 - Inject a small debug `<script>` into a scratch copy of the page that prints `window.innerWidth`, `document.documentElement.scrollWidth`, `document.documentElement.clientWidth`, and `getBoundingClientRect()` for suspect elements.
 - The reliable check for "is there page-level overflow" is `scrollWidth === clientWidth`, not a visual read of a screenshot.
 - For subtler layout bugs (like uneven spacing between sibling buttons), measure `getBoundingClientRect().left`/`.right` for every sibling and diff the gaps programmatically rather than eyeballing a zoomed screenshot.

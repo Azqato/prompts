@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.29.0
+**Version:** 1.30.0
 **Status:** Active
 **Author:** Azqato
 
@@ -753,6 +753,18 @@ The browser needs to support: CSS custom properties, CSS Grid, `max()` in a CSS 
 
 Git is needed only to clone the repository and to commit. It is not needed to run the site.
 
+### Browser testing
+
+**Drive Microsoft Edge, never Chrome.** There is no JavaScript runtime on the maintenance machine, so every end-to-end check on this project is done by driving a headless browser from a Python script. Chrome is the author's day-to-day browser and driving it disturbs a live session. Edge runs the same engine, so nothing about the results changes.
+
+On this machine Edge resolves to `C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`. The path is recorded because it differs by platform and is the first thing that breaks on a new machine. Note the `(x86)` directory, which is where the 64-bit Edge installs on Windows.
+
+The invocation used is `--headless --disable-gpu --no-sandbox --user-data-dir=<scratch> --virtual-time-budget=<ms>` plus either `--dump-dom` or `--screenshot=<path>`. A separate `--user-data-dir` under the scratch directory keeps the run out of any real profile.
+
+Two constraints worth knowing before writing a check. The Content Security Policy blocks inline scripts, so a driver script has to be a real same-origin file next to a scratch copy of `index.html` rather than injected markup. And a DOM dump cannot exercise the Clipboard API, which is why the copy button's paths are still unverified; see section 19.
+
+This rule was adopted in v1.30.0, at the same time it was added to the Documentation prompt as a default. Every check before that release used Chrome.
+
 ### Local setup
 
 ```
@@ -1356,6 +1368,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.30.0 | 2026-08-24 | Added a Browser Testing default policy to the Documentation prompt: drive Microsoft Edge, never Chrome, because the maintenance machine has no JavaScript runtime and Chrome is the owner's day-to-day browser. Like every policy in that prompt it yields to a rule the project already states. Applied the same rule to the Mobile Audit prompt, which had explicitly instructed driving Chrome, and adopted it for this repository in the section 29 Runbook with the resolved Edge path. |
 | 1.29.0 | 2026-08-24 | Made the prompt block collapsible and collapsed it by default. The entire header bar toggles it, with a button labelled for the action it performs rather than the state it is in, and the copy button excluded so copying never collapses what was just copied. Copy works in both states because the text stays in the DOM. No persistence, so no browser storage is introduced. Added section 10a, the first lettered section in this document, and recorded the suffix convention in section 33. Corrected the section 24 assumption that still described `escapeHtml()` as it was before v1.28.0, logged as discrepancy 16. `docs/DESIGN.md` to 1.9 with a full spec for the new component. |
 | 1.28.0 | 2026-08-23 | Acted on all four open questions from the v1.27.0 audit. Corrected the two stale `docs/DESIGN.md` blocks rather than leaving them flagged, once confirmed neither held an intended design. Fixed both cheap debt items: `escapeHtml()` now escapes quotes and the slug is escaped at every attribute interpolation, and a failed clipboard write now reports itself instead of failing silently. Added `tools/prompts-mirror.py`, a standard-library check and resync for the mirror invariant. Added a Content Security Policy to `index.html`, verified enforced in headless Chrome, which makes the no-dependency rule a runtime guarantee. Found and worked around a latent CRLF mismatch between the working tree and the data file. Rendered the site for the first time since v1.18.0, closing that verification gap. |
 | 1.27.0 | 2026-08-23 | Ran the project's own Documentation prompt against this repository. Rewrote `README.md` to the general-reader standard adopted in v1.26.0, moving all setup, structure, and procedure into this document. Added sections 21 through 35, the eleven required sections this PRD had never carried: Target Users, User Stories, Feature List, Assumptions, Success Criteria, Tenets, Roadmap, Metrics, Runbook, Technical Reference, Security, Public Surface and Retired Items, Documentation Audit Process, Press Release, and FAQ. Added six rows to the section 18 discrepancy table and four open questions. Expanded `docs/DESIGN.md` with the spacing scale, an animation and motion section, component patterns, the error view spec, and a rewritten accessibility section. |

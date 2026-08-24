@@ -4,6 +4,32 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.30.0 - 2026-08-24
+
+A browser testing policy, added to the Documentation prompt as a default and then applied to this repository and to the one other prompt that drives a browser.
+
+### Added
+
+- `prompts/documentation.md`: A **Browser Testing** section, placed beside Writing Style because it has the same shape: document the project's rule if it states one, and only adopt the default where it does not. The default is to drive Microsoft Edge and never Chrome. Where there is no JavaScript runtime on the maintenance machine, end-to-end testing means driving a headless browser directly, and Chrome is typically the owner's day-to-day browser, so driving it disturbs a live session. Edge runs the same engine, so nothing about the results changes.
+- Three clauses were added around the rule itself, because the bare instruction leaves the obvious gaps unanswered. It applies to every browser a test drives rather than only the one named in a config file, since an ad hoc headless invocation from a shell command is testing too, and that is the form this project actually uses. The resolved binary path belongs in the Runbook, because it differs by platform and is the first thing that breaks on a new machine. And a project that genuinely needs a second engine should say which browsers it targets and why, rather than dropping the default silently.
+- `docs/PRD.md` section 29: This repository's own browser testing rule, adopted from that default since it stated none. Records the Edge path on this machine, the exact headless invocation used, and two constraints that are not obvious: the Content Security Policy blocks inline scripts, so a driver has to be a real same-origin file rather than injected markup, and a DOM dump cannot exercise the Clipboard API, which is why the copy button's paths remain unverified.
+
+### Changed
+
+- `prompts/mobile-responsive-audit.md`: The verification methodology section opened with "Headless Chrome enforces an effective minimum viewport", which is an instruction to drive Chrome and directly contradicted the new default. It now names Edge, defers to any rule the project states, and describes the viewport floor as a property of any headless Chromium browser, which is what it always was. The measurements are unchanged because the engine is the same.
+
+### Notes
+
+Worth stating plainly: every browser check in this project up to and including v1.29.0 used Chrome, this session included. The policy is new, not newly enforced, and the patch notes for v1.28.0 and v1.29.0 accurately record Chrome as what was used at the time. They are left alone, because they describe what happened rather than what the rule is now.
+
+### Verified
+
+- The full render check was re-run in Edge across all six routes, which is both the verification for this release and the first exercise of the policy. Every route matches what Chrome produced: the home view and an unknown slug both render four cards, all four prompt pages open collapsed with the label reading "Expand" and toggle to "Hide", and no route renders the error view.
+- The Documentation prompt now renders at 22,785 characters and the new section reaches the page: the rendered text contains both "Browser Testing" and the Edge rule. That count matches the fenced block in `prompts/documentation.md` exactly, which confirms the mirror in `js/prompts-data.js` carries the edit rather than a stale copy.
+- `tools/prompts-mirror.py` resynced the data file and then passed a clean check: four prompts, no orphans in either direction, all frontmatter present.
+
+---
+
 ## v1.29.0 - 2026-08-24
 
 The prompt block is now collapsible, and collapsed when a page opens. The first new component on the site since v1.0.

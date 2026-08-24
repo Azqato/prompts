@@ -4,7 +4,7 @@ description: Scan the entire codebase, then consolidate all documentation into f
 meta: Claude Code Prompt
 ---
 
-Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Security, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
+Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Security, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
 
 Use it when a project needs one authoritative, exhaustive doc set in a single pass. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, cross-checks the docs against reality, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
 
@@ -228,6 +228,21 @@ and write it in:
 Apply the writing style to every document you write in this audit. Then sweep the
 rest of the project's text for violations and fix those too, and record in the
 patch notes how many were found and where.
+Browser Testing
+Record the project's rule for which browser is driven during automated or
+end-to-end testing. If the project already states one, document it and leave it
+alone. If it does not, adopt this default and write it in:
+- Use Microsoft Edge, never Chrome. Where there is no JavaScript runtime on the
+  maintenance machine, end-to-end testing is done by driving a headless browser
+  directly, and Chrome is the owner's day-to-day browser. Driving it would disturb
+  a live session. Edge runs the same engine and is free to use.
+- This applies to every browser a test drives, not only the one named in a config
+  file: an ad hoc headless invocation from a script or a shell command is testing
+  and falls under the same rule.
+- Record the resolved browser binary path in the Runbook, since it differs by
+  platform and is the first thing that breaks on a new machine.
+- Where the project genuinely needs a second engine, say which browsers it targets
+  and why, rather than dropping the default silently.
 Security
 - Authentication model: how users are identified and sessions are managed
 - Authorization model: what different user roles can and cannot do
