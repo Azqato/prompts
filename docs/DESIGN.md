@@ -1,6 +1,6 @@
 # DESIGN.md - Prompts
 
-**Version:** 1.6
+**Version:** 1.8
 **Status:** Active
 **Author:** Azqato
 
@@ -35,9 +35,13 @@ All colors are defined as CSS custom properties in `:root`.
 | `--color-text-primary` | `#eef3f7` | Body copy, headings |
 | `--color-text-secondary` | `#cbdae6` | Subtitles, captions, sidebar inactive links |
 | `--color-positive` | `#3fb950` | Success state (copy button "Copied!" feedback) |
-| `--color-negative` | `#f85149` | Error states (unused at v1.0) |
-| `--color-warning` | `#ffa657` | Caution callouts (unused at v1.0) |
+| `--color-negative` | `#f85149` | Error states. In use since v1.28.0 by the copy button's failed state |
+| `--color-warning` | `#ffa657` | Caution callouts. Reserved, referenced nowhere in the stylesheet as of v1.28.0 |
 | `--color-purple` | `#bc8cff` | Gradient accent on card hover top border |
+
+`--color-warning` is held deliberately rather than deleted: it is part of the shared Azqato palette, and a caution state added later should use the brand value rather than inventing one.
+
+Note that the error view described in section 5 does **not** use `--color-negative`, even though it is the error view. It is styled as a neutral information panel, because a failure to load prompt data is a diagnostic for the author in a broken working copy rather than an alarm for a reader. The one place the negative colour appears is the copy button's failed state, where it is reporting that an action the reader just took did not work, which is the case that genuinely warrants it.
 
 **Rationale:** The `#00d4a0` teal is the Azqato brand signature across all projects. The dark background palette is drawn from the azqato.github.io design system. Primary text on background passes approximately 15:1 contrast; muted text on background is approximately 4.8:1, meeting WCAG AA.
 
@@ -103,6 +107,40 @@ Persistent on desktop. Contains:
 **Padding:** 32px top/bottom, 28px left/right on desktop; 20px on mobile
 
 The content block is capped at `--content-max` plus its 56px of horizontal padding, so the block itself measures 75vw once the viewport is wide enough. Below roughly 1170px the `max()` floor holds the text column at 820px, which keeps line length readable on laptops and leaves the mobile layout completely unchanged. Above that, the column grows with the viewport so wide screens are not left with a narrow strip of content and a large empty margin. The floor is what makes this safe at the 1023px breakpoint, where the sidebar collapses to a full-width top nav and a bare `75vw` would otherwise shrink the content instead of widening it.
+
+---
+
+## 4a. Spacing System
+
+**Base unit: 2px. Preferred rhythm: 4px.**
+
+There is no spacing token in `:root`. Every value is written literally in the rule that uses it, which is a deliberate consequence of the project's size: a token indirection for spacing would cost more in lookup than it saves in consistency across a single 536-line stylesheet. The scale below is therefore descriptive, derived from the values actually in use, not a set of variables to reference.
+
+| Step | Value | Used for |
+| --- | --- | --- |
+| Hairline | 1px | Borders and dividers |
+| 1 | 2px | The card hover gradient bar height |
+| 1.5 | 3px | The `h2::before` accent bar width, the active sidebar link left border |
+| 2 | 4px | Tightest gap: description offset under a card title, sidebar nav link gap, copy button vertical padding |
+| 3 | 6px | Title-to-meta gap on a prompt header, list item spacing, mobile nav link vertical padding |
+| 4 | 8px | Sidebar nav link vertical padding, support button vertical padding |
+| 5 | 10px | Code block header vertical padding, mobile nav link horizontal padding |
+| 6 | 12px | Card gap in the home list, support button horizontal padding, copy button horizontal padding, mobile logo bottom margin |
+| 7 | 14px | Paragraph bottom margin, h2 bottom margin, hero h1 bottom margin, mobile sidebar vertical padding |
+| 8 | 16px | Card padding, code block header horizontal padding, mobile content horizontal padding, mobile nav horizontal padding |
+| 9 | 20px | Code block and status panel padding, mobile content vertical padding, h3 top margin, sidebar support top padding |
+| 10 | 24px | Sidebar horizontal padding, sidebar logo bottom margin, description top margin, tablet content vertical padding |
+| 11 | 28px | Content horizontal padding, footer vertical padding, sidebar vertical padding, h2 top margin, description bottom margin |
+| 12 | 32px | Content vertical padding, footer horizontal padding |
+| 14 | 40px | Hero bottom margin, the largest gap on the page |
+
+**Rules:**
+
+- Prefer a multiple of 4. The three values that are not (6px, 10px, 14px) are optical adjustments on small elements, not the norm to follow.
+- Never introduce a value above 40px. If a section needs more separation than the hero gets, the layout is wrong rather than the spacing.
+- Vertical rhythm inside the content column is driven by margins on the typographic elements themselves (`p`, `h2`, `h3`), not by wrapper padding. Match that when adding a block.
+- Horizontal padding differs by breakpoint and is the only spacing that changes responsively: 28px on desktop, 20px on tablet, 16px on mobile.
+- The one named spatial token is `--sidebar-width: 220px`, because it appears in the grid definition and would be meaningless as a literal there. `--content-max` is a computed width rather than a spacing step; see section 4.
 
 ---
 
@@ -183,10 +221,19 @@ Copied state (2 seconds):
   color: --color-positive
   border-color: rgba(63,185,80,0.4)
 
+Failed state (2 seconds):
+  text: "Copy failed"
+  color: --color-negative
+  border-color: rgba(248,81,73,0.4)
+
 Transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease
 ```
 
-JavaScript behavior: on click, use `navigator.clipboard.writeText()` to copy the `<code>` element's text content. Set button to "Copied!" state, then reset after 2000ms.
+JavaScript behavior: on click, use `navigator.clipboard.writeText()` to copy the `<code>` element's text content. Set the button to "Copied!", then reset after 2000ms.
+
+Both outcomes are reported. If the Clipboard API is unavailable, or the write rejects, the button shows "Copy failed" for the same 2000ms and its `aria-label` becomes "Copy failed. Select the prompt text and copy it manually". Added in v1.28.0: before that a failed copy left the button reading "Copy" and said nothing, so the reader would paste whatever was on the clipboard already, believing it had worked. A silent failure on the site's only action was the worst failure mode it had.
+
+The two states share one code path and differ only in label, class, and `aria-label`, so they cannot drift apart in timing or reset behaviour.
 
 ---
 
@@ -222,6 +269,29 @@ Hover:
 ```
 
 The bar is an absolutely positioned pseudo-element rather than a real `border-top`, so the card does not shift by 2px when it appears. `overflow: hidden` on the card clips the bar to the 10px corner radius.
+
+---
+
+### Error / Status Panel
+
+Rendered into the content area by `renderError()` when `js/prompts-data.js` fails to load or parse. It replaces the whole view: there is no partial state, because without the prompt data there is nothing to render.
+
+```
+Heading: h1 "Could not load prompts"
+Below it: the error message as a normal description paragraph
+Then the panel (.status-message):
+  background: --color-surface
+  border: 1px solid --color-border
+  border-radius: 10px
+  padding: 20px
+  color: --color-text-secondary
+  line-height: 1.65
+  Inline code inside it: 0.85rem
+```
+
+Styled as a neutral information panel, not an alert. It uses no `--color-negative`, no icon, and no red border. The reasoning: this failure is only ever reachable by the author, in a broken working copy, and the panel's job is to say which file to check rather than to signal alarm. A visitor to the deployed site will never see it unless the site is genuinely broken, in which case the calm version is still the right one.
+
+The sidebar may be unbuilt when this renders, since `renderError()` can be called before `buildSidebar()`. That is accepted: navigation to a prompt would fail anyway.
 
 ---
 
@@ -309,42 +379,113 @@ content: "Built by Azqato." where "Azqato" is a link to azqato.github.io
 
 ## 9. Responsive Behavior
 
+There are exactly two breakpoints, both `max-width`, both at the bottom of the stylesheet. The design is desktop-first: the base rules describe the desktop layout and each query overrides downward.
+
 | Breakpoint | Changes |
 | --- | --- |
 | `< 1024px` | Sidebar becomes top nav bar, backdrop blur, bottom-border active state |
 | `< 768px` | h1 reduces to 1.5rem, h2 reduces to 1.2rem, padding reduces to 20px/16px, code block font-size reduces to 0.8rem |
 
+### Below 1024px, in full
+
+The collapse is more than a grid change, and two of these declarations are load-bearing bug fixes rather than styling. **Removing either one silently reintroduces a shipped bug.** Both were added in v1.11.0 after the Mobile Audit prompt was run against the live site.
+
+| Rule | Declaration | Why |
+| --- | --- | --- |
+| `.site-wrapper` | `grid-template-columns: 1fr` | Single column |
+| `.sidebar` | `position: sticky; top: 0; z-index: 10; height: auto; width: 100%` | Becomes a top bar |
+| `.sidebar` | `border-right: none; border-bottom: 1px solid` | Divider moves to the bottom edge |
+| `.sidebar` | `background: rgba(22, 27, 34, 0.85)` plus `backdrop-filter: blur(12px)` | Translucent header. Degrades to a near-opaque bar without `backdrop-filter` support |
+| `.sidebar-sticky` | **`height: auto`** | **Load-bearing.** The desktop rule sets `height: 100vh` for the vertical sidebar. Without this override the collapsed header stays full-viewport-tall with its contents vertically centred, pushing all page content roughly 1200px below the fold |
+| `.sidebar-sticky` | `position: static; max-height: none; overflow: visible` | Undoes the desktop sticky column |
+| `.sidebar-sticky` | `flex-direction: row; flex-wrap: wrap; align-items: center` | Horizontal bar |
+| `.sidebar-nav` | **`flex-basis: 100%`** | **Load-bearing.** Without it the nav shares its flex row with the logo and squeezes into a roughly 150px column, stacking one link per row. This forces it onto its own line beneath the logo, which the logo's `margin-bottom` already implied was the intent |
+| `.sidebar-nav` | `flex-direction: row; flex-wrap: wrap; gap: 4px` | Links flow horizontally and wrap |
+| `.sidebar-nav a` | `border-left: none; border-bottom: 2px solid transparent; padding: 6px 10px` | Active indicator moves to the bottom edge |
+| `.sidebar-support` | `margin-top: 0; padding: 0 16px 0 4px` | Releases the `margin-top: auto` that pinned it to the bottom on desktop, so it flows inline |
+| `.content` | `padding: 24px 20px; max-width: 100%` | Full width. Note this overrides `--content-max`, so the `max()` formula does not apply below 1024px |
+
+### Below 768px
+
+Type and padding only. No layout change: the structure established at 1024px carries down unchanged. The site is verified at seven widths from 375px to 1920px; see `docs/PATCHNOTES.md` v1.11.0.
+
 ---
 
 ## 10. Accessibility
 
-- All color combinations meet WCAG AA contrast minimums (primary text ~15:1, muted text ~4.8:1)
-- Copy button includes `aria-label="Copy prompt to clipboard"` and updates `aria-label` to "Copied!" on activation
-- Focus styles preserved on all interactive elements (`focus-visible` outline in `--color-accent`)
-- `prefers-reduced-motion` disables transition animations
-- Code block uses `<pre><code>` semantics; screen readers treat it as preformatted content
+**Target: WCAG 2.1 Level AA.** Not formally audited, and the known gaps are listed below rather than omitted.
+
+### Contrast
+
+| Pair | Approximate ratio | AA requirement |
+| --- | --- | --- |
+| `--color-text-primary` on `--color-bg` | 15:1 | 4.5:1 for body text. Passes comfortably |
+| `--color-text-secondary` on `--color-bg` | 4.8:1 | 4.5:1. Passes, with little margin |
+| `--color-text-secondary` on `--color-surface` | Slightly lower than the above, since the surface is lighter than the background | 4.5:1. The tightest pair on the site |
+| `--color-accent` on `--color-bg` | Well above 4.5:1 | Passes |
+
+These figures are carried forward from earlier versions of this document and are stated as approximate. They have not been recomputed with a contrast tool. **Any new muted-text-on-surface combination should be checked rather than assumed**, because that pair already sits close to the floor.
+
+Rule: never place `--color-text-secondary` on anything lighter than `--color-surface`, and never introduce a third surface tone without checking the muted pair against it.
+
+### Implemented
+
+- Copy button carries `aria-label="Copy prompt to clipboard"`, updated to `"Copied!"` on activation so the state change is announced rather than only shown in the visible label.
+- `#content` carries `aria-live="polite"`, so a view change on hash navigation is announced. This matters because routing never reloads the page and there is no other signal that the content changed.
+- `#sidebar-nav` carries `aria-label="Prompt navigation"`.
+- `:focus-visible` renders a 2px `--color-accent` outline with a 2px offset and a 3px radius, applied globally rather than per-component, so no interactive element can be added without one.
+- `prefers-reduced-motion: reduce` sets `transition: none !important` and `animation: none !important` on every element and pseudo-element, and disables `scroll-behavior: smooth`.
+- The code block uses `<pre><code>` semantics, so screen readers treat the prompt as preformatted text.
+- The Support link uses `rel="noopener noreferrer"` with `target="_blank"`.
+- Every card in the home list is a single `<a>` wrapping its whole content, so the entire card is one focusable target with one accessible name rather than a div with a nested link.
+- `<html lang="en">` is set.
+- Colour is never the sole carrier of meaning. The active nav link is marked by a border and a weight change as well as by colour; the copied state changes the button's text.
+
+### Keyboard navigation
+
+Expected behaviour, and what is actually there.
+
+- All interactive elements are native `<a>` and `<button>` elements, so they are in the tab order by default. There is no `tabindex` anywhere, positive or negative, and no custom key handler. Tab, Shift-Tab, Enter, and Space all behave natively.
+- Tab order follows the DOM: logo, then each nav link in order, then the Support button, then into the content area, reaching the copy button after the description.
+- **Known gap: there is no skip-to-content link.** On a prompt page a keyboard user must tab past the logo, every nav link, and the Support button before reaching the copy button, which is the primary action. With four prompts that is seven stops. This is the most significant accessibility shortfall on the site and it grows with every prompt added. Adding one would mean a visually-hidden anchor as the first focusable element in `<body>`, targeting `#content`, which needs a `tabindex="-1"` to be focusable as a heading target.
+- **Known gap: the copy button's result is announced only via the `aria-label` change.** That is a reasonable signal but not a guaranteed one across screen readers; a live region would be more reliable. This applies to the failure state added in v1.28.0 as well as to success, and it matters more there, since a reader who does not notice the failure will paste the wrong thing.
+
+### Deliberately not addressed
+
+- No high-contrast theme and no light theme. Dark only is a brand decision (section 13), and the base palette meets AA on its own.
+- No font-size control. The page uses `rem` throughout, so browser and OS text scaling applies without any custom widget.
 
 ---
 
 ## 11. CSS File Structure
 
+Read from the file, in the order the blocks actually appear.
+
 ```
 css/style.css structure (in order):
-  :root (CSS variables)
-  Reset / base
-  Layout (site-wrapper flex, site-layout grid)
-  Sidebar
-  Main content
+  :root (CSS variables, including --sidebar-width and --content-max)
+  Reset / base (box-sizing, margin, padding, html, body, a)
+  Layout (.site-wrapper, the two-column grid)
+  Sidebar (.sidebar, .sidebar-sticky, .sidebar-logo, .accent-dot, .sidebar-nav)
+  Sidebar support button (.sidebar-support, .support-btn)
+  Main content (.content)
   Footer
-  Typography (h1, h2 with ::before bar, h3, body, lead, caption)
-  Prompt page (title block, description block)
-  Code block (wrapper, header bar, pre, code)
-  Copy button (default, hover, copied states)
-  Home page prompt list (items, links, descriptions)
-  Hero / intro section
+  Typography (h1, h2 with ::before bar, h3, p, .lead, code)
+  Hero / intro section (.hero)
+  Home page prompt list (.prompt-list, .prompt-list-item and its ::before,
+    hover states, .prompt-list-title, .prompt-list-desc)
+  Prompt detail page (.prompt-header, .prompt-meta, .prompt-description)
+  Code block (.code-block-wrapper, header bar, pre, code)
+  Copy button (default, hover, copied, copy-failed states)
+  Status / error message (.status-message)
+  Focus styles (:focus-visible)
   Media queries (tablet < 1024px, mobile < 768px)
-  Reduced motion
+  Reduced motion (prefers-reduced-motion)
 ```
+
+Corrected in v1.28.0. This list previously named a `.site-layout` class that has never existed, described `.site-wrapper` as flex when it is the grid, listed the blocks in an order the file does not use, and omitted four blocks entirely. It was flagged as a discrepancy in v1.27.0 and corrected once the author confirmed there was no intended design being preserved in it.
+
+Two notes for anyone adding a block. There is no spacing section, because spacing is written literally at each use rather than tokenized; see section 4a. And `body` is the flex column that pins the footer, while `.site-wrapper` is the grid inside it, which is the distinction the old list got backwards.
 
 ---
 
@@ -361,19 +502,23 @@ There is one HTML file, `index.html`. It is a static shell: sidebar, empty conte
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Azqato's Prompts</title>
+  <meta name="description" content="A personal library of reusable Claude Code prompts.">
   <link rel="icon" href="data:image/svg+xml,...">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <div class="site-wrapper">
     <aside class="sidebar">
-      <a class="sidebar-logo" href="#/">Azqato's Prompts<span class="accent-dot">.</span></a>
-      <nav class="sidebar-nav" id="sidebar-nav"></nav>
-      <div class="sidebar-support">
-        <a href="https://azqato.github.io/support.html" target="_blank" rel="noopener noreferrer" class="support-btn">Support</a>
+      <div class="sidebar-sticky">
+        <a class="sidebar-logo" href="#/">Azqato's Prompts<span class="accent-dot">.</span></a>
+        <nav class="sidebar-nav" id="sidebar-nav" aria-label="Prompt navigation"></nav>
+        <div class="sidebar-support">
+          <a href="https://azqato.github.io/support.html" target="_blank" rel="noopener noreferrer" class="support-btn">Support</a>
+        </div>
       </div>
     </aside>
-    <main class="content" id="content"></main>
+    <main class="content" id="content" aria-live="polite"></main>
   </div>
   <footer>
     <p>Built by <a href="https://azqato.github.io">Azqato</a>.</p>
@@ -384,7 +529,13 @@ There is one HTML file, `index.html`. It is a static shell: sidebar, empty conte
 </html>
 ```
 
-`prompts-data.js` must load before `script.js`. It defines `window.PROMPTS_DATA`, an array of `{ slug, raw }` objects where `raw` is the verbatim text of a `prompts/*.md` file.
+Corrected in v1.28.0. The previous template omitted the `.sidebar-sticky` wrapper, and **rebuilding the shell from it would have broken the sidebar layout**: that div is what carries `position: sticky`, `height: 100vh`, and the `display: flex; flex-direction: column` that lets `margin-top: auto` pin the Support button to the bottom. It also omitted the meta description, the nav `aria-label`, and the `aria-live` region. Flagged as a discrepancy in v1.27.0 and fixed once the author confirmed it was a stale transcription rather than an intended design.
+
+Three things in this template are load-bearing and are not stylistic:
+
+- **`.sidebar-sticky` must wrap all three sidebar children.** See above.
+- **`prompts-data.js` must load before `script.js`.** It defines `window.PROMPTS_DATA`, an array of `{ slug, raw }` objects where `raw` is the verbatim text of a `prompts/*.md` file. Reverse the order and the page renders the error view.
+- **The Content Security Policy must keep `script-src 'self'`.** It is what makes the project's no-dependency rule a runtime guarantee rather than a written one: a CDN script or a `fetch()` added later fails in the browser instead of silently shipping. Verified enforced on `file://`. See `docs/PRD.md` section 31. It defines `window.PROMPTS_DATA`, an array of `{ slug, raw }` objects where `raw` is the verbatim text of a `prompts/*.md` file.
 
 ### Prompt Markdown Template
 
@@ -432,6 +583,122 @@ Loading `prompts/*.md` with `fetch()` would require an HTTP server, because brow
 
 ---
 
+## 12a. Component Patterns
+
+Rules for building any recurring element, so a new one matches without having to reverse-engineer the existing ones.
+
+### The shared container pattern
+
+Every raised surface on the site (the code block wrapper, a prompt card, the status panel) is the same three declarations:
+
+```css
+background: var(--color-surface);
+border: 1px solid var(--color-border);
+border-radius: 10px;
+```
+
+10px is the container radius and it does not vary. Smaller controls use 6px (buttons), and the focus outline uses 3px. There is no other radius on the site. Do not introduce a fourth.
+
+### Interactive states
+
+Every interactive element follows the same progression, and the accent hover is the site's single interaction idiom:
+
+| State | Treatment |
+| --- | --- |
+| Default | `--color-text-secondary` text, `--color-border` border, transparent or surface background |
+| Hover | Text to `--color-accent` (or `--color-text-primary` for nav links), border to `rgba(0, 212, 160, 0.5)`, background to `--color-accent-light` |
+| Active / current | `--color-accent` text, weight 600, a 3px accent bar (left border on desktop, bottom border on mobile), `--color-accent-light` background |
+| Success | `--color-positive` text, `rgba(63, 185, 80, 0.4)` border. Used only by the copy button |
+| Focus | Global `:focus-visible` outline. Never overridden per component |
+| Disabled | No pattern exists. Nothing on the site can be disabled |
+
+Note the two hardcoded `rgba()` values. They are the only colour literals outside `:root`, and they exist because they are alpha variants of tokens that CSS cannot derive without `color-mix()`. If a third is ever needed, define it as a token instead.
+
+### Buttons
+
+Two exist, and they are the template for any third.
+
+- **Copy button** (`.copy-btn`): a real `<button>`, 4px/12px padding, 6px radius, 0.78rem, transparent background. Carries an `aria-label` that updates with its state.
+- **Support button** (`.support-btn`): an `<a>` styled as a button. `display: block`, centred text, 8px/12px padding, 6px radius, 0.8125rem, weight 500.
+
+Rules: use a real `<button>` for an action and an `<a>` for a navigation, never the reverse. Always set `font-family: var(--font-sans)` on a `<button>`, since it does not inherit. Always transition `color`, `border-color`, and `background` together at 0.15s ease. Never use a filled accent background: the accent is for text and borders, and a solid teal button would be louder than anything else on the page.
+
+### Cards
+
+One exists, the home list item. The pattern: an `<a>` wrapping the entire card so the whole surface is one focusable target with one accessible name, `position: relative` with `overflow: hidden` so a pseudo-element bar clips to the radius, a flex column with `align-items: flex-start`, and 16px padding.
+
+Never put a second link inside a card. It would nest interactive elements and split the accessible name.
+
+### Forms and modals
+
+**Neither exists, and neither should.** There is no `<input>`, `<textarea>`, `<select>`, `<form>`, or `<dialog>` anywhere in the project, and no overlay, drawer, tooltip, or toast.
+
+This is not an omission to be filled in. A form implies submission, which implies a server, which the architecture forbids. A modal implies a state layer the site does not have. If a future feature seems to need either, that is a signal to reconsider the feature. Should a genuine need ever arise, the container pattern above supplies the surface treatment, and the focus management would have to be written from scratch, since there is no library.
+
+---
+
+## 12b. Animation and Motion
+
+Motion here is confirmation, never decoration. Every animation on the site tells the reader that something responded to them. Nothing moves on its own, nothing animates on load, and nothing draws attention to itself.
+
+### Timing and easing
+
+**One duration and one easing curve, used everywhere: `0.15s ease`.**
+
+There is no second value. 150ms is fast enough to feel instantaneous rather than animated, which is the intent: the reader should register that the element responded, not watch it transition. Do not introduce a slower duration for a "smoother" feel, and do not add a custom cubic-bezier. A single timing across every element is what makes the interface feel like one thing.
+
+The only other timed behaviour is the copy button's success state, which holds for **2000ms** before reverting. That is a state duration set in JavaScript, not an animation.
+
+`scroll-behavior: smooth` is set on `html`, which applies the browser's own scroll timing. `route()` also calls `window.scrollTo(0, 0)` on every navigation, so a new view always starts at the top.
+
+### The complete inventory
+
+Everything that moves. If it is not on this list, it should not move.
+
+| Element | Property | Trigger |
+| --- | --- | --- |
+| Sidebar nav link | `color`, `border-color`, `background` | Hover, active |
+| Support button | `color`, `border-color`, `background` | Hover |
+| Copy button | `color`, `border-color`, `background` | Hover, copied, copy failed |
+| Prompt card | `background`, `border-color` | Hover |
+| Prompt card `::before` gradient bar | `opacity` 0 to 1 | Hover |
+
+### Rules
+
+- **Transition only `color`, `border-color`, `background`, and `opacity`.** Never `transform`, `width`, `height`, `margin`, or `padding`. Nothing on this site should move position or change size, and layout-affecting transitions cause reflow.
+- **Never transition `all`.** Name each property.
+- **Reveal, do not shift.** The card's gradient bar is an absolutely positioned pseudo-element faded in with `opacity` rather than a real `border-top`, precisely so the card does not jump by 2px when it appears. Any similar treatment must follow the same approach.
+- **No entrance animation.** Nothing fades or slides in on page load or on a view change. The content is already what the reader came for.
+- **No loading state.** There is nothing to load, so there is no spinner, skeleton, or progress indicator anywhere in the project.
+- **No hover animation on non-interactive elements.** If it moves, it must be clickable.
+- **`prefers-reduced-motion: reduce` disables everything** via a global `transition: none !important; animation: none !important` on all elements and pseudo-elements, plus `scroll-behavior: auto`. Because motion here is only ever confirmation and never information, nothing is lost when it is off: every animated state also changes colour or text.
+
+---
+
+## 12c. Notes for a Model Working on This Design
+
+Context that is obvious to someone who has read the whole stylesheet and invisible to someone editing one rule.
+
+**The design is inherited, not invented.** `#00d4a0`, the surface tones, the `h2::before` bar, and the interaction states all come from the Azqato brand system used across `azqato.github.io`, ComposerAtlas, and the Stocks methodology site. Changing one of them here does not make this site inconsistent with itself, it makes it inconsistent with four other sites. This is why section 13 states the accent as non-negotiable.
+
+**Restraint is the design, not the absence of one.** There is one accent colour, one radius scale, one transition duration, one interaction idiom, and no imagery. A change that adds a second of any of those is a larger change than it appears, even when it looks locally reasonable. The correct instinct when something seems to need a new value is to check whether an existing one can carry it.
+
+**The code block is the product.** Every prompt page exists to deliver one copyable block, and the header bar with the Copy button must be visible without scrolling on desktop. Anything that pushes it down (a longer description treatment, an added metadata row, a callout) is working against the page's only job.
+
+**Two rules are bug fixes wearing styling clothes.** `height: auto` on `.sidebar-sticky` and `flex-basis: 100%` on `.sidebar-nav`, both in the `max-width: 1023px` block, look like ordinary declarations and are not. Section 9 records what each one prevents. Do not tidy either away.
+
+**`--content-max` is load-bearing at the breakpoint.** The `max(820px, calc(75vw - 56px))` formula is not a stylistic flourish. Simplifying it to a bare `75vw` shrinks the content on tablets rather than widening it. Section 4 explains the floor.
+
+**`overflow: hidden` on the prompt card is structural.** It clips the gradient pseudo-element to the 10px radius. Removing it leaves a square bar overhanging two rounded corners.
+
+**The CSS structure list in section 11 and the shell template in section 12 were both wrong until v1.28.0** and are now read from the files. They are the two blocks most likely to go stale again, because nothing checks them, so verify against `index.html` and `css/style.css` before relying on either.
+
+**Where to change what.** A colour, font, or width: the `:root` block in `css/style.css`, and check the token is documented in section 2 of this file. A component: find its `/* Section */` banner in the stylesheet; the file is ordered by component and has no imports. Responsive behaviour: the two media queries at the bottom, and read section 9 first. Anything structural: `index.html`, all 31 lines of it.
+
+**Verification.** There is no test, no linter, and no visual regression check. The only way to confirm a change is to open `index.html` from disk and look at it: the home list, one prompt page, the copy button, and both breakpoints. `docs/PRD.md` section 20 makes this mandatory rather than advisory.
+
+---
+
 ## 13. What Not To Do
 
 - No light/white backgrounds (dark theme only, consistent with Azqato brand)
@@ -450,6 +717,8 @@ Loading `prompts/*.md` with `fetch()` would require an HTTP server, because brow
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.8 | 2026-08-23 | Resolved both discrepancies flagged in 1.7, after the author confirmed neither preserved an intended design. The section 11 CSS structure list is now read from the stylesheet: the `.site-layout` class that never existed is gone, `.site-wrapper` is correctly described as the grid, the order matches the file, and the four omitted blocks are listed. The section 12 shell template now includes the `.sidebar-sticky` wrapper the layout depends on, plus the meta description, the nav `aria-label`, the `aria-live` region, and the new Content Security Policy, with the three load-bearing elements called out. Documented the copy button's new failed state, which is the first use of `--color-negative`. |
+| 1.7 | 2026-08-23 | Documentation audit against the codebase. Added the spacing system (section 4a), component patterns (12a), animation and motion (12b), and a notes-for-a-model section (12c). Added the error and status panel component spec, which had shipped since v1.0 undocumented. Rewrote accessibility (section 10) with the WCAG target stated, a contrast table, keyboard navigation expectations, and two recorded gaps: no skip-to-content link, and a copy confirmation announced only through `aria-label`. Expanded section 9 with the full sub-1024px rule set, marking `height: auto` on `.sidebar-sticky` and `flex-basis: 100%` on `.sidebar-nav` as load-bearing v1.11.0 bug fixes. Annotated two blocks as unresolved discrepancies rather than correcting them: the CSS structure list in section 11 and the shell template in section 12. Noted that `--color-negative` and `--color-warning` remain reserved and unused. |
 | 1.6 | 2026-08-23 | Built the card hover treatment that section 2 already documented: the home list items became bordered, rounded cards on `--color-surface` with a 12px gap, hovering to `--color-card-hover` with a teal to purple gradient bar across the top. `--color-card-hover` and `--color-purple` were defined but unused until now. Rewrote the Home Page Prompt List spec to match, and added the card hover to the animation allowance in section 13. Replaced the em dash in this document's title with a hyphen. |
 | 1.5 | 2026-06-27 | Documented the optional `hidden: true` frontmatter key in the prompt markdown template. Hidden prompts are excluded from the sidebar and home list but remain reachable by direct link. |
 | 1.4 | 2026-06-13 | Static assets reorganized into subfolders: `css/style.css` and `js/script.js`, `js/prompts-data.js`. `index.html` references updated. Shell template and CSS file structure section updated. |

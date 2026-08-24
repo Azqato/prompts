@@ -62,11 +62,19 @@ function parsePrompt(raw, slug) {
 
 /* ---------- Minimal markdown for descriptions ---------- */
 
+/* Escapes the five characters that matter in HTML. The two quote forms
+   are included because interpolated values reach attributes as well as
+   text nodes: renderInline() writes a markdown link target straight into
+   href="...". Entities decode back to the original characters in both
+   text content and textContent, so the rendered page and the copied
+   prompt are byte-identical to the source either way. */
 function escapeHtml(str) {
   return str
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function renderInline(text) {
@@ -111,7 +119,8 @@ function buildSidebar() {
   let html = '<a href="#/" data-slug="">Home</a>';
   PROMPTS.forEach(function (p) {
     if (p.hidden) return; // hidden prompts stay reachable by direct link, but off the nav
-    html += '<a href="#/' + p.slug + '" data-slug="' + p.slug + '">' + escapeHtml(p.title) + '</a>';
+    const slug = escapeHtml(p.slug);
+    html += '<a href="#/' + slug + '" data-slug="' + slug + '">' + escapeHtml(p.title) + '</a>';
   });
   nav.innerHTML = html;
 }
@@ -133,7 +142,7 @@ function renderHome() {
   html += '<div class="prompt-list">';
   PROMPTS.forEach(function (p) {
     if (p.hidden) return; // hidden prompts stay reachable by direct link, but off the home list
-    html += '<a class="prompt-list-item" href="#/' + p.slug + '">';
+    html += '<a class="prompt-list-item" href="#/' + escapeHtml(p.slug) + '">';
     html += '<span class="prompt-list-title">' + escapeHtml(p.title) + '</span>';
     html += '<span class="prompt-list-desc">' + escapeHtml(p.description) + '</span>';
     html += '</a>';
@@ -178,18 +187,34 @@ function renderError(err) {
 function wireCopyButton() {
   const btn = document.querySelector('.copy-btn');
   if (!btn) return;
+
+  function flash(label, cls, ariaLabel) {
+    btn.textContent = label;
+    btn.classList.add(cls);
+    btn.setAttribute('aria-label', ariaLabel);
+    setTimeout(function () {
+      btn.textContent = 'Copy';
+      btn.classList.remove(cls);
+      btn.setAttribute('aria-label', 'Copy prompt to clipboard');
+    }, 2000);
+  }
+
   btn.addEventListener('click', function () {
     const code = document.querySelector('.code-block-wrapper pre code');
     if (!code) return;
+    // The Clipboard API needs a secure context. https:// and file:// both
+    // qualify, but a local server on a bare IP does not, and there the
+    // property is missing outright rather than returning a rejection.
+    // Either way the reader must be told, because the failure is otherwise
+    // silent and they will paste whatever was on the clipboard before.
+    if (!navigator.clipboard || !navigator.clipboard.writeText) {
+      flash('Copy failed', 'copy-failed', 'Copy failed. Select the prompt text and copy it manually');
+      return;
+    }
     navigator.clipboard.writeText(code.textContent).then(function () {
-      btn.textContent = 'Copied!';
-      btn.classList.add('copied');
-      btn.setAttribute('aria-label', 'Copied!');
-      setTimeout(function () {
-        btn.textContent = 'Copy';
-        btn.classList.remove('copied');
-        btn.setAttribute('aria-label', 'Copy prompt to clipboard');
-      }, 2000);
+      flash('Copied!', 'copied', 'Copied!');
+    }).catch(function () {
+      flash('Copy failed', 'copy-failed', 'Copy failed. Select the prompt text and copy it manually');
     });
   });
 }

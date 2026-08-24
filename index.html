@@ -6,6 +6,18 @@
   <title>Azqato's Prompts</title>
   <meta name="description" content="A personal library of reusable Claude Code prompts.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+  <!-- The point of this policy is not XSS hardening, which is marginal on a
+       page with no external resources and no inline handlers. It is that it
+       makes the no-dependency rule a runtime guarantee instead of a written
+       one: a future edit that reaches for a CDN script or adds a fetch() call
+       fails loudly in the browser rather than shipping a working page that
+       quietly broke the rule the architecture exists to protect.
+       data: is allowed for images because the favicon above is one.
+       frame-ancestors is deliberately absent: it is ignored in a meta tag,
+       so stating it here would only imply protection that is not there.
+       Verified enforced on file:// and https://, with a blocked inline
+       script and a blocked CDN script. See docs/PRD.md section 31. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>

@@ -406,6 +406,11 @@ code {
   border-color: rgba(63, 185, 80, 0.4);
 }
 
+.copy-btn.copy-failed {
+  color: var(--color-negative);
+  border-color: rgba(248, 81, 73, 0.4);
+}
+
 /* Status / error message */
 .status-message {
   color: var(--color-text-secondary);
