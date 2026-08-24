@@ -1,6 +1,6 @@
 # DESIGN.md - Prompts
 
-**Version:** 1.8
+**Version:** 1.9
 **Status:** Active
 **Author:** Azqato
 
@@ -175,11 +175,13 @@ Outer wrapper:
 
 Header bar (inside wrapper, above pre):
   bg: --color-tag-bg
-  border-bottom: 1px solid --color-border
+  border-bottom: 1px solid --color-border  (removed while collapsed)
   padding: 10px 16px
   display: flex, justify-content: space-between, align-items: center
-  Left label: "Prompt" in --color-text-secondary, 0.8rem
-  Right: Copy button (see below)
+  cursor: pointer  (the whole bar is the collapse target)
+  Left label: "Prompt" in --color-text-secondary, 0.8rem. Plain text, not a control
+  Right: .code-block-actions, a flex row with 8px gap holding the
+         collapse toggle then the Copy button, in that order
 
 pre element:
   bg: --color-tag-bg
@@ -192,7 +194,62 @@ pre element:
   color: --color-text-primary
   white-space: pre-wrap
   word-break: break-word
+  display: none while the wrapper carries .collapsed
 ```
+
+**The block is collapsed on arrival.** `renderDetail()` writes the wrapper with
+`.collapsed` already on it, so a prompt page opens showing the title, the
+description, and the header bar alone. The prompts run to several hundred lines
+and an expanded default buried the description under a wall of text before the
+reader had decided they wanted it. See the collapse toggle spec below.
+
+---
+
+### Collapse Toggle
+
+Positioned in the code block header bar, immediately left of the Copy button.
+
+```
+Appearance: identical to the Copy button in every resting property.
+  The two share one rule (.copy-btn, .code-toggle) rather than
+  defining a second button treatment. Same border, radius, padding,
+  size, colour, and hover.
+
+Collapsed state (the default):
+  text: "Expand"
+  aria-expanded: false
+  wrapper carries .collapsed
+  pre: display: none
+  header bar: border-bottom removed
+
+Expanded state:
+  text: "Hide"
+  aria-expanded: true
+```
+
+Three things about this are deliberate.
+
+**The label names the action, not the state.** "Expand" when collapsed, "Hide"
+when expanded, matching the convention "Copy" already sets.
+
+**The whole header bar is the click target, not just the button.** The listener
+sits on `.code-block-header`, which carries `cursor: pointer`. A click on the
+toggle bubbles up to that same handler, so there is no second listener on the
+button and no chance of a double fire. Clicks originating inside `.copy-btn` are
+ignored, so copying never collapses the block. The button still exists because
+the bar is a `div`: it cannot be focused, cannot be reached by keyboard, and has
+no accessible name or state.
+
+**Only the buttons themselves show hover.** An earlier build lit the toggle up
+whenever the bar was hovered, on the reasoning that the bar is the real target
+and should say so. It reads as a glitch rather than as feedback, because the
+pointer can be several hundred pixels away from the element that changed. The
+pointer cursor carries the affordance on its own. Do not add it back.
+
+There is no persistence. The block is collapsed again on every page load and on
+every navigation, because no browser storage API is used anywhere in the project
+and adding one for this would contradict a stated security property. See
+`docs/PRD.md` section 31.
 
 ---
 
@@ -228,6 +285,9 @@ Failed state (2 seconds):
 
 Transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease
 ```
+
+The default and hover blocks above are shared with the collapse toggle. Only the
+copied and failed states are the copy button's own.
 
 JavaScript behavior: on click, use `navigator.clipboard.writeText()` to copy the `<code>` element's text content. Set the button to "Copied!", then reset after 2000ms.
 
@@ -431,6 +491,8 @@ Rule: never place `--color-text-secondary` on anything lighter than `--color-sur
 ### Implemented
 
 - Copy button carries `aria-label="Copy prompt to clipboard"`, updated to `"Copied!"` on activation so the state change is announced rather than only shown in the visible label.
+- The collapse toggle is a real `<button>` carrying `aria-expanded` and `aria-controls="prompt-body"`, which resolves to the `<pre>`. Both are kept in step with the visible label on every toggle. The header bar it sits in is also clickable, but the bar is a `div` and is deliberately not given a role: the button inside it is the accessible control, and duplicating that on the container would announce the same action twice.
+- The collapsed prompt uses `display: none`, so it is removed from the accessibility tree as well as from the page. A screen reader is not offered several hundred lines of text the reader has not asked for.
 - `#content` carries `aria-live="polite"`, so a view change on hash navigation is announced. This matters because routing never reloads the page and there is no other signal that the content changed.
 - `#sidebar-nav` carries `aria-label="Prompt navigation"`.
 - `:focus-visible` renders a 2px `--color-accent` outline with a 2px offset and a 3px radius, applied globally rather than per-component, so no interactive element can be added without one.
@@ -446,7 +508,7 @@ Rule: never place `--color-text-secondary` on anything lighter than `--color-sur
 Expected behaviour, and what is actually there.
 
 - All interactive elements are native `<a>` and `<button>` elements, so they are in the tab order by default. There is no `tabindex` anywhere, positive or negative, and no custom key handler. Tab, Shift-Tab, Enter, and Space all behave natively.
-- Tab order follows the DOM: logo, then each nav link in order, then the Support button, then into the content area, reaching the copy button after the description.
+- Tab order follows the DOM: logo, then each nav link in order, then the Support button, then into the content area, reaching the collapse toggle and then the copy button after the description. The toggle is before Copy in the DOM as well as visually, so tab order matches reading order.
 - **Known gap: there is no skip-to-content link.** On a prompt page a keyboard user must tab past the logo, every nav link, and the Support button before reaching the copy button, which is the primary action. With four prompts that is seven stops. This is the most significant accessibility shortfall on the site and it grows with every prompt added. Adding one would mean a visually-hidden anchor as the first focusable element in `<body>`, targeting `#content`, which needs a `tabindex="-1"` to be focusable as a heading target.
 - **Known gap: the copy button's result is announced only via the `aria-label` change.** That is a reasonable signal but not a guaranteed one across screen readers; a live region would be more reliable. This applies to the failure state added in v1.28.0 as well as to success, and it matters more there, since a reader who does not notice the failure will paste the wrong thing.
 
@@ -475,8 +537,10 @@ css/style.css structure (in order):
   Home page prompt list (.prompt-list, .prompt-list-item and its ::before,
     hover states, .prompt-list-title, .prompt-list-desc)
   Prompt detail page (.prompt-header, .prompt-meta, .prompt-description)
-  Code block (.code-block-wrapper, header bar, pre, code)
-  Copy button (default, hover, copied, copy-failed states)
+  Code block (.code-block-wrapper, header bar, .code-block-actions,
+    collapsed states, pre, code)
+  Copy button and collapse toggle (shared default and hover,
+    plus copied and copy-failed on the copy button alone)
   Status / error message (.status-message)
   Focus styles (:focus-visible)
   Media queries (tablet < 1024px, mobile < 768px)
@@ -616,10 +680,13 @@ Note the two hardcoded `rgba()` values. They are the only colour literals outsid
 
 ### Buttons
 
-Two exist, and they are the template for any third.
+Three exist, and they are the template for any fourth.
 
 - **Copy button** (`.copy-btn`): a real `<button>`, 4px/12px padding, 6px radius, 0.78rem, transparent background. Carries an `aria-label` that updates with its state.
+- **Collapse toggle** (`.code-toggle`): a real `<button>` sharing the copy button's rule outright rather than restating it. Its label names the action it performs. Carries `aria-expanded` and `aria-controls`.
 - **Support button** (`.support-btn`): an `<a>` styled as a button. `display: block`, centred text, 8px/12px padding, 6px radius, 0.8125rem, weight 500.
+
+When a new control is a peer of an existing one, sitting beside it and doing the same kind of job, add it to that selector rather than writing a second rule. The toggle and Copy are pixel-identical at rest because they are literally the same declarations, which is a property that cannot drift.
 
 Rules: use a real `<button>` for an action and an `<a>` for a navigation, never the reverse. Always set `font-family: var(--font-sans)` on a `<button>`, since it does not inherit. Always transition `color`, `border-color`, and `background` together at 0.15s ease. Never use a filled accent background: the accent is for text and borders, and a solid teal button would be louder than anything else on the page.
 
@@ -660,6 +727,7 @@ Everything that moves. If it is not on this list, it should not move.
 | Sidebar nav link | `color`, `border-color`, `background` | Hover, active |
 | Support button | `color`, `border-color`, `background` | Hover |
 | Copy button | `color`, `border-color`, `background` | Hover, copied, copy failed |
+| Collapse toggle | `color`, `border-color`, `background` | Hover |
 | Prompt card | `background`, `border-color` | Hover |
 | Prompt card `::before` gradient bar | `opacity` 0 to 1 | Hover |
 
@@ -669,6 +737,7 @@ Everything that moves. If it is not on this list, it should not move.
 - **Never transition `all`.** Name each property.
 - **Reveal, do not shift.** The card's gradient bar is an absolutely positioned pseudo-element faded in with `opacity` rather than a real `border-top`, precisely so the card does not jump by 2px when it appears. Any similar treatment must follow the same approach.
 - **No entrance animation.** Nothing fades or slides in on page load or on a view change. The content is already what the reader came for.
+- **Show and hide, do not animate open and closed.** The collapse is `display: none`, with no height transition and no rotating chevron. Both would break the rule above: height is a layout property and a chevron needs `transform`. The state change is carried by the button's label instead, which is also the only form a screen reader can use.
 - **No loading state.** There is nothing to load, so there is no spinner, skeleton, or progress indicator anywhere in the project.
 - **No hover animation on non-interactive elements.** If it moves, it must be clickable.
 - **`prefers-reduced-motion: reduce` disables everything** via a global `transition: none !important; animation: none !important` on all elements and pseudo-elements, plus `scroll-behavior: auto`. Because motion here is only ever confirmation and never information, nothing is lost when it is off: every animated state also changes colour or text.
@@ -683,7 +752,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 **Restraint is the design, not the absence of one.** There is one accent colour, one radius scale, one transition duration, one interaction idiom, and no imagery. A change that adds a second of any of those is a larger change than it appears, even when it looks locally reasonable. The correct instinct when something seems to need a new value is to check whether an existing one can carry it.
 
-**The code block is the product.** Every prompt page exists to deliver one copyable block, and the header bar with the Copy button must be visible without scrolling on desktop. Anything that pushes it down (a longer description treatment, an added metadata row, a callout) is working against the page's only job.
+**The code block is the product, and since v1.29.0 it starts hidden.** That reads like a contradiction and is not. The page's job is to deliver one copyable block, and Copy works whether the block is shown or not, so the primary action is still one click from arrival. What collapsing removes is the several hundred lines of prompt text that used to sit between the reader and the description explaining what they were about to copy. The rule that still holds without qualification is the one that matters: **the header bar must be visible without scrolling on desktop**, and it now always is, on every prompt, at every length. Anything that pushes it down (a longer description treatment, an added metadata row, a callout) is working against the page's only job.
 
 **Two rules are bug fixes wearing styling clothes.** `height: auto` on `.sidebar-sticky` and `flex-basis: 100%` on `.sidebar-nav`, both in the `max-width: 1023px` block, look like ordinary declarations and are not. Section 9 records what each one prevents. Do not tidy either away.
 
@@ -717,6 +786,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.9 | 2026-08-24 | Specced the collapse toggle, which is the first new component since v1.0 and the third button on the site. Section 5 gains a Collapse Toggle spec and the code block header now documents the action group, the pointer cursor on the bar, and the collapsed default. Section 12a records the rule the toggle follows: a peer control joins the existing selector rather than getting a second treatment. Section 12b adds the show-and-hide rule, which is what the no-transform and no-height rules imply for a collapse. Section 12c reconciles the collapsed default with the tenet that the code block is the product. Sections 10 and 11 updated for the new control. |
 | 1.8 | 2026-08-23 | Resolved both discrepancies flagged in 1.7, after the author confirmed neither preserved an intended design. The section 11 CSS structure list is now read from the stylesheet: the `.site-layout` class that never existed is gone, `.site-wrapper` is correctly described as the grid, the order matches the file, and the four omitted blocks are listed. The section 12 shell template now includes the `.sidebar-sticky` wrapper the layout depends on, plus the meta description, the nav `aria-label`, the `aria-live` region, and the new Content Security Policy, with the three load-bearing elements called out. Documented the copy button's new failed state, which is the first use of `--color-negative`. |
 | 1.7 | 2026-08-23 | Documentation audit against the codebase. Added the spacing system (section 4a), component patterns (12a), animation and motion (12b), and a notes-for-a-model section (12c). Added the error and status panel component spec, which had shipped since v1.0 undocumented. Rewrote accessibility (section 10) with the WCAG target stated, a contrast table, keyboard navigation expectations, and two recorded gaps: no skip-to-content link, and a copy confirmation announced only through `aria-label`. Expanded section 9 with the full sub-1024px rule set, marking `height: auto` on `.sidebar-sticky` and `flex-basis: 100%` on `.sidebar-nav` as load-bearing v1.11.0 bug fixes. Annotated two blocks as unresolved discrepancies rather than correcting them: the CSS structure list in section 11 and the shell template in section 12. Noted that `--color-negative` and `--color-warning` remain reserved and unused. |
 | 1.6 | 2026-08-23 | Built the card hover treatment that section 2 already documented: the home list items became bordered, rounded cards on `--color-surface` with a 12px gap, hovering to `--color-card-hover` with a teal to purple gradient bar across the top. `--color-card-hover` and `--color-purple` were defined but unused until now. Rewrote the Home Page Prompt List spec to match, and added the card hover to the animation allowance in section 13. Replaced the em dash in this document's title with a hyphen. |

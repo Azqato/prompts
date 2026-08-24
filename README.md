@@ -10,7 +10,7 @@ Live site: [azqato.github.io/prompts](https://azqato.github.io/prompts/)
 
 Good prompts get written once and then lost, buried in an old chat thread or a notes app nobody opens again. This site is the fix: a small, permanent shelf for the prompts that turned out to be worth keeping.
 
-Every prompt gets its own page with a plain-language description of what it does, when to reach for it, and what it will change. Below that sits the full prompt text in a copy block. Read the description, press Copy, paste it into Claude Code, and go.
+Every prompt gets its own page with a plain-language description of what it does, when to reach for it, and what it will change. Below that sits the full prompt text, tucked behind an Expand button so the description is not buried under it. Read the description, press Copy, paste it into Claude Code, and go. You do not need to expand anything first.
 
 ---
 

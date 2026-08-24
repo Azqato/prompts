@@ -349,6 +349,7 @@ code {
   overflow: hidden;
 }
 
+/* The whole bar toggles, not just the button, so it carries the pointer. */
 .code-block-header {
   background: var(--color-tag-bg);
   border-bottom: 1px solid var(--color-border);
@@ -356,11 +357,30 @@ code {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
+}
+
+.code-block-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .code-label {
   color: var(--color-text-secondary);
   font-size: 0.8rem;
+}
+
+/* Collapsed: the pre is removed from the flow entirely rather than animated
+   to zero height, because transitioning height is forbidden (DESIGN 12b) and
+   would reflow the page on every toggle. The header keeps its own rounding
+   from the wrapper, so dropping its bottom border leaves a single clean bar. */
+.code-block-wrapper.collapsed pre {
+  display: none;
+}
+
+.code-block-wrapper.collapsed .code-block-header {
+  border-bottom: none;
 }
 
 .code-block-wrapper pre {
@@ -382,8 +402,11 @@ code {
   padding: 0;
 }
 
-/* Copy button */
-.copy-btn {
+/* Copy button, and the collapse toggle that sits beside it. They are peers in
+   the same action group, so they share one appearance rather than inventing a
+   second button treatment. */
+.copy-btn,
+.code-toggle {
   font-family: var(--font-sans);
   background: transparent;
   border: 1px solid var(--color-border);
@@ -395,7 +418,11 @@ code {
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
-.copy-btn:hover {
+/* Only the buttons themselves light up. The bar is clickable too, but the
+   pointer cursor already says so, and lighting the toggle from a hover several
+   hundred pixels away reads as a glitch rather than as feedback. */
+.copy-btn:hover,
+.code-toggle:hover {
   border-color: rgba(0, 212, 160, 0.5);
   color: var(--color-accent);
   background: var(--color-accent-light);

@@ -159,16 +159,25 @@ function renderDetail(p) {
   html += '<span class="prompt-meta">' + escapeHtml(p.meta) + '</span>';
   html += '</div>';
   html += '<div class="prompt-description">' + p.descHtml + '</div>';
-  html += '<div class="code-block-wrapper">';
+  // Collapsed on arrival. The prompts run to several hundred lines, so an
+  // expanded default buries the description under a wall of text before the
+  // reader has decided they want it.
+  html += '<div class="code-block-wrapper collapsed">';
   html += '<div class="code-block-header">';
   html += '<span class="code-label">Prompt</span>';
+  html += '<div class="code-block-actions">';
+  // Before Copy in the DOM as well as visually, so tab order matches reading
+  // order. Its click bubbles to the header handler like any other.
+  html += '<button class="code-toggle" aria-expanded="false" aria-controls="prompt-body">Expand</button>';
   html += '<button class="copy-btn" aria-label="Copy prompt to clipboard">Copy</button>';
   html += '</div>';
-  html += '<pre><code>' + escapeHtml(p.prompt) + '</code></pre>';
+  html += '</div>';
+  html += '<pre id="prompt-body"><code>' + escapeHtml(p.prompt) + '</code></pre>';
   html += '</div>';
   document.getElementById('content').innerHTML = html;
   document.title = p.title;
   wireCopyButton();
+  wireCollapseToggle();
 }
 
 function renderError(err) {
@@ -180,6 +189,27 @@ function renderError(err) {
     'and is loaded before <code>script.js</code>.</p>' +
     '</div>';
   document.getElementById('content').innerHTML = html;
+}
+
+/* ---------- Collapse toggle ---------- */
+
+function wireCollapseToggle() {
+  const wrapper = document.querySelector('.code-block-wrapper');
+  const header = document.querySelector('.code-block-header');
+  const btn = document.querySelector('.code-toggle');
+  if (!wrapper || !header || !btn) return;
+  // The listener lives on the whole bar, so the target is the full-width
+  // header rather than a small button. The button stays because the bar is a
+  // div and cannot be focused or announced; a click on it bubbles up to here,
+  // which is why there is no second listener on the button itself.
+  header.addEventListener('click', function (e) {
+    if (e.target.closest('.copy-btn')) return;
+    const collapsed = wrapper.classList.toggle('collapsed');
+    btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    // The label names the action the button performs, not the current state,
+    // which is the convention the Copy button already follows.
+    btn.textContent = collapsed ? 'Expand' : 'Hide';
+  });
 }
 
 /* ---------- Copy button ---------- */

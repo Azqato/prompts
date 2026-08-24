@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.28.0
+**Version:** 1.29.0
 **Status:** Active
 **Author:** Azqato
 
@@ -85,7 +85,7 @@ Rendered from the matching markdown file in `prompts/`. Each prompt view contain
 
 1. **Title**: the name of the prompt as an `h1`, from the markdown frontmatter
 2. **Description**: one or more paragraphs explaining what the prompt does, when to use it, and any important behavior the user should know before running it
-3. **Code Block**: the full prompt text in a `<pre><code>` block with a one-click copy button
+3. **Code Block**: the full prompt text in a `<pre><code>` block, behind a header bar carrying a collapse toggle and a one-click copy button. The block is collapsed when the page opens; see section 10a
 
 No other sections. No decorative content. No padding between the prompt and the rest of the page beyond standard spacing.
 
@@ -122,6 +122,20 @@ Not rendered as navigable pages on the site. These are documentation files for c
 - On click: copies the full code block contents to clipboard
 - Visual feedback: button text changes to "Copied!" for 2 seconds, then resets
 - Requires no external library; uses the native Clipboard API
+- The button sits in the code block header bar and is present whether the block is shown or hidden, so copying never requires expanding first
+
+---
+
+## 10a. Prompt Collapse Behavior
+
+Added in v1.29.0. Numbered `10a` rather than inserted as a new section 11, because nine releases of patch notes cite this document by section number and renumbering would silently invalidate all of them. Section 33 records the rule.
+
+- **The prompt block is collapsed when a prompt page opens.** Every page load and every navigation starts collapsed. The prompts run to several hundred lines, and an expanded default pushed the description, which explains what the reader is about to copy, off the top of a screen.
+- The header bar carries a toggle labelled **Expand** when hidden and **Hide** when shown. The label names the action the button performs, not the state it is in, which is the convention the copy button already sets.
+- **The entire header bar is clickable**, not only the toggle. A click anywhere on the bar toggles the block, except on the copy button, so copying never collapses what was just copied.
+- Copy works in both states. The prompt text stays in the DOM while hidden; only its display is suppressed. This is what keeps the primary action one click from arrival despite the collapsed default.
+- **The state is not persisted.** No browser storage API is used anywhere in the project, and section 31 states that as a privacy property. Remembering a reader's preference here would cost that for a small convenience, so it is deliberately not done.
+- There is no animation on the collapse. It is a display change, not a transition. `docs/DESIGN.md` section 12b forbids transitioning height or transform, which rules out both an animated open and a rotating chevron.
 
 ---
 
@@ -264,10 +278,10 @@ Traced from the code rather than from the docs.
 3. `js/script.js` runs `init()` on `DOMContentLoaded`, or immediately if the document is already parsed. `init()` validates that `PROMPTS_DATA` is a non-empty array, maps each entry through `parsePrompt()`, builds the sidebar, binds `hashchange`, and calls `route()`.
 4. `parsePrompt()` splits frontmatter with a single regex, reads `title`, `description`, `meta`, and `hidden`, takes the first fenced code block in the body as the prompt text, and treats everything before that fence (minus a trailing `## Prompt` heading) as the description.
 5. `renderMarkdown()` is a hand-rolled markdown subset applied only to the description: it splits on blank lines and handles headings, all-bullet blocks as `<ul>`, and paragraphs. `renderInline()` handles inline code, bold, and links on HTML-escaped text.
-6. `route()` reads the hash, resolves any entry in the `REDIRECTS` map (guarded on the target existing, and empty as of v1.24.0), finds the prompt, and calls `renderHome()` or `renderDetail()`. An unknown slug silently falls through to the home view. `renderDetail()` also sets `document.title` and wires the copy button.
+6. `route()` reads the hash, resolves any entry in the `REDIRECTS` map (guarded on the target existing, and empty as of v1.24.0), finds the prompt, and calls `renderHome()` or `renderDetail()`. An unknown slug silently falls through to the home view. `renderDetail()` also sets `document.title`, wires the copy button, and wires the collapse toggle.
 7. If `PROMPTS_DATA` is missing or `parsePrompt()` throws, `renderError()` paints a `.status-message` panel telling the reader to check that `prompts-data.js` is present and loaded first. This view exists in both `js/script.js` and `css/style.css` but is not described in section 8 or in `docs/DESIGN.md`.
 
-`js/script.js` is the only file with logic. `js/prompts-data.js` is the only data source. There is no state beyond the module-level `PROMPTS` array and the URL hash, nothing is persisted, and there are no network calls, storage APIs, or external services at runtime. The single browser API dependency is `navigator.clipboard.writeText()` in the copy button.
+`js/script.js` is the only file with logic. `js/prompts-data.js` is the only data source. There is no state beyond the module-level `PROMPTS` array and the URL hash, nothing is persisted, and there are no network calls, storage APIs, or external services at runtime. The single browser API dependency is `navigator.clipboard.writeText()` in the copy button. The collapse state added in v1.29.0 is held entirely in a CSS class on one element, which is why it does not count as state and does not survive a navigation.
 
 ---
 
@@ -369,6 +383,7 @@ Observed on 2026-08-23 by reading the code against the docs. Items 2, 5, and 6 w
 | 13 | `docs/DESIGN.md` section 2 marks `--color-negative` and `--color-warning` as "unused at v1.0" | Both are still defined and still referenced nowhere, at v1.27.0 | Trust both: the tokens are genuinely unused and the note is genuinely stale. Annotated in place in v1.27.0 rather than removed, since the tokens are reserved deliberately for future error and caution states |
 | 14 | `docs/DESIGN.md` section 9 responsive table lists what changes below 1024px | It omits `height: auto` on `.sidebar-sticky` and `flex-basis: 100%` on `.sidebar-nav`, both of which are the load-bearing v1.11.0 bug fixes | Trust the stylesheet. Documented in DESIGN section 9 in v1.27.0, because a future edit that removes either one silently reintroduces a shipped bug |
 | 15 | Nothing documented it, because nothing had noticed | `core.autocrlf` is true system-wide and there is no `.gitattributes`, so a fresh Windows clone gets CRLF `prompts/*.md` while the `raw` values in `js/prompts-data.js` stay LF. The two would never compare equal | **Found in v1.28.0** while testing `tools/prompts-mirror.py`, which failed on a file git had just checked out. The script now normalizes line endings on both sides, since they are a property of the checkout rather than of the content. Whether to pin LF with a `.gitattributes` is open question 5 |
+| 16 | Section 24 of this document, Assumptions: "`escapeHtml()` does not escape quotes, and `renderInline()` writes a markdown link target directly into an `href` attribute" | Both quote forms have been escaped since v1.28.0, and section 30 of this same document records the fix and strikes it from the debt table | **Corrected in v1.29.0.** The v1.28.0 pass updated sections 30 and 31 for the escaping change and missed this one, so the document contradicted itself for a release. Found by reading section 24 while checking whether the collapse work touched any stated assumption. Worth noting as a pattern: a fact repeated in more than one section will go stale in the copy nobody was editing |
 
 Confirmed accurate, checked rather than assumed:
 
@@ -541,7 +556,8 @@ These are live and are the product as it exists today.
 | Hash routing | `index.html#/<slug>` addresses each prompt. Switching views does not reload the page |
 | Dependency-free `file://` operation | Prompt text is embedded in `js/prompts-data.js` and loaded by `<script>`, so the site runs by opening the file from disk |
 | Dynamic sidebar | Built from the prompt data at load, with an active-state indicator on the current view |
-| One-click copy | Native Clipboard API, with a two-second "Copied!" confirmation state |
+| One-click copy | Native Clipboard API, with a two-second "Copied!" confirmation state. Works whether the prompt block is shown or hidden |
+| Collapsible prompt block | The block is collapsed on arrival. The whole header bar toggles it, and the label names the action. Not persisted. See section 10a |
 | Home list | Card per prompt, title and one-line description, with a hover treatment |
 | Minimal markdown renderer | Headings, paragraphs, bullet lists, inline code, bold, and links in prompt descriptions |
 | `hidden` frontmatter flag | Removes a prompt from the sidebar and home list while leaving its page reachable by direct address. Supported, currently unused |
@@ -577,6 +593,7 @@ Not committed and not scheduled. Recorded so the ideas are not lost.
 - A "last updated" date per prompt, derived from the patch notes rather than from file metadata, which would let a reader tell a revised prompt from an original one.
 - A skip-to-content link, so a keyboard user reaching a prompt page does not pass seven focus stops before the copy button. See the accessibility section of `docs/DESIGN.md`. This is now the largest known gap in the project.
 - A live region for the copy button's result, which is currently announced only through an `aria-label` change.
+- Remembering the collapse state across a navigation, which is deliberately not built today because it would mean introducing browser storage. Recorded so the reason is visible if it is ever reconsidered rather than the idea simply reappearing.
 
 ---
 
@@ -587,7 +604,7 @@ Decisions taken without full information, accepted as true, and worth revisiting
 - **The library stays small.** Every choice against search, tagging, and pagination assumes the prompt count stays in the low tens. At roughly twenty prompts the sidebar stops being scannable and the home list stops fitting on a screen, and both decisions need reopening.
 - **The author is the only person who edits it.** There is no contributing guide, no pull request template, no review process, and no lint or test gate. A second maintainer would need all of them, because nothing currently catches a mistake except loading the page.
 - **`prompts-data.js` will be kept in sync by discipline.** Nothing enforces the mirror. The assumption is that every edit follows the procedure in section 12. This is the weakest assumption in the project and section 19 treats it as the primary fragility.
-- **Prompt text is trusted input.** `escapeHtml()` does not escape quotes, and `renderInline()` writes a markdown link target directly into an `href` attribute. This is safe only because every byte of content is author-written. If descriptions were ever sourced from anywhere else, that is an injection, not an edge case.
+- **Prompt text is trusted input.** `escapeHtml()` covers both quote forms as of v1.28.0, and the slug is escaped wherever it reaches an attribute, so the sharpest edge is gone. The assumption still holds at the level that matters: nothing validates a prompt file, the markdown renderer is hand-rolled rather than audited, and it is safe because every byte of content is author-written. If descriptions were ever sourced from anywhere else, that is an injection, not an edge case. (This bullet still described the pre-v1.28.0 code until v1.29.0. It is recorded as item 16 in section 18.)
 - **The Clipboard API is available.** The copy button has no fallback. It requires a secure context, which `https://` and `file://` both satisfy, but a page served over plain `http://` from a local server would fail silently, with no error shown to the reader.
 - **GitHub Pages continues to serve a repository root from `main`.** The deploy process is a push. There is no configuration in the repository that captures this, so the setting exists only in the GitHub project settings and in section 17.
 - **Semantic versioning is applied by judgment.** There is no release tooling and no tags. Whether a change is minor or patch is decided by the author at the time of writing the entry.
@@ -954,10 +971,11 @@ There is no API. There are no endpoints, no requests, and no serialization bound
 | `findPrompt(slug)` | Slug | `Prompt` or `null` | Linear scan. `null` for an unknown slug |
 | `buildSidebar()` | `PROMPTS` | Writes `#sidebar-nav` | Skips entries where `hidden` is true |
 | `renderHome()` | `PROMPTS` | Writes `#content`, sets the document title | Skips hidden entries |
-| `renderDetail(p)` | A `Prompt` | Writes `#content`, sets the title to the prompt name, wires the copy button | None |
+| `renderDetail(p)` | A `Prompt` | Writes `#content`, sets the title to the prompt name, wires the copy button and the collapse toggle | None |
 | `renderError(err)` | An `Error` | Writes the status panel into `#content` | Terminal. The sidebar may be unbuilt at this point |
 | `route()` | `window.location.hash` | Renders home or a detail view, sets the active link, scrolls to top | An unknown slug falls through to home, silently and by design |
 | `currentSlug()` | The hash | Trimmed slug string, empty for the home view | None |
+| `wireCollapseToggle()` | The rendered DOM | Binds one click handler on `.code-block-header` | Returns early if the wrapper, header, or button is absent. The listener is on the header rather than the button, so a click on the button reaches it by bubbling and there is no second handler. A click inside `.copy-btn` returns early, so copying does not collapse the block |
 | `wireCopyButton()` | The rendered DOM | Binds one click handler | Returns early if the button is absent. Since v1.28.0 a missing Clipboard API or a rejected write shows "Copy failed" for 2000ms with a matching `aria-label`, sharing one code path with the success state so the two cannot drift |
 
 ### State management
@@ -969,7 +987,7 @@ All application state is:
 1. `PROMPTS`, a module-level array, written once at init and never mutated afterwards.
 2. `window.location.hash`, which is the single source of truth for the current view.
 
-There is no store, no observable, no reactivity, no component lifecycle, and no diffing. A view change is `innerHTML` replacing the whole content area. Nothing is cached, nothing is persisted, and no browser storage API is used: `localStorage`, `sessionStorage`, IndexedDB, and cookies are all absent from the codebase. Refreshing the page rebuilds everything from scratch in a few milliseconds, which is why none of the above is missed.
+There is no store, no observable, no reactivity, no component lifecycle, and no diffing. A view change is `innerHTML` replacing the whole content area. The one piece of view state that exists, whether the prompt block is collapsed, lives as a class on a single element and is discarded with it on the next render. Nothing is cached, nothing is persisted, and no browser storage API is used: `localStorage`, `sessionStorage`, IndexedDB, and cookies are all absent from the codebase. Refreshing the page rebuilds everything from scratch in a few milliseconds, which is why none of the above is missed.
 
 The one piece of transient UI state, the copy button's "Copied!" label, lives in the DOM and in a `setTimeout` closure, and is discarded when the view changes.
 
@@ -1186,6 +1204,8 @@ These are the standards the audit applies, restated here so they bind the docume
 
 **Numbers are not renumbered.** Sections are appended rather than inserted, and the version history stays last. Nine releases of patch notes cite these sections by number, and renumbering would invalidate every one of those references for no gain.
 
+Where new material genuinely belongs beside an existing section rather than at the end, it takes a letter suffix: `10a` follows section 10 and nothing after it moves. `docs/DESIGN.md` has used this since v1.27.0 for sections 4a, 12a, 12b, and 12c, and this document adopted it in v1.29.0 for section 10a. Prefer appending. Use a suffix only when placement carries real meaning, which it does when a reader would look for the material next to a specific section and nowhere else.
+
 **Historical records are never rewritten.** A patch note describes what happened on the day it was written. It is not updated when the thing it describes is later changed or removed.
 
 ### After any documentation change
@@ -1336,6 +1356,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.29.0 | 2026-08-24 | Made the prompt block collapsible and collapsed it by default. The entire header bar toggles it, with a button labelled for the action it performs rather than the state it is in, and the copy button excluded so copying never collapses what was just copied. Copy works in both states because the text stays in the DOM. No persistence, so no browser storage is introduced. Added section 10a, the first lettered section in this document, and recorded the suffix convention in section 33. Corrected the section 24 assumption that still described `escapeHtml()` as it was before v1.28.0, logged as discrepancy 16. `docs/DESIGN.md` to 1.9 with a full spec for the new component. |
 | 1.28.0 | 2026-08-23 | Acted on all four open questions from the v1.27.0 audit. Corrected the two stale `docs/DESIGN.md` blocks rather than leaving them flagged, once confirmed neither held an intended design. Fixed both cheap debt items: `escapeHtml()` now escapes quotes and the slug is escaped at every attribute interpolation, and a failed clipboard write now reports itself instead of failing silently. Added `tools/prompts-mirror.py`, a standard-library check and resync for the mirror invariant. Added a Content Security Policy to `index.html`, verified enforced in headless Chrome, which makes the no-dependency rule a runtime guarantee. Found and worked around a latent CRLF mismatch between the working tree and the data file. Rendered the site for the first time since v1.18.0, closing that verification gap. |
 | 1.27.0 | 2026-08-23 | Ran the project's own Documentation prompt against this repository. Rewrote `README.md` to the general-reader standard adopted in v1.26.0, moving all setup, structure, and procedure into this document. Added sections 21 through 35, the eleven required sections this PRD had never carried: Target Users, User Stories, Feature List, Assumptions, Success Criteria, Tenets, Roadmap, Metrics, Runbook, Technical Reference, Security, Public Surface and Retired Items, Documentation Audit Process, Press Release, and FAQ. Added six rows to the section 18 discrepancy table and four open questions. Expanded `docs/DESIGN.md` with the spacing scale, an animation and motion section, component patterns, the error view spec, and a rewritten accessibility section. |
 | 1.26.0 | 2026-08-23 | Reworked the README standard in the Documentation prompt. The README is now the public front door for a general reader on every project, with all setup and technical detail relocated to the Runbook and Technical Requirements sections of the PRD rather than duplicated into a new PRD section. Replaced the do-not-pad standard: in `/docs`, and `PRD.md` above all, completeness beats brevity, with the README named as the exception. |

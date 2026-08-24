@@ -4,6 +4,44 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.29.0 - 2026-08-24
+
+The prompt block is now collapsible, and collapsed when a page opens. The first new component on the site since v1.0.
+
+### Added
+
+- `js/script.js`: A collapse toggle in the code block header bar, sitting immediately left of the copy button. It is a real `<button>` carrying `aria-expanded` and `aria-controls="prompt-body"`, both kept in step with its visible label. Its label names the action it performs rather than the state it is in, "Expand" when the block is hidden and "Hide" when it is shown, which is the convention the copy button already sets.
+- **The entire header bar is the click target, not only the button.** The listener sits on `.code-block-header`, which carries `cursor: pointer`. A click on the toggle reaches the same handler by bubbling, so there is no second listener on the button and no way for the two to fire against each other. Clicks originating inside `.copy-btn` return early, so copying never collapses the block that was just copied.
+- The button exists alongside the clickable bar rather than instead of it, because the bar is a `div`: it cannot be focused, cannot be reached by keyboard, and carries no accessible name or state. The bar is deliberately given no ARIA role, since the button inside it is already the accessible control and labelling the container would announce the same action twice.
+- `css/style.css`: `.code-block-actions`, a flex row with an 8px gap holding the toggle and the copy button, so the header is a label on the left and an action group on the right.
+- `docs/DESIGN.md` section 5: A full Collapse Toggle spec, and the code block spec now documents the action group, the pointer cursor on the bar, and the collapsed default.
+- `docs/PRD.md` section 10a: Prompt Collapse Behavior. This is the first lettered section in the PRD. It is numbered `10a` rather than inserted as a new section 11 because nine releases of these notes cite that document by section number, and renumbering would silently invalidate every one of those references. The convention is now stated in section 33, which previously said only that sections are appended.
+
+### Changed
+
+- **The prompt block is collapsed when a prompt page opens**, on every load and every navigation. The prompts run to several hundred lines; the Documentation prompt alone rendered as roughly 350 lines of unbroken text directly beneath the title. That buried the description, which is the part explaining what the reader is about to copy, off the top of the screen on arrival.
+- This appears to contradict the tenet that the code block is the product, and does not. Copy works whether the block is shown or hidden, because the text stays in the DOM and only its display is suppressed, so the primary action is still one click from arrival. The rule that actually mattered, that the header bar with the copy button is visible without scrolling on desktop, now holds on every prompt at every length rather than only on short ones. `docs/DESIGN.md` section 12c records the reconciliation instead of leaving a future reader to spot the tension and resolve it the wrong way.
+- `css/style.css`: The toggle shares the copy button's rule outright, as `.copy-btn, .code-toggle`, rather than getting a second button treatment. The two are pixel-identical at rest because they are literally the same declarations, which is a property that cannot drift. `docs/DESIGN.md` section 12a now states this as the rule for adding any peer control.
+- `docs/PRD.md` section 24: The assumption bullet on trusted input still described `escapeHtml()` as not escaping quotes, which stopped being true in v1.28.0. The v1.28.0 pass updated sections 30 and 31 for that change and missed this one, so the document contradicted itself for a release. Corrected, and logged as discrepancy 16 in section 18. The underlying assumption still holds and is restated at the level where it is still true: nothing validates a prompt file and the markdown renderer is hand-rolled, so the content being author-written is what makes it safe.
+
+### Notes
+
+Three things were considered and deliberately not done.
+
+**No animation.** The collapse is `display: none`, not a height transition, and the toggle has no rotating chevron. `docs/DESIGN.md` section 12b permits transitioning only `color`, `border-color`, `background`, and `opacity`; an animated open needs `height` and a chevron needs `transform`. An earlier draft used a swapped glyph pair to stay inside that rule, which was dropped once the label became a word, since a word button beside a word button does not need one. The rule this implies is now written down: show and hide, do not animate open and closed.
+
+**No persistence.** The block collapses again on every navigation. Remembering the reader's choice would mean `localStorage`, and section 31 of the PRD states as a privacy property that no browser storage API appears anywhere in the codebase. That is worth more than the convenience. Recorded under possible future work in section 23 so the reason is visible if it is ever reconsidered, rather than the idea simply reappearing.
+
+**No hover treatment on the bar.** A build in progress lit the toggle up whenever the header was hovered, on the reasoning that the bar is the real click target and ought to say so. In use it reads as a glitch rather than as feedback, because the pointer can be several hundred pixels from the element that changed. It was removed before release. The pointer cursor carries the affordance on its own, and the design notes now say not to add it back.
+
+### Verified
+
+- Checked in headless Chrome from `file://`, driven by a real script rather than inspected statically, since every behaviour here is a click result. Fifteen assertions: the toggle is a `<button>`, its `aria-controls` resolves to an element that exists, it precedes the copy button in the DOM and to its left on screen, the label is leftmost, the bar reports `cursor: pointer`, and the two buttons render at identical heights. The block starts hidden with the label reading "Expand" and `aria-expanded` false. Clicking the button, the bar, and the label each toggle it correctly, with the label and the ARIA state moving together every time. Clicking copy changes neither. The prompt text is intact while hidden, the header keeps the copy button visible, and its bottom border is removed while collapsed.
+- After the hover treatment was removed, confirmed that no `.code-block-header:hover` rule remains in the stylesheet, that the toggle does not match that selector in the rendered page, and that the toggle and copy button compute to identical colour and background at rest.
+- Both states were also captured as screenshots at 1280x900 and looked at, because a passing assertion about a computed style is not the same as the layout being right.
+
+---
+
 ## v1.28.0 - 2026-08-23
 
 Acted on all four open questions raised by the v1.27.0 audit, after the author answered each one. This is the first release since v1.18.0 in which the site was actually rendered and checked.
