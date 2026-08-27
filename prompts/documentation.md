@@ -4,7 +4,7 @@ description: Scan the entire codebase, then consolidate all documentation into f
 meta: Claude Code Prompt
 ---
 
-Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Security, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
+Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
 
 Use it when a project needs one authoritative, exhaustive doc set in a single pass. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, cross-checks the docs against reality, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
 
@@ -243,6 +243,33 @@ alone. If it does not, adopt this default and write it in:
   platform and is the first thing that breaks on a new machine.
 - Where the project genuinely needs a second engine, say which browsers it targets
   and why, rather than dropping the default silently.
+Verification Environment
+Record where the project verifies a change. If it already states a rule, document
+it and leave it alone. If it does not, adopt this default and write it in:
+- Verify locally, never against production, unless the request explicitly asks for
+  a production check. Run the change on a local copy: the file opened from disk, a
+  local server, a development build, whatever the project's local setup produces.
+  Production is where a change is confirmed to have arrived, not where it is
+  tested.
+- The reason is not caution for its own sake. Testing against production means the
+  change has already shipped, so the test can only tell you what users are already
+  seeing. It also puts load, writes, or test data onto a live system, and it makes
+  a failing test something the author has to roll back rather than something they
+  fix before pushing.
+- Distinguish two things that are easy to conflate. Verifying functionality is
+  local. Confirming a deploy landed is a separate step, done against production
+  after the push, and it is a comparison rather than a test: fetch the deployed
+  artifact and check it matches what was verified locally. That is legitimate and
+  is not an exception to this rule.
+- Where local and production genuinely differ in a way that can hide a bug, say so
+  explicitly in the Runbook: name what differs (a base path, an origin, an
+  environment variable, a secure-context API, a rewrite rule the local server does
+  not apply) and what class of bug can therefore only appear once deployed. A
+  reader who does not know the gap exists cannot compensate for it.
+- Never point a destructive or state-changing check at production. That covers
+  writes, deletes, migrations, seeded test records, and anything that sends mail
+  or a webhook. If the only way to exercise something is against a live system,
+  stop and ask rather than deciding alone.
 Security
 - Authentication model: how users are identified and sessions are managed
 - Authorization model: what different user roles can and cannot do

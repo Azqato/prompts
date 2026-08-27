@@ -4,6 +4,34 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.31.0 - 2026-08-24
+
+A second default policy for the Documentation prompt, on where a change is verified.
+
+### Added
+
+- `prompts/documentation.md`: A **Verification Environment** section, placed after Browser Testing since the two answer adjacent questions about how a project checks its own work. The default is to verify locally and never against production, unless the request explicitly asks for a production check. Local means whatever the project's own setup produces: the file opened from disk, a local server, a development build.
+- The section gives the reason rather than only the rule, because a rule without one gets dropped the first time it is inconvenient. Testing against production means the change has already shipped, so the test can only report what users are already seeing. It also puts load, writes, or test data onto a live system, and it turns a failure into something the author has to roll back rather than something they fix before pushing.
+- **It separates two things that are easy to conflate.** Verifying functionality is local. Confirming a deploy arrived is a separate step, run against production after the push, and it is a comparison rather than a test: fetch the deployed artifact and check it matches what was already verified locally. That is legitimate and is explicitly not an exception to the rule, because it answers a different question. Without saying this the policy would appear to forbid the post-push check this project has done for two releases.
+- Two further clauses. Where local and production genuinely differ in a way that can hide a bug, the Runbook must name what differs and what class of bug can therefore only appear once deployed, since a reader who does not know a gap exists cannot compensate for it. And a destructive or state-changing check is never pointed at production, covering writes, deletes, migrations, seeded records, and anything that sends mail or a webhook; where a live system is the only way to exercise something, stop and ask.
+- `docs/PRD.md` section 20: The rule stated explicitly for this repository, along with the deploy-confirmation procedure and the two ways local and deployed differ here.
+
+### Changed
+
+- Nothing about how this project works. It has described its check as opening `index.html` from disk since v1.0, which is the rule already. The prompt now requires that to be written down rather than implied, so section 20 says it outright. This is the merge rule working as intended: the project already had a rule, so the default did not overrule it, it documented it.
+
+### Notes
+
+The two environment differences recorded for this project are worth stating here too, because both are the kind of thing a local check silently cannot catch. Hash routing resolves against a directory rather than a domain root, so a path assumption that holds at `file://` can break under `/prompts/`. And `file://` is a secure context, so `navigator.clipboard` is available locally exactly as it is over `https://`, which means a local check cannot catch the copy button failing for a secure-context reason. That second one is a genuine limit on the verification gap already recorded as open question 6, not a reassurance.
+
+### Verified
+
+- Re-rendered in Edge across all six routes, per the policy added in v1.30.0. Every route unchanged: the home view and an unknown slug both render four cards, all four prompt pages open collapsed and toggle correctly, no route renders the error view.
+- The Documentation prompt grew to 24,682 characters and the rendered page carries the new section, matching the fenced block in `prompts/documentation.md` exactly, which confirms the mirror carries the edit.
+- `tools/prompts-mirror.py` resynced and passed clean: four prompts, no orphans, all frontmatter present.
+
+---
+
 ## v1.30.0 - 2026-08-24
 
 A browser testing policy, added to the Documentation prompt as a default and then applied to this repository and to the one other prompt that drives a browser.

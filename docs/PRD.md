@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.30.0
+**Version:** 1.31.0
 **Status:** Active
 **Author:** Azqato
 
@@ -488,6 +488,12 @@ The approach to take on future tasks here.
 Run `python tools/prompts-mirror.py`. It must print OK. If anything under `prompts/` changed, run `python tools/prompts-mirror.py --sync` first, then the check.
 
 Then open `index.html` from disk, not from a server, and check the home list, one prompt page, the copy button, and a direct hash link. The script catches mirror drift and malformed prompt files; it cannot catch a rendering or layout problem, so it replaces none of this. Loading the page is still the only real test this project has.
+
+**Verify locally, never against the live site.** This project has stated that rule since v1.0 by describing the check as opening the file from disk, and v1.31.0 makes it explicit because the Documentation prompt now requires the rule to be written down rather than implied. Verifying against `azqato.github.io/prompts` would mean the change had already shipped, so a failure would be something to roll back rather than something to fix before pushing.
+
+The one thing legitimately done against production is confirming a deploy arrived, which is a comparison rather than a test: after a push, fetch the deployed `index.html`, `js/script.js`, `js/prompts-data.js`, and `css/style.css` and check each matches the local copy that was already verified. Normalize line endings before comparing, because `core.autocrlf` rewrites the working tree; see open question 5. That check answers "did what I verified reach the server", which is a different question from "does it work".
+
+Two ways this project's local and deployed environments differ, both worth knowing because a bug in either class cannot appear locally. Hash routing resolves against a directory rather than a domain root, so a path assumption that holds at `file://` can break under `/prompts/`. And `file://` is a secure context, so `navigator.clipboard` is available locally exactly as it is on `https://`, which means the copy button cannot be caught failing by a local check for that reason alone.
 
 Then add a `docs/PATCHNOTES.md` entry with the next semantic version and today's date, and record the release in the version history table below.
 
@@ -1368,6 +1374,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.31.0 | 2026-08-24 | Added a Verification Environment default policy to the Documentation prompt: verify locally, never against production, unless a production check is explicitly asked for. Separates verifying functionality, which is local, from confirming a deploy arrived, which is a comparison run against production after the push. This repository already stated the rule implicitly by describing its check as opening the file from disk, so section 20 documents the existing practice and makes it explicit rather than replacing it, and records the two ways local and deployed differ here. |
 | 1.30.0 | 2026-08-24 | Added a Browser Testing default policy to the Documentation prompt: drive Microsoft Edge, never Chrome, because the maintenance machine has no JavaScript runtime and Chrome is the owner's day-to-day browser. Like every policy in that prompt it yields to a rule the project already states. Applied the same rule to the Mobile Audit prompt, which had explicitly instructed driving Chrome, and adopted it for this repository in the section 29 Runbook with the resolved Edge path. |
 | 1.29.0 | 2026-08-24 | Made the prompt block collapsible and collapsed it by default. The entire header bar toggles it, with a button labelled for the action it performs rather than the state it is in, and the copy button excluded so copying never collapses what was just copied. Copy works in both states because the text stays in the DOM. No persistence, so no browser storage is introduced. Added section 10a, the first lettered section in this document, and recorded the suffix convention in section 33. Corrected the section 24 assumption that still described `escapeHtml()` as it was before v1.28.0, logged as discrepancy 16. `docs/DESIGN.md` to 1.9 with a full spec for the new component. |
 | 1.28.0 | 2026-08-23 | Acted on all four open questions from the v1.27.0 audit. Corrected the two stale `docs/DESIGN.md` blocks rather than leaving them flagged, once confirmed neither held an intended design. Fixed both cheap debt items: `escapeHtml()` now escapes quotes and the slug is escaped at every attribute interpolation, and a failed clipboard write now reports itself instead of failing silently. Added `tools/prompts-mirror.py`, a standard-library check and resync for the mirror invariant. Added a Content Security Policy to `index.html`, verified enforced in headless Chrome, which makes the no-dependency rule a runtime guarantee. Found and worked around a latent CRLF mismatch between the working tree and the data file. Rendered the site for the first time since v1.18.0, closing that verification gap. |
