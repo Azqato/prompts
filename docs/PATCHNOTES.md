@@ -4,6 +4,37 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.32.0 - 2026-08-24
+
+A working practice change rather than a product change. Nothing about the site itself is different.
+
+### Removed
+
+- `docs/PRD.md` section 20: "Never push or publish without being asked. Publishing is the author's decision." The author gave standing authorization on 2026-08-24 for this repository, so every change here now ships as soon as it is documented and verified. There is no approval step and nothing waits for a release window.
+
+### Changed
+
+- `docs/PRD.md` section 20 gains a Publishing subsection recording the authorization, its date, and its scope, along with the reasoning. The reasoning is worth keeping because it is specific to this project rather than a general claim that pushing is safe: the site is static, with no database, no user data, no session, and no server-side state, so a bad deploy cannot corrupt or lose anything. Rollback is one revert and one push and takes about as long as the deploy did.
+- The Never list keeps an entry in the same position, rewritten: never push a change that has not passed the checks. Removing the approval step does not remove the verification, and with the pause gone the verification is the only thing left between an edit and the live site. That is a stronger reason to run it than existed before, not a weaker one.
+- `docs/PRD.md` section 29, Deploy: the same change, stated where the deploy procedure actually lives so a reader following the runbook does not have to have read section 20 first.
+
+### Notes
+
+Three boundaries were written into the change rather than left implied.
+
+**It covers this repository only.** The authorization was given about this project, so it does not travel to any other repository.
+
+**It does not shorten the procedure before a push.** The mirror check must still print OK, the page must still be opened from disk and looked at, and the patch notes and version history row are still written before the push rather than after. A release that is live and undocumented is precisely the state this project's documentation practice exists to prevent.
+
+**It is unrelated to the rule in section 11** that no prompt's text may instruct its reader to push. That rule is about the content this site publishes to other people, not about how this site is maintained, and the two were easy to conflate because both used the word "push". Section 29 now says so explicitly.
+
+### Verified
+
+- Re-rendered in Edge across all six routes. No change, which is the expected result: this release touches only documentation, and no file the browser loads was modified.
+- `tools/prompts-mirror.py` passed clean without needing a resync, since no prompt source changed: four prompts, no orphans, all frontmatter present.
+
+---
+
 ## v1.31.0 - 2026-08-24
 
 A second default policy for the Documentation prompt, on where a change is verified.

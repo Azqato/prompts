@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.31.0
+**Version:** 1.32.0
 **Status:** Active
 **Author:** Azqato
 
@@ -469,7 +469,7 @@ The approach to take on future tasks here.
 - Never edit `js/prompts-data.js` and the source `.md` separately in a way that could leave them different. Run `tools/prompts-mirror.py` rather than trusting that you did it right.
 - Never weaken the Content Security Policy in `index.html` to make something work. If a change needs `script-src` relaxed, the change is adding a dependency, which is the thing the policy exists to catch.
 - Never add a `REDIRECTS` entry for a source file. The map is for public addresses only, and any entry in it becomes permanent.
-- Never push or publish without being asked. Publishing is the author's decision (section 12).
+- Never push a change that has not passed the checks above. Standing authorization to publish is not authorization to skip verification; it makes verification the only thing standing between an edit and the live site.
 
 ### Where to look first
 
@@ -496,6 +496,20 @@ The one thing legitimately done against production is confirming a deploy arrive
 Two ways this project's local and deployed environments differ, both worth knowing because a bug in either class cannot appear locally. Hash routing resolves against a directory rather than a domain root, so a path assumption that holds at `file://` can break under `/prompts/`. And `file://` is a secure context, so `navigator.clipboard` is available locally exactly as it is on `https://`, which means the copy button cannot be caught failing by a local check for that reason alone.
 
 Then add a `docs/PATCHNOTES.md` entry with the next semantic version and today's date, and record the release in the version history table below.
+
+### Publishing
+
+**Push to production without asking.** The author gave standing authorization on 2026-08-24, for this repository only. Every change here ships as soon as it is documented and verified; there is no approval step and nothing waits for a release window.
+
+This is safe for reasons specific to this project rather than because pushing is generally safe. The site is static, there is no database, no user data, no session, and no server-side state, so a bad deploy cannot corrupt anything or lose anything. Rollback is one `git revert` and one push, and it takes about as long as the deploy did. The audience is small and the failure mode is a page that looks wrong for a few minutes.
+
+What did not change is everything before the push:
+
+- The full check above still runs first, every time. The mirror script must print OK and the page must be opened from disk and looked at. Standing authorization removes the pause for approval, not the verification, and with the pause gone the verification is the only thing left between an edit and the live site.
+- Patch notes and the version history row are written before the push, not after. A release that is live and undocumented is the state this project's whole documentation practice exists to prevent.
+- Confirm the deploy arrived afterwards, by comparing the deployed files against the local copies that were verified. That is the comparison described above, and it is still a comparison rather than a test.
+
+Two things this authorization does not cover. It does not extend to any other repository, since it was given about this one. And it does not license pushing something unverified because it looks trivial; a one-line CSS change is exactly the kind of edit that ships broken, and it is now one command from being live.
 
 ---
 
@@ -823,7 +837,7 @@ git push origin main
 
 That is the entire deploy. GitHub Pages publishes `main` from the repository root and picks up the change within a minute or two. The setting lives in the GitHub project settings, not in the repository, so nothing in the working tree reflects it. There is no workflow file, no action, and no build on the server.
 
-**Publishing is always the author's explicit decision.** Nothing in this project pushes automatically, and no prompt in the library may instruct its reader to push (section 11).
+**Push as soon as a change is documented and verified.** The author gave standing authorization on 2026-08-24 for this repository, so no approval is needed for an individual release; see section 20 for what still has to happen first. Nothing pushes automatically in the sense of a hook or a scheduled job: the push is still a command someone runs deliberately. Separately and unchanged, no prompt in the library may instruct its reader to push, which is a rule about the text this site publishes rather than about how this site is maintained (section 11).
 
 Verify after a deploy by loading `https://azqato.github.io/prompts/` and checking the home list, one prompt page, and the copy button. The local `file://` check and the deployed check are not redundant: they differ in protocol and in base path.
 
@@ -1374,6 +1388,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.32.0 | 2026-08-24 | Removed the requirement to ask before publishing, on the author's standing authorization for this repository. Every change here now ships as soon as it is documented and verified. The verification that precedes a push is unchanged and is now the only thing between an edit and the live site, which section 20 states explicitly. Scoped deliberately: it covers this repository only, and it is unrelated to the separate rule that no prompt's text may instruct its reader to push. |
 | 1.31.0 | 2026-08-24 | Added a Verification Environment default policy to the Documentation prompt: verify locally, never against production, unless a production check is explicitly asked for. Separates verifying functionality, which is local, from confirming a deploy arrived, which is a comparison run against production after the push. This repository already stated the rule implicitly by describing its check as opening the file from disk, so section 20 documents the existing practice and makes it explicit rather than replacing it, and records the two ways local and deployed differ here. |
 | 1.30.0 | 2026-08-24 | Added a Browser Testing default policy to the Documentation prompt: drive Microsoft Edge, never Chrome, because the maintenance machine has no JavaScript runtime and Chrome is the owner's day-to-day browser. Like every policy in that prompt it yields to a rule the project already states. Applied the same rule to the Mobile Audit prompt, which had explicitly instructed driving Chrome, and adopted it for this repository in the section 29 Runbook with the resolved Edge path. |
 | 1.29.0 | 2026-08-24 | Made the prompt block collapsible and collapsed it by default. The entire header bar toggles it, with a button labelled for the action it performs rather than the state it is in, and the copy button excluded so copying never collapses what was just copied. Copy works in both states because the text stays in the DOM. No persistence, so no browser storage is introduced. Added section 10a, the first lettered section in this document, and recorded the suffix convention in section 33. Corrected the section 24 assumption that still described `escapeHtml()` as it was before v1.28.0, logged as discrepancy 16. `docs/DESIGN.md` to 1.9 with a full spec for the new component. |
