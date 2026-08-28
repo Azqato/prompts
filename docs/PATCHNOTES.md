@@ -4,6 +4,18 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.33.1 - 2026-08-24
+
+### Changed
+
+- `prompts/documentation.md`: The licensing policy now names the licence file as `LICENSE.md` rather than as a plain text file, at all five places it referred to one. The licence is a document people read, it belongs to the same markdown doc set as the four files this audit already writes, and every platform that detects a licence file recognises the `.md` extension, so nothing is lost by it.
+
+### Verified
+
+- Re-rendered in Edge across all six routes, unchanged. The Documentation prompt is 29,137 characters and matches its source fenced block exactly. Mirror check clean.
+
+---
+
 ## v1.33.0 - 2026-08-24
 
 A licensing default policy for the Documentation prompt, supplied by the author.

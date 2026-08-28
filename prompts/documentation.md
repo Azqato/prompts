@@ -286,9 +286,12 @@ Record the project's licensing posture. If it already has a well defined licence
 document it and leave it alone: name the licence, point at the file, and state what
 it permits and forbids. Only where the project has no licence, or has a bare licence
 name with no licence text behind it, adopt this default and write both the policy
-into the PRD and a LICENSE file at the repository root.
+into the PRD and a `LICENSE.md` file at the repository root. Markdown, not plain
+text: the licence is a document people read, it belongs to the same doc set as
+everything else this audit writes, and every platform that detects a licence file
+recognises the `.md` extension.
 Default posture: all rights reserved. Source-available, not open source. Publish a
-LICENSE that grants nothing. The repository is published so it can be read, and
+`LICENSE.md` that grants nothing. The repository is published so it can be read, and
 publishing is not a grant.
 - Grant nothing by default. A permission given to everyone cannot easily be
   withdrawn from one person. The goal is usually not to stop copying, it is to
@@ -302,7 +305,7 @@ publishing is not a grant.
 - Asymmetry rule: widening a grant is one sentence, narrowing a granted right is
   not. When in doubt, grant less and offer the request route.
 - Never assert a licence without the licence text. A bare "MIT" line in a README
-  with no LICENSE file is not a grant, it is an ambiguity. Either ship real licence
+  with no `LICENSE.md` behind it is not a grant, it is an ambiguity. Either ship real licence
   text or say nothing and let the default apply.
 The one standing carve-out is AI and search referencing. Explicitly permit search
 engines, AI assistants, answer engines, and other automated systems to crawl, index,
@@ -326,7 +329,7 @@ Things the licence must not claim:
   data source is not the project's to license. Say so explicitly.
 - Do not restrict rights that cannot be restricted, such as fair use or fair
   dealing.
-Required sections of the LICENSE file: NO LICENCE IS GRANTED (covering express,
+Required sections of `LICENSE.md`: NO LICENCE IS GRANTED (covering express,
 implied, and estoppel), AI, SEARCH, AND AUTOMATED ACCESS, NO WAIVER, PERMISSION, the
 platform terms note, the third-party data note, NO WARRANTY, and any domain-specific
 disclaimer the project needs.
@@ -338,7 +341,7 @@ traceable rather than assumed.
 Keep the machine-readable layer consistent with the licence. Where the project
 serves a site, `robots.txt` stays fully open (`User-agent: *` and `Allow: /`) and
 carries a comment marking that as deliberate, so a future tightening is a decision
-rather than an accident. Name the LICENSE as authoritative if the two ever disagree.
+rather than an accident. Name `LICENSE.md` as authoritative if the two ever disagree.
 A grants-nothing licence sitting next to an open `robots.txt` is a contradiction a
 cautious crawler operator may resolve the wrong way.
 Deprecation and Removal
