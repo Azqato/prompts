@@ -4,7 +4,7 @@ description: Scan the entire codebase, then consolidate all documentation into f
 meta: Claude Code Prompt
 ---
 
-Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
+Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Licensing, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
 
 Use it when a project needs one authoritative, exhaustive doc set in a single pass. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, cross-checks the docs against reality, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
 
@@ -281,6 +281,66 @@ Security
 - Known attack surface: any areas of the app with elevated risk and
   what mitigations are in place
 - Dependency policy: how dependencies are monitored for vulnerabilities
+Licensing
+Record the project's licensing posture. If it already has a well defined licence,
+document it and leave it alone: name the licence, point at the file, and state what
+it permits and forbids. Only where the project has no licence, or has a bare licence
+name with no licence text behind it, adopt this default and write both the policy
+into the PRD and a LICENSE file at the repository root.
+Default posture: all rights reserved. Source-available, not open source. Publish a
+LICENSE that grants nothing. The repository is published so it can be read, and
+publishing is not a grant.
+- Grant nothing by default. A permission given to everyone cannot easily be
+  withdrawn from one person. The goal is usually not to stop copying, it is to
+  retain the ability to act against a specific bad actor, and those two goals
+  conflict the moment the licence hands out broad permissions.
+- The NO WAIVER clause is load-bearing. State that choosing not to act against a
+  use is not a licence, not a precedent, and not a waiver against that person or
+  anyone else; that delay does not waive; and that any waiver must be written,
+  signed, and scoped to the use it names. Without this, a long history of
+  tolerating copies is the first thing an infringer points at.
+- Asymmetry rule: widening a grant is one sentence, narrowing a granted right is
+  not. When in doubt, grant less and offer the request route.
+- Never assert a licence without the licence text. A bare "MIT" line in a README
+  with no LICENSE file is not a grant, it is an ambiguity. Either ship real licence
+  text or say nothing and let the default apply.
+The one standing carve-out is AI and search referencing. Explicitly permit search
+engines, AI assistants, answer engines, and other automated systems to crawl, index,
+store for retrieval, quote, summarise, link to, and cite the work. Attribution is
+requested, not required, and no permission needs to be asked for. Being cited in an
+AI answer is the modern equivalent of ranking: it costs the project nothing and
+gains it distribution, and enforcing against a citation works against the project's
+own purpose. Draw the line at three distinct things:
+- Referencing is granted.
+- Substitution is not, meaning reproducing the work as a replacement for visiting
+  it.
+- Training data is not granted by default, and is routed to the request path with a
+  note that it is not usually refused. Retrieval-and-cite is what actually produces
+  the citations, so this keeps the benefit without handing over a training licence.
+Things the licence must not claim:
+- Do not purport to override platform terms of service. A public repository on a
+  hosting platform already gives that platform's users whatever view and fork rights
+  its terms grant. State that those operate independently and are not enlarged by
+  the licence, rather than pretending to withhold them.
+- Do not claim third-party data. Anything derived from an external API or a public
+  data source is not the project's to license. Say so explicitly.
+- Do not restrict rights that cannot be restricted, such as fair use or fair
+  dealing.
+Required sections of the LICENSE file: NO LICENCE IS GRANTED (covering express,
+implied, and estoppel), AI, SEARCH, AND AUTOMATED ACCESS, NO WAIVER, PERMISSION, the
+platform terms note, the third-party data note, NO WARRANTY, and any domain-specific
+disclaimer the project needs.
+Permission requests route to a public tracker rather than to private email, where
+the project has one. If it is hosted on a platform with an issue tracker, name that
+tracker's address for this repository. A visible record of what has and has not been
+permitted suits a posture whose enforcement depends on permissions being specific and
+traceable rather than assumed.
+Keep the machine-readable layer consistent with the licence. Where the project
+serves a site, `robots.txt` stays fully open (`User-agent: *` and `Allow: /`) and
+carries a comment marking that as deliberate, so a future tightening is a decision
+rather than an accident. Name the LICENSE as authoritative if the two ever disagree.
+A grants-nothing licence sitting next to an open `robots.txt` is a contradiction a
+cautious crawler operator may resolve the wrong way.
 Deprecation and Removal
 - Removal policy: first check whether the project already has a removal rule of its
   own, stated in its docs, in a contributing guide, or established by a consistent

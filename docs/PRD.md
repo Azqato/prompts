@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.32.0
+**Version:** 1.33.0
 **Status:** Active
 **Author:** Azqato
 
@@ -439,6 +439,7 @@ Numbered so they can be answered by reference. An answered question is folded in
 
 5. Should a `.gitattributes` pin `* text=auto eol=lf` so the working tree matches what the repository stores? Found in v1.28.0: `core.autocrlf` is true system-wide and there is no `.gitattributes`, so a fresh Windows clone gets CRLF source files while the `raw` strings inside `js/prompts-data.js` stay LF forever. `tools/prompts-mirror.py` normalizes around this and is not affected. The argument for pinning: the mismatch is latent and will surprise the next person or tool that compares the two literally, as it surprised the script. The argument against: it changes checkout behaviour for a problem that is currently handled, and it would rewrite line endings across the working tree on the next checkout.
 6. The copy button's success and failure paths have never been exercised, only read. A headless DOM dump cannot drive the Clipboard API. Is a manual click worth doing before the next release, or is the code simple enough to trust?
+7. This repository has no LICENSE file, and as of v1.33.0 the Documentation prompt says that a project without one falls to a default of all rights reserved, source-available, with a standing carve-out for search and AI citation. The prompt would have this project ship that LICENSE and a `robots.txt` marked deliberately open. It was not done in v1.33.0, because a licence is a legal assertion published under the author's name rather than a documentation change, and because the four prompts are written to be copied and used, which is a posture worth stating deliberately rather than inheriting from a default. Should the default be applied here, adjusted, or explicitly declined and recorded as declined? Declining and saying why is a valid answer; leaving no licence and no note is the only outcome that carries a real cost, because it leaves a reader guessing.
 
 Answered on 2026-08-23, all four of the previous questions, and folded into the relevant sections:
 
@@ -1388,6 +1389,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.33.0 | 2026-08-24 | Added a Licensing default policy to the Documentation prompt: all rights reserved, source-available rather than open source, with a standing carve-out permitting search engines and AI systems to crawl, index, quote, and cite. Grants nothing by default on the reasoning that a permission given to everyone cannot be withdrawn from one person. Generalized the author's example issue-tracker URL, since section 11 forbids a prompt from naming the author's own services. This repository has no LICENSE file and so falls under the default; that is recorded as open question 7 rather than acted on, because publishing a licence is a legal assertion and the author's decision. |
 | 1.32.0 | 2026-08-24 | Removed the requirement to ask before publishing, on the author's standing authorization for this repository. Every change here now ships as soon as it is documented and verified. The verification that precedes a push is unchanged and is now the only thing between an edit and the live site, which section 20 states explicitly. Scoped deliberately: it covers this repository only, and it is unrelated to the separate rule that no prompt's text may instruct its reader to push. |
 | 1.31.0 | 2026-08-24 | Added a Verification Environment default policy to the Documentation prompt: verify locally, never against production, unless a production check is explicitly asked for. Separates verifying functionality, which is local, from confirming a deploy arrived, which is a comparison run against production after the push. This repository already stated the rule implicitly by describing its check as opening the file from disk, so section 20 documents the existing practice and makes it explicit rather than replacing it, and records the two ways local and deployed differ here. |
 | 1.30.0 | 2026-08-24 | Added a Browser Testing default policy to the Documentation prompt: drive Microsoft Edge, never Chrome, because the maintenance machine has no JavaScript runtime and Chrome is the owner's day-to-day browser. Like every policy in that prompt it yields to a rule the project already states. Applied the same rule to the Mobile Audit prompt, which had explicitly instructed driving Chrome, and adopted it for this repository in the section 29 Runbook with the resolved Edge path. |

@@ -4,6 +4,35 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.33.0 - 2026-08-24
+
+A licensing default policy for the Documentation prompt, supplied by the author.
+
+### Added
+
+- `prompts/documentation.md`: A **Licensing** section, placed after Security since both concern what a project asserts rather than how it is built. Like every policy in this prompt it yields to what the project already has: where a project has a well defined licence, the audit names it, points at the file, and states what it permits, and the default applies only where there is no licence or where a bare licence name sits in a README with no licence text behind it.
+- The default posture is all rights reserved, source-available rather than open source. Publish a LICENSE that grants nothing, because the repository is published so it can be read and publishing is not a grant. The reasoning is the part that makes the rule usable: a permission given to everyone cannot easily be withdrawn from one person, and the goal is usually not to stop copying but to retain the ability to act against a specific bad actor. Those two goals conflict the moment the licence hands out broad permissions.
+- The NO WAIVER clause is called out as load-bearing, since a long history of tolerating copies is the first thing an infringer points at. Also stated: the asymmetry rule, that widening a grant is one sentence and narrowing a granted right is not, so when in doubt grant less and offer the request route; and that a licence is never asserted without licence text, because a bare name with no file is an ambiguity rather than a grant.
+- One standing carve-out, for AI and search referencing. Search engines, AI assistants, answer engines, and other automated systems may crawl, index, store for retrieval, quote, summarise, link to, and cite the work, with attribution requested rather than required and no permission to ask for. Being cited in an AI answer is the modern equivalent of ranking: it costs nothing and gains distribution, and enforcing against a citation works against the project's own purpose. The line is drawn at three distinct things: referencing is granted, substitution is not, and training data is not granted by default but is routed to the request path with a note that it is not usually refused. Retrieval-and-cite is what actually produces the citations, so this keeps the benefit without handing over a training licence.
+- Three things the licence must not claim: it does not purport to override a hosting platform's terms, since a public repository already grants that platform's users whatever its terms say and the licence should state that those operate independently rather than pretend to withhold them; it does not claim third-party data derived from an external API or public source; and it does not restrict rights that cannot be restricted, such as fair use or fair dealing.
+- The required LICENSE sections are listed, and the machine-readable layer is required to stay consistent with the licence: `robots.txt` stays fully open with a comment marking that as deliberate, and the LICENSE is named authoritative if the two ever disagree. A grants-nothing licence beside an open `robots.txt` is a contradiction a cautious crawler operator may resolve the wrong way.
+
+### Changed
+
+- The permission-request route was generalized. The policy as supplied named a specific repository's issue tracker as the example. Section 11 of `docs/PRD.md` prohibits a prompt from referencing services or accounts belonging to the author, and discrepancy 8 in section 18 records two prompts being deleted in v1.19.0 partly for exactly that. The prompt now says to route to a public tracker rather than private email and to name that tracker's address for the repository being audited, which preserves the reasoning, that a visible record suits a posture whose enforcement depends on permissions being specific and traceable, without embedding one project's address in a prompt meant to run anywhere.
+
+### Notes
+
+**This repository has no LICENSE file**, so by the policy just written it falls to the default. That was not acted on in this release, for two reasons. A licence is a legal assertion published under the author's name rather than a documentation change, so it is the author's call rather than a default to inherit silently. And the posture deserves a deliberate answer here in particular: this site exists to hand people prompts to copy and use, which is not obviously the same posture as all rights reserved. Recorded as open question 7 in section 19. Declining the default and saying why is a valid answer; leaving no licence and no note is the only outcome that carries a real cost, because it leaves a reader guessing.
+
+### Verified
+
+- Re-rendered in Edge across all six routes. Every route unchanged, all four prompt pages open collapsed and toggle correctly, no error view.
+- The Documentation prompt grew to 28,907 characters and the rendered page carries the new section, matching the fenced block in `prompts/documentation.md` exactly, which confirms the mirror carries the edit rather than a stale copy.
+- `tools/prompts-mirror.py` resynced and passed clean: four prompts, no orphans, all frontmatter present.
+
+---
+
 ## v1.32.0 - 2026-08-24
 
 A working practice change rather than a product change. Nothing about the site itself is different.
