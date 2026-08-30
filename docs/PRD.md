@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.33.1
+**Version:** 1.34.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1389,6 +1389,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.34.0 | 2026-08-24 | The enforced folder structure now shows `LICENSE.md` and `robots.txt` at the repository root, both excluded from the rule that moves stray files into `/docs`. Hosting platforms detect a licence by location and the root is the most widely recognised one; crawlers read robots.txt from the origin root and nowhere else, so a copy under `/docs` does nothing at all. A licence is also never relocated, since an existing one is a decision the project already made. |
 | 1.33.1 | 2026-08-24 | The licensing policy now names the licence file as `LICENSE.md` rather than a plain text file, so it joins the same markdown doc set as everything else the audit writes. |
 | 1.33.0 | 2026-08-24 | Added a Licensing default policy to the Documentation prompt: all rights reserved, source-available rather than open source, with a standing carve-out permitting search engines and AI systems to crawl, index, quote, and cite. Grants nothing by default on the reasoning that a permission given to everyone cannot be withdrawn from one person. Generalized the author's example issue-tracker URL, since section 11 forbids a prompt from naming the author's own services. This repository has no LICENSE file and so falls under the default; that is recorded as open question 7 rather than acted on, because publishing a licence is a legal assertion and the author's decision. |
 | 1.32.0 | 2026-08-24 | Removed the requirement to ask before publishing, on the author's standing authorization for this repository. Every change here now ships as soon as it is documented and verified. The verification that precedes a push is unchanged and is now the only thing between an edit and the live site, which section 20 states explicitly. Scoped deliberately: it covers this repository only, and it is unrelated to the separate rule that no prompt's text may instruct its reader to push. |

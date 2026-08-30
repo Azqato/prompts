@@ -4,7 +4,7 @@ description: Scan the entire codebase, then consolidate all documentation into f
 meta: Claude Code Prompt
 ---
 
-Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Licensing, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
+Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`, plus a LICENSE.md beside the README where the project has no licence of its own. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Licensing, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
 
 Use it when a project needs one authoritative, exhaustive doc set in a single pass. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, cross-checks the docs against reality, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
 
@@ -43,13 +43,36 @@ Make sure to perform a full codebase scan before touching any documentation.
 
    /project-root
    ├── README.md          ← Important: README.MD is always root only, never inside /docs
+   ├── LICENSE.md         ← root only, and never moved. See below
+   ├── robots.txt         ← root only, where the project serves a site
    └── /docs
        ├── PRD.md
        ├── DESIGN.md
        └── PATCHNOTES.md
 
-   If any of these files exist outside of /docs (except README.md), move them into
-   /docs. If /docs does not exist, create it.
+   If any of these files exist outside of /docs, move them into /docs. If /docs does
+   not exist, create it. README.md, LICENSE.md, and robots.txt are excluded from that
+   rule and stay at the root.
+
+   LICENSE.md is root only, for the same reason the README is: it is one of the few
+   files a person or a tool expects to find without looking. Hosting platforms detect
+   a licence by looking in specific locations, and the repository root is the most
+   widely recognised of them, so a licence filed under /docs may not be detected at
+   all. It is also the one file this structure never relocates. Where a project
+   already has a licence file, under any name and in any location, leave it exactly
+   where it is and document it in place: an existing licence is a decision the
+   project already made, and this audit records those rather than overruling them.
+   Create LICENSE.md only where no licence exists, under the Licensing policy in the
+   PRD section list below.
+
+   robots.txt is root only as a hard requirement rather than a convention. Crawlers
+   fetch it from one address, the origin root, and read it from nowhere else, so a
+   copy under /docs is not a robots policy at all, it is an unreferenced text file.
+   This applies only where the project actually serves a site. A library, a CLI, or
+   anything else with no origin has nothing to put a robots.txt on, and one should
+   not be created for it. Where a site is served from a subdirectory of a larger
+   domain, say so in the PRD: the robots.txt that governs it belongs to the domain
+   owner and may not be the project's to write.
 
 ---
 README.md - The front door. First thing anyone sees. Explains what the project is and how to use it.
@@ -286,8 +309,9 @@ Record the project's licensing posture. If it already has a well defined licence
 document it and leave it alone: name the licence, point at the file, and state what
 it permits and forbids. Only where the project has no licence, or has a bare licence
 name with no licence text behind it, adopt this default and write both the policy
-into the PRD and a `LICENSE.md` file at the repository root. Markdown, not plain
-text: the licence is a document people read, it belongs to the same doc set as
+into the PRD and a `LICENSE.md` at the repository root, beside the README and never
+inside /docs, for the detection reason given in the folder structure above. Markdown,
+not plain text: the licence is a document people read, it belongs to the same doc set as
 everything else this audit writes, and every platform that detects a licence file
 recognises the `.md` extension.
 Default posture: all rights reserved. Source-available, not open source. Publish a

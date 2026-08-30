@@ -4,6 +4,30 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.34.0 - 2026-08-24
+
+### Changed
+
+- `prompts/documentation.md`: The enforced folder structure now shows `LICENSE.md`. The licensing policy added in v1.33.0 already said the file goes at the repository root, but the structure diagram did not list it, so the two could be read as disagreeing and the diagram is the part a model follows literally.
+- `LICENSE.md` is excluded from the rule that moves stray documentation into `/docs`, alongside the README. It is root only for the same reason the README is: it is one of the two files a person or a tool expects to find without looking. Stated explicitly in the prompt because hosting platforms detect a licence by looking in specific locations, the repository root is the most widely recognised of them, and a licence filed under `/docs` may not be detected at all.
+
+- `robots.txt` is listed at the root as well, and excluded from the same move rule. This one is a hard requirement rather than a convention: crawlers fetch it from exactly one address, the origin root, and read it from nowhere else, so a copy under `/docs` is not a robots policy at all, it is an unreferenced text file. The licensing policy added in v1.33.0 already required `robots.txt` to stay open and consistent with the licence, but said nothing about where it lives, which left the one detail that determines whether it does anything.
+
+### Added
+
+- A never-move rule for licences. Where a project already has a licence file, under any name and in any location, it stays exactly where it is and is documented in place. An existing licence is a decision the project already made, and this audit records those rather than overruling them. `LICENSE.md` is created only where no licence exists.
+- Two conditions on `robots.txt`, since the structure diagram would otherwise read as an instruction to create one everywhere. It applies only where the project actually serves a site: a library or a CLI has no origin to put one on and should not get one. And where a site is served from a subdirectory of a larger domain, the PRD says so, because the robots.txt governing it belongs to the domain owner and may not be the project's to write. This project is an example: it serves from `/prompts/` under a domain whose root it does not own.
+
+### Notes
+
+This release was written once with the file under `/docs`, then reverted before it was committed and rewritten with it at the root. The `/docs` version had a real problem: the structure rule would have relocated an existing root licence, which can stop a repository being reported as licensed. The reasoning survived the reversal and is now the justification for keeping it at the root rather than for moving it, which is why this note exists at all: the argument is worth more than the position it was first written to support.
+
+### Verified
+
+- Re-rendered in Edge across all six routes, unchanged. The Documentation prompt matches its source fenced block exactly. Mirror check clean.
+
+---
+
 ## v1.33.1 - 2026-08-24
 
 ### Changed
