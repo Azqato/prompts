@@ -45,14 +45,15 @@ Make sure to perform a full codebase scan before touching any documentation.
    ├── README.md          ← Important: README.MD is always root only, never inside /docs
    ├── LICENSE.md         ← root only, and never moved. See below
    ├── robots.txt         ← root only, where the project serves a site
+   ├── sitemap.xml        ← root by default, where the project serves a site
    └── /docs
        ├── PRD.md
        ├── DESIGN.md
        └── PATCHNOTES.md
 
    If any of these files exist outside of /docs, move them into /docs. If /docs does
-   not exist, create it. README.md, LICENSE.md, and robots.txt are excluded from that
-   rule and stay at the root.
+   not exist, create it. README.md, LICENSE.md, robots.txt, and sitemap.xml are
+   excluded from that rule and stay at the root.
 
    LICENSE.md is root only, for the same reason the README is: it is one of the few
    files a person or a tool expects to find without looking. Hosting platforms detect
@@ -73,6 +74,17 @@ Make sure to perform a full codebase scan before touching any documentation.
    not be created for it. Where a site is served from a subdirectory of a larger
    domain, say so in the PRD: the robots.txt that governs it belongs to the domain
    owner and may not be the project's to write.
+
+   sitemap.xml is root by default rather than root by requirement, and the difference
+   is worth understanding before moving one. A sitemap is scope-limited by its own
+   location: one at /docs/sitemap.xml may only list URLs under /docs/, and entries
+   outside that path are ignored. At the root it can list the whole site, which is why
+   the root is the position that is always correct. The exception is cross-submission:
+   a sitemap named on a `Sitemap:` line in robots.txt is trusted for the entire host
+   wherever it sits. So a sitemap anywhere other than the root is only valid if
+   robots.txt points at it, and an audit that finds one elsewhere should check for
+   that line rather than assume it is broken or move it. The same condition as
+   robots.txt applies: only where the project actually serves a site.
 
 ---
 README.md - The front door. First thing anyone sees. Explains what the project is and how to use it.

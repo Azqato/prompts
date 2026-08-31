@@ -4,6 +4,24 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.35.0 - 2026-08-24
+
+### Changed
+
+- `prompts/documentation.md`: The enforced folder structure now shows `sitemap.xml` at the repository root and excludes it from the rule that moves stray files into `/docs`, alongside the README, the licence, and `robots.txt`.
+
+### Added
+
+- The reasoning that separates a sitemap from the two files listed beside it, because treating all three as one rule is how an audit either moves a working file or leaves a broken one alone. `robots.txt` is root by requirement: crawlers read it from the origin root and nowhere else. `sitemap.xml` is root by default: a sitemap is scope-limited by its own location, so one at `/docs/sitemap.xml` may only list URLs under `/docs/` and entries outside that path are ignored, while one at the root can list the whole site. That makes the root the position that is always correct without being the only correct one.
+- The cross-submission exception, which is the part that changes what an audit should do. A sitemap named on a `Sitemap:` line in `robots.txt` is trusted for the entire host wherever it sits. So a sitemap outside the root is valid exactly when robots.txt points at it, and an audit that finds one there checks for that line rather than assuming the file is broken or relocating it. The same condition as `robots.txt` applies throughout: this is only relevant where the project actually serves a site.
+
+### Verified
+
+- Re-rendered in Edge across all six routes. Every route unchanged, all four prompt pages open collapsed and toggle correctly, no error view. The Documentation prompt matches its source fenced block exactly, confirming the mirror carries the edit.
+- `tools/prompts-mirror.py` resynced and passed clean.
+
+---
+
 ## v1.34.0 - 2026-08-24
 
 ### Changed

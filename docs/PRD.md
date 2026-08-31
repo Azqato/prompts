@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.34.0
+**Version:** 1.35.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1389,6 +1389,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.35.0 | 2026-08-24 | The folder structure now shows `sitemap.xml` at the root, with the distinction that separates it from `robots.txt`: it is root by default rather than root by requirement. A sitemap is scope-limited by its own location, so one under `/docs` may only list URLs under `/docs`, but one named on a `Sitemap:` line in `robots.txt` is trusted for the whole host wherever it sits. An audit finding a sitemap outside the root checks for that line rather than assuming it is broken. |
 | 1.34.0 | 2026-08-24 | The enforced folder structure now shows `LICENSE.md` and `robots.txt` at the repository root, both excluded from the rule that moves stray files into `/docs`. Hosting platforms detect a licence by location and the root is the most widely recognised one; crawlers read robots.txt from the origin root and nowhere else, so a copy under `/docs` does nothing at all. A licence is also never relocated, since an existing one is a decision the project already made. |
 | 1.33.1 | 2026-08-24 | The licensing policy now names the licence file as `LICENSE.md` rather than a plain text file, so it joins the same markdown doc set as everything else the audit writes. |
 | 1.33.0 | 2026-08-24 | Added a Licensing default policy to the Documentation prompt: all rights reserved, source-available rather than open source, with a standing carve-out permitting search engines and AI systems to crawl, index, quote, and cite. Grants nothing by default on the reasoning that a permission given to everyone cannot be withdrawn from one person. Generalized the author's example issue-tracker URL, since section 11 forbids a prompt from naming the author's own services. This repository has no LICENSE file and so falls under the default; that is recorded as open question 7 rather than acted on, because publishing a licence is a legal assertion and the author's decision. |
