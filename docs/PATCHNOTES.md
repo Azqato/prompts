@@ -4,6 +4,32 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.36.0 - 2026-08-24
+
+Closes open question 5, which has been open since v1.28.0.
+
+### Added
+
+- `.gitattributes`, pinning `* text=auto eol=lf`. A checkout now produces LF on any machine, whatever its `core.autocrlf` is set to. This repository stores LF, so nothing about the stored content changes; what changes is that the working tree can no longer disagree with it.
+- The file carries a comment explaining why, because the reason is not obvious from the rule. The line breaks inside the `raw` strings in `js/prompts-data.js` are JSON escape sequences rather than real newlines, so git never rewrites them. Under `core.autocrlf=true` and with no `.gitattributes`, a checkout therefore produced CRLF source files under `prompts/` while their mirrored copies stayed LF, and the two stopped matching byte for byte with nothing actually wrong.
+
+### Notes
+
+The counter-argument recorded in section 19 was that `tools/prompts-mirror.py` already normalizes line endings on both sides, so the problem was handled. That was true, and it was judged insufficient for two reasons.
+
+The failure mode is silent rather than loud. A literal comparison does not error, it reports a difference that is not there, and the natural response to the mirror check reporting drift on all four prompts is to run `--sync` and rewrite a file that was already correct.
+
+And normalizing inside the tool puts the burden on every tool that touches these files, rather than on the repository. It had already cost two debugging cycles, both in this project: it broke the first version of the mirror script in v1.28.0, discovered only because a file had just been restored with `git checkout`; and in v1.35.0 a `git checkout` mid-session left an edit script unable to match its own target text, which surfaced as an unhelpful "not unique (0)" assertion rather than as anything mentioning line endings.
+
+The deployed site is unaffected either way, since GitHub Pages serves what the repository stores and that was always LF.
+
+### Verified
+
+- Tested against a real checkout rather than by reading the rule. Both `prompts/documentation.md` and `js/prompts-data.js` were deleted and restored with `git checkout`, which is the exact operation that produced CRLF before. Both came back LF, and `tools/prompts-mirror.py` passed clean afterwards: four prompts, no orphans, all frontmatter present. That is the scenario that broke the first mirror script, so it is the one worth testing.
+- Re-rendered in Edge across all six routes. Unchanged, as expected: no file the browser loads was modified.
+
+---
+
 ## v1.35.0 - 2026-08-24
 
 ### Changed

@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.35.0
+**Version:** 1.36.0
 **Status:** Active
 **Author:** Azqato
 
@@ -437,9 +437,12 @@ Stated plainly, because the confident parts of a document are worth less than th
 
 Numbered so they can be answered by reference. An answered question is folded into the relevant section and marked answered here rather than deleted.
 
-5. Should a `.gitattributes` pin `* text=auto eol=lf` so the working tree matches what the repository stores? Found in v1.28.0: `core.autocrlf` is true system-wide and there is no `.gitattributes`, so a fresh Windows clone gets CRLF source files while the `raw` strings inside `js/prompts-data.js` stay LF forever. `tools/prompts-mirror.py` normalizes around this and is not affected. The argument for pinning: the mismatch is latent and will surprise the next person or tool that compares the two literally, as it surprised the script. The argument against: it changes checkout behaviour for a problem that is currently handled, and it would rewrite line endings across the working tree on the next checkout.
 6. The copy button's success and failure paths have never been exercised, only read. A headless DOM dump cannot drive the Clipboard API. Is a manual click worth doing before the next release, or is the code simple enough to trust?
 7. This repository has no `LICENSE.md`, and as of v1.33.0 the Documentation prompt says that a project without one falls to a default of all rights reserved, source-available, with a standing carve-out for search and AI citation. The prompt would have this project ship that LICENSE and a `robots.txt` marked deliberately open. It was not done in v1.33.0, because a licence is a legal assertion published under the author's name rather than a documentation change, and because the four prompts are written to be copied and used, which is a posture worth stating deliberately rather than inheriting from a default. Should the default be applied here, adjusted, or explicitly declined and recorded as declined? Declining and saying why is a valid answer; leaving no licence and no note is the only outcome that carries a real cost, because it leaves a reader guessing.
+
+Answered on 2026-08-24:
+
+5. **Yes, and it was added in v1.36.0.** `.gitattributes` now pins `* text=auto eol=lf`, so a checkout produces LF on any machine regardless of its `core.autocrlf` setting. The deciding argument was that the failure mode is silent rather than loud: a literal comparison does not error, it reports a difference that is not there, and the natural response to the mirror check reporting drift is to run `--sync` and rewrite a file that was correct. The problem had already cost two debugging cycles, once when it broke the first version of `tools/prompts-mirror.py` in v1.28.0 and once in v1.35.0 when a `git checkout` mid-session left an edit script unable to match its own target text. The counter-argument, that the mirror script already normalizes and the problem is therefore handled, was accepted as true and judged insufficient: it puts the burden on every tool that touches these files rather than on the repository, and the tools that forgot were written in this project.
 
 Answered on 2026-08-23, all four of the previous questions, and folded into the relevant sections:
 
@@ -1389,6 +1392,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.36.0 | 2026-08-24 | Added `.gitattributes` pinning `* text=auto eol=lf`, closing open question 5. A checkout now produces LF on any machine, so source files under `prompts/` cannot drift from their mirrored copies in `js/prompts-data.js` purely because of the checkout. Verified by deleting both files and restoring them from git, which previously produced CRLF and now produces LF, with the mirror check passing afterwards. |
 | 1.35.0 | 2026-08-24 | The folder structure now shows `sitemap.xml` at the root, with the distinction that separates it from `robots.txt`: it is root by default rather than root by requirement. A sitemap is scope-limited by its own location, so one under `/docs` may only list URLs under `/docs`, but one named on a `Sitemap:` line in `robots.txt` is trusted for the whole host wherever it sits. An audit finding a sitemap outside the root checks for that line rather than assuming it is broken. |
 | 1.34.0 | 2026-08-24 | The enforced folder structure now shows `LICENSE.md` and `robots.txt` at the repository root, both excluded from the rule that moves stray files into `/docs`. Hosting platforms detect a licence by location and the root is the most widely recognised one; crawlers read robots.txt from the origin root and nowhere else, so a copy under `/docs` does nothing at all. A licence is also never relocated, since an existing one is a decision the project already made. |
 | 1.33.1 | 2026-08-24 | The licensing policy now names the licence file as `LICENSE.md` rather than a plain text file, so it joins the same markdown doc set as everything else the audit writes. |

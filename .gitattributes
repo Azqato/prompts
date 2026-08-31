@@ -1,0 +1,12 @@
+# Normalize line endings on checkout, whatever core.autocrlf is set to on the machine.
+#
+# The repository stores LF. The raw strings inside js/prompts-data.js hold their line
+# breaks as JSON escape sequences rather than as real newlines, so git never rewrites
+# them. Without this file, a checkout on a machine with core.autocrlf=true produces
+# CRLF source files under prompts/ while their mirrored copies stay LF, and the two
+# stop matching byte for byte even though nothing is wrong.
+#
+# That is the project's central invariant, so the fix belongs here rather than in each
+# tool that reads these files. See docs/PRD.md section 19, question 5.
+
+* text=auto eol=lf
