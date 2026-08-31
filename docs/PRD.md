@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.36.0
+**Version:** 1.36.1
 **Status:** Active
 **Author:** Azqato
 
@@ -242,16 +242,19 @@ The `hidden: true` flag remains supported for retiring a prompt from navigation 
 
 ## 13. Repository Structure
 
-The whole project is 13 files in five folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+The whole project is 14 files in five folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
-There is no `.gitattributes` either, which has one consequence worth knowing: the repository stores LF, but `core.autocrlf` is true by default on Windows, so a fresh clone puts CRLF in the working tree while the `raw` values inside `js/prompts-data.js` stay LF, because they are JSON escapes rather than real line breaks and git never rewrites them. Any comparison between the two must normalize line endings or it will report drift that is not there. `tools/prompts-mirror.py` does. Whether to add a `.gitattributes` pinning LF is open question 5 in section 19.
+`.gitattributes` is the one piece of git configuration the repository carries, added in v1.36.0. It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
 
 ```
 /
 ├── index.html          Single-page shell. The only HTML file.
-├── README.md           Front door: what the site is, file table, add and rename procedures.
+├── README.md           Front door: what the site is and who it is for. Deliberately
+│                       carries no setup, structure, or procedure; see section 33.
+├── .gitattributes      Pins LF line endings on checkout. Six lines of comment and
+│                       one rule. Not part of the deployed site.
 ├── css/
-│   └── style.css       Entire stylesheet, 540 lines, no imports.
+│   └── style.css       Entire stylesheet, 567 lines, no imports.
 ├── js/
 │   ├── prompts-data.js Hand-maintained mirror of prompts/*.md. Largest file by far.
 │   └── script.js       All client logic: parse, render, route, copy.
@@ -382,7 +385,7 @@ Observed on 2026-08-23 by reading the code against the docs. Items 2, 5, and 6 w
 | 12 | `README.md`, "Adding a New Prompt" and the file structure tree, plus the Files table, the prompt markdown format, and "Running Locally" | All still accurate, but all now barred from the README by the standard adopted in v1.26.0, which restricts it to a general reader | **Resolved in v1.27.0** by scope rather than by correction. The README was rewritten to the new standard and this material moved into sections 29, 30, and 33 of this document. Item 1 above disappeared with it. Nothing was silently corrected: the content was relocated intact |
 | 13 | `docs/DESIGN.md` section 2 marks `--color-negative` and `--color-warning` as "unused at v1.0" | Both are still defined and still referenced nowhere, at v1.27.0 | Trust both: the tokens are genuinely unused and the note is genuinely stale. Annotated in place in v1.27.0 rather than removed, since the tokens are reserved deliberately for future error and caution states |
 | 14 | `docs/DESIGN.md` section 9 responsive table lists what changes below 1024px | It omits `height: auto` on `.sidebar-sticky` and `flex-basis: 100%` on `.sidebar-nav`, both of which are the load-bearing v1.11.0 bug fixes | Trust the stylesheet. Documented in DESIGN section 9 in v1.27.0, because a future edit that removes either one silently reintroduces a shipped bug |
-| 15 | Nothing documented it, because nothing had noticed | `core.autocrlf` is true system-wide and there is no `.gitattributes`, so a fresh Windows clone gets CRLF `prompts/*.md` while the `raw` values in `js/prompts-data.js` stay LF. The two would never compare equal | **Found in v1.28.0** while testing `tools/prompts-mirror.py`, which failed on a file git had just checked out. The script now normalizes line endings on both sides, since they are a property of the checkout rather than of the content. Whether to pin LF with a `.gitattributes` is open question 5 |
+| 15 | Nothing documented it, because nothing had noticed | `core.autocrlf` is true system-wide and there is no `.gitattributes`, so a fresh Windows clone gets CRLF `prompts/*.md` while the `raw` values in `js/prompts-data.js` stay LF. The two would never compare equal | **Found in v1.28.0** while testing `tools/prompts-mirror.py`, which failed on a file git had just checked out. The script now normalizes line endings on both sides, since they are a property of the checkout rather than of the content. **Resolved in v1.36.0** by adding a `.gitattributes` that pins `* text=auto eol=lf`, so a checkout can no longer produce the mismatch at all. The script still normalizes, which is now redundant on purpose |
 | 16 | Section 24 of this document, Assumptions: "`escapeHtml()` does not escape quotes, and `renderInline()` writes a markdown link target directly into an `href` attribute" | Both quote forms have been escaped since v1.28.0, and section 30 of this same document records the fix and strikes it from the debt table | **Corrected in v1.29.0.** The v1.28.0 pass updated sections 30 and 31 for the escaping change and missed this one, so the document contradicted itself for a release. Found by reading section 24 while checking whether the collapse work touched any stated assumption. Worth noting as a pattern: a fact repeated in more than one section will go stale in the copy nobody was editing |
 
 Confirmed accurate, checked rather than assumed:
@@ -484,7 +487,7 @@ The approach to take on future tasks here.
 | Deleting a prompt | Section 12, "Removing Prompts", then grep the repository for the slug and the title |
 | Anything visual | The `:root` block in `css/style.css` first, then `docs/DESIGN.md` to check the token is documented |
 | Routing, parsing, rendering | `js/script.js`, the only file with logic |
-| Layout shell, script order, meta tags | `index.html`, all 31 lines of it |
+| Layout shell, script order, meta tags | `index.html`, all 42 lines of it |
 | Understanding a past decision | `docs/PATCHNOTES.md`, then the commit body, which is usually longer than the patch note |
 
 ### After any change
@@ -495,7 +498,7 @@ Then open `index.html` from disk, not from a server, and check the home list, on
 
 **Verify locally, never against the live site.** This project has stated that rule since v1.0 by describing the check as opening the file from disk, and v1.31.0 makes it explicit because the Documentation prompt now requires the rule to be written down rather than implied. Verifying against `azqato.github.io/prompts` would mean the change had already shipped, so a failure would be something to roll back rather than something to fix before pushing.
 
-The one thing legitimately done against production is confirming a deploy arrived, which is a comparison rather than a test: after a push, fetch the deployed `index.html`, `js/script.js`, `js/prompts-data.js`, and `css/style.css` and check each matches the local copy that was already verified. Normalize line endings before comparing, because `core.autocrlf` rewrites the working tree; see open question 5. That check answers "did what I verified reach the server", which is a different question from "does it work".
+The one thing legitimately done against production is confirming a deploy arrived, which is a comparison rather than a test: after a push, fetch the deployed `index.html`, `js/script.js`, `js/prompts-data.js`, and `css/style.css` and check each matches the local copy that was already verified. Since v1.36.0 the working tree is LF on any machine, so a byte comparison is now valid as it stands; normalizing anyway costs nothing and keeps the check correct on a clone made before that release. That check answers "did what I verified reach the server", which is a different question from "does it work".
 
 Two ways this project's local and deployed environments differ, both worth knowing because a bug in either class cannot appear locally. Hash routing resolves against a directory rather than a domain root, so a path assumption that holds at `file://` can break under `/prompts/`. And `file://` is a secure context, so `navigator.clipboard` is available locally exactly as it is on `https://`, which means the copy button cannot be caught failing by a local check for that reason alone.
 
@@ -924,7 +927,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 | Layer | Technology | Version |
 | --- | --- | --- |
 | Markup | HTML5 | Living standard. One file, 42 lines |
-| Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 540 lines, no `@import` |
+| Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 567 lines, no `@import` |
 | Logic | JavaScript, ES5-flavoured with `const` and `let` | No transpiler. Runs as written. 297 lines |
 | Maintenance tooling | Python 3, standard library only | `tools/prompts-mirror.py`. Never runs in a browser, never required to build or serve |
 | Content format | Markdown, a hand-parsed subset | No markdown library |
@@ -943,7 +946,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 │                           Ships an empty #sidebar-nav and #content.
 ├── README.md               Public front door, written for a general reader.
 ├── css/
-│   └── style.css           540 lines. Whole design system. Tokens in :root,
+│   └── style.css           567 lines. Whole design system. Tokens in :root,
 │                           two media queries plus reduced-motion at the bottom.
 ├── js/
 │   ├── prompts-data.js     window.PROMPTS_DATA: [{slug, raw}]. Verbatim mirror
@@ -1049,7 +1052,7 @@ Recorded honestly, with what the correct fix would be and why it has not been do
 | ~~Nothing verifies the mirror~~ | | | **Fixed in v1.28.0.** `tools/prompts-mirror.py`, standard library only, run by hand. Not automated: there is no hook and no CI, so it still depends on the procedure in section 20 being followed |
 | ~~`escapeHtml()` does not escape quotes~~ | | | **Fixed in v1.28.0.** Both quote forms are escaped, and the slug is escaped where it is interpolated into `href` and `data-slug` |
 | ~~An unhandled clipboard rejection~~ | | | **Fixed in v1.28.0.** A missing API or a rejected write now shows "Copy failed" |
-| No `.gitattributes` while `core.autocrlf` is true | A fresh Windows clone has CRLF source files against LF strings in the data file. Any literal comparison reports false drift | `* text=auto eol=lf` | Handled in the one place it matters, by normalizing in the mirror script. Pinning it repository-wide is open question 5 in section 19 |
+| ~~No `.gitattributes` while `core.autocrlf` is true~~ | | | **Fixed in v1.36.0.** `* text=auto eol=lf` is pinned repository-wide, so a checkout produces LF on any machine and the mismatch cannot occur. The mirror script still normalizes, which is now defence in depth |
 | `parsePrompt()` takes the first fence in the body | A fenced example in a description would be published as the prompt text | Match on the fence following the `## Prompt` heading specifically | No prompt has hit it yet. It is a trap rather than a bug |
 | The frontmatter parser is line-based | A wrapped `description` value drops everything after the first line, with no error | Parse folded values, or fail loudly on a continuation line | Every description is currently one line. Failing loudly would be the cheaper half of the fix |
 | No test suite, no linter, no CI | Only loading the page catches anything | Any one of them | Each is a dependency and a toolchain. Accepted deliberately, and the reason section 20 makes the manual check mandatory |
@@ -1392,6 +1395,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.36.1 | 2026-08-24 | Followed the `.gitattributes` addition through the rest of this document, which v1.36.0 left describing the old state in five places: the section 13 file count and tree, the paragraph stating no `.gitattributes` exists, discrepancy 15, the deploy comparison caveat in section 20, and the technical debt row in section 30. Also corrected four line counts that had gone stale across earlier releases. |
 | 1.36.0 | 2026-08-24 | Added `.gitattributes` pinning `* text=auto eol=lf`, closing open question 5. A checkout now produces LF on any machine, so source files under `prompts/` cannot drift from their mirrored copies in `js/prompts-data.js` purely because of the checkout. Verified by deleting both files and restoring them from git, which previously produced CRLF and now produces LF, with the mirror check passing afterwards. |
 | 1.35.0 | 2026-08-24 | The folder structure now shows `sitemap.xml` at the root, with the distinction that separates it from `robots.txt`: it is root by default rather than root by requirement. A sitemap is scope-limited by its own location, so one under `/docs` may only list URLs under `/docs`, but one named on a `Sitemap:` line in `robots.txt` is trusted for the whole host wherever it sits. An audit finding a sitemap outside the root checks for that line rather than assuming it is broken. |
 | 1.34.0 | 2026-08-24 | The enforced folder structure now shows `LICENSE.md` and `robots.txt` at the repository root, both excluded from the rule that moves stray files into `/docs`. Hosting platforms detect a licence by location and the root is the most widely recognised one; crawlers read robots.txt from the origin root and nowhere else, so a copy under `/docs` does nothing at all. A licence is also never relocated, since an existing one is a decision the project already made. |

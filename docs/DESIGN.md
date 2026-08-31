@@ -1,6 +1,6 @@
 # DESIGN.md - Prompts
 
-**Version:** 1.9
+**Version:** 1.9.1
 **Status:** Active
 **Author:** Azqato
 
@@ -762,7 +762,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 **The CSS structure list in section 11 and the shell template in section 12 were both wrong until v1.28.0** and are now read from the files. They are the two blocks most likely to go stale again, because nothing checks them, so verify against `index.html` and `css/style.css` before relying on either.
 
-**Where to change what.** A colour, font, or width: the `:root` block in `css/style.css`, and check the token is documented in section 2 of this file. A component: find its `/* Section */` banner in the stylesheet; the file is ordered by component and has no imports. Responsive behaviour: the two media queries at the bottom, and read section 9 first. Anything structural: `index.html`, all 31 lines of it.
+**Where to change what.** A colour, font, or width: the `:root` block in `css/style.css`, and check the token is documented in section 2 of this file. A component: find its `/* Section */` banner in the stylesheet; the file is ordered by component and has no imports. Responsive behaviour: the two media queries at the bottom, and read section 9 first. Anything structural: `index.html`, all 42 lines of it.
 
 **Verification.** There is no test, no linter, and no visual regression check. The only way to confirm a change is to open `index.html` from disk and look at it: the home list, one prompt page, the copy button, and both breakpoints. `docs/PRD.md` section 20 makes this mandatory rather than advisory.
 
@@ -786,6 +786,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.9.1 | 2026-08-24 | Corrected the `index.html` line count in section 12c, which had said 31 since before the Content Security Policy was added in v1.28.0. A line count carries no intent, so it is fixed in place under the mechanical-fact exception rather than flagged. |
 | 1.9 | 2026-08-24 | Specced the collapse toggle, which is the first new component since v1.0 and the third button on the site. Section 5 gains a Collapse Toggle spec and the code block header now documents the action group, the pointer cursor on the bar, and the collapsed default. Section 12a records the rule the toggle follows: a peer control joins the existing selector rather than getting a second treatment. Section 12b adds the show-and-hide rule, which is what the no-transform and no-height rules imply for a collapse. Section 12c reconciles the collapsed default with the tenet that the code block is the product. Sections 10 and 11 updated for the new control. |
 | 1.8 | 2026-08-23 | Resolved both discrepancies flagged in 1.7, after the author confirmed neither preserved an intended design. The section 11 CSS structure list is now read from the stylesheet: the `.site-layout` class that never existed is gone, `.site-wrapper` is correctly described as the grid, the order matches the file, and the four omitted blocks are listed. The section 12 shell template now includes the `.sidebar-sticky` wrapper the layout depends on, plus the meta description, the nav `aria-label`, the `aria-live` region, and the new Content Security Policy, with the three load-bearing elements called out. Documented the copy button's new failed state, which is the first use of `--color-negative`. |
 | 1.7 | 2026-08-23 | Documentation audit against the codebase. Added the spacing system (section 4a), component patterns (12a), animation and motion (12b), and a notes-for-a-model section (12c). Added the error and status panel component spec, which had shipped since v1.0 undocumented. Rewrote accessibility (section 10) with the WCAG target stated, a contrast table, keyboard navigation expectations, and two recorded gaps: no skip-to-content link, and a copy confirmation announced only through `aria-label`. Expanded section 9 with the full sub-1024px rule set, marking `height: auto` on `.sidebar-sticky` and `flex-basis: 100%` on `.sidebar-nav` as load-bearing v1.11.0 bug fixes. Annotated two blocks as unresolved discrepancies rather than correcting them: the CSS structure list in section 11 and the shell template in section 12. Noted that `--color-negative` and `--color-warning` remain reserved and unused. |

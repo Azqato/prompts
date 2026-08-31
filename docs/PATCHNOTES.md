@@ -4,6 +4,30 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.36.1 - 2026-08-24
+
+A follow-through release. v1.36.0 added `.gitattributes` and documented the decision, but left five other places in `docs/PRD.md` describing the state before it.
+
+### Fixed
+
+- Section 13 said the project is 13 files and that there is no `.gitattributes`, in a paragraph explaining the consequence of not having one. It is now 14 files, and that paragraph describes what the file does and why the mirror needs it. The tree lists it.
+- Discrepancy 15 in section 18 ended with "whether to pin LF with a `.gitattributes` is open question 5". Marked resolved, with the note that `tools/prompts-mirror.py` still normalizes line endings and that this is now redundant on purpose rather than load-bearing.
+- The deploy comparison in section 20 instructed normalizing line endings before comparing local against deployed, because `core.autocrlf` rewrites the working tree. That is no longer true of a current checkout. It now says the comparison is valid as it stands, and that normalizing anyway costs nothing and keeps the check correct against a clone made before v1.36.0.
+- The technical debt table in section 30 still carried the missing `.gitattributes` as open debt. Struck out as fixed, which makes four struck rows.
+- Four stale line counts, corrected in place under the mechanical-fact exception in section 33 rather than flagged, since a line count carries no intent: `css/style.css` is 567 lines rather than 540, in three places across sections 13 and 30, and `index.html` is 42 lines rather than 31, in section 20 of this document and section 12c of `docs/DESIGN.md`. Both had been stale since v1.28.0 added the Content Security Policy and the copy button's failed state.
+
+### Notes
+
+Worth recording why this release exists at all. The v1.36.0 change was one new file and a closed open question, which is about as small as a change gets here, and it still left five statements in the PRD false and four numbers wrong. The reason is that this document deliberately repeats facts across sections so each one can be read on its own, which section 33 states as the standard. The cost of that standard is exactly this: a fact that changes has to be chased through every place it appears, and the copy nobody was editing is the one that goes stale. Discrepancy 16, logged in v1.29.0, was the same failure with the same cause. The check that catches it is grepping for the thing that changed rather than trusting that the section it was changed in was the only one mentioning it.
+
+### Verified
+
+- Grepped for `gitattributes`, `autocrlf`, and every stale line count across all tracked files, then read each match rather than assuming the replacement was right.
+- Re-rendered in Edge across all six routes. Unchanged, as expected: documentation only.
+- `tools/prompts-mirror.py` clean.
+
+---
+
 ## v1.36.0 - 2026-08-24
 
 Closes open question 5, which has been open since v1.28.0.
