@@ -4,6 +4,26 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.37.0 - 2026-09-07
+
+### Added
+
+- `prompts/documentation.md`: A **Social Sharing Tags** section, placed after Licensing because the two cover the same layer, what a page tells a machine about itself rather than what it shows a reader. The default requires six tags on every shareable page (`og:title`, `og:description`, `og:url`, `og:type`, `og:site_name`, `twitter:card`), sets character budgets of 60/150/20 with hard ceilings of 70/200, turns images off by default, and lists the pages that are deliberately excluded. Like every policy in that prompt it yields to a rule the project already states, and it applies only where the project actually serves a site, the same condition already attached to `robots.txt` and `sitemap.xml`.
+- The section is written as a policy record rather than an instruction to edit pages. The audit reads the tags that exist, writes the rule into the PRD, and reports any page that fails it as a discrepancy. This is deliberate: the prompt's read-only guarantee for steps 1 through 3 is followed by a write scope limited to the four documentation files, so a section that told the model to rewrite every page head would contradict the constraint the prompt states most strictly. The compliance checks are recorded as checks to run, and are explicitly read-and-report.
+- Section 19 of `docs/PRD.md`: open question 8. This site now falls under a policy it does not meet. `index.html` carries a `<meta name="description">` and nothing else, so a pasted link renders from the title tag alone.
+
+### Changed
+
+- The prompt's page description in `prompts/documentation.md` now lists Social Sharing Tags among the required PRD sections, keeping the description and the prompt body in agreement.
+
+### Notes
+
+The source text supplied for this section named a specific chat platform as the rendering target. That naming is generalised in the prompt to "one chat platform" and "the strictest renderer", with the reasoning kept intact, on the same grounds section 11 applies to services and accounts: a prompt is copied into other projects, and a rule that names a product ages with that product. The behaviour it is written against, a narrow card that falls back to the title tag, is what actually matters and is stated directly.
+
+The prompt block is now 37,543 characters, up from 31,766.
+
+---
+
 ## v1.36.1 - 2026-08-24
 
 A follow-through release. v1.36.0 added `.gitattributes` and documented the decision, but left five other places in `docs/PRD.md` describing the state before it.

@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.36.1
+**Version:** 1.37.0
 **Status:** Active
 **Author:** Azqato
 
@@ -442,6 +442,8 @@ Numbered so they can be answered by reference. An answered question is folded in
 
 6. The copy button's success and failure paths have never been exercised, only read. A headless DOM dump cannot drive the Clipboard API. Is a manual click worth doing before the next release, or is the code simple enough to trust?
 7. This repository has no `LICENSE.md`, and as of v1.33.0 the Documentation prompt says that a project without one falls to a default of all rights reserved, source-available, with a standing carve-out for search and AI citation. The prompt would have this project ship that LICENSE and a `robots.txt` marked deliberately open. It was not done in v1.33.0, because a licence is a legal assertion published under the author's name rather than a documentation change, and because the four prompts are written to be copied and used, which is a posture worth stating deliberately rather than inheriting from a default. Should the default be applied here, adjusted, or explicitly declined and recorded as declined? Declining and saying why is a valid answer; leaving no licence and no note is the only outcome that carries a real cost, because it leaves a reader guessing.
+
+8. This site now falls under a policy it does not meet. As of v1.37.0 the Documentation prompt says a project that serves a site records a social sharing policy and carries `og:title`, `og:description`, `og:url`, `og:type`, `og:site_name`, and `twitter:card` on every shareable page. `index.html` carries a `<meta name="description">` and nothing else, so a pasted link renders from the title tag alone and, on a client that requires `og:title`, may not render an embed at all. Two things have to be decided before it can be fixed rather than one. First, the canonical domain: this repository has no `sitemap.xml` and no `CNAME`, so the Pages address is recorded nowhere the audit can read, and `og:url` cannot be guessed. Second, the architecture: every route is a hash on one `index.html`, and a link renderer never sees the fragment, so one static set of tags is the only thing achievable without a build step. That is a real limit worth stating rather than working around, since the prompt's own rule is that `og:url` is unique per page. Should the tags be added for the site as a whole, with the per-page requirement noted as not applicable to a hash-routed single page, or declined and recorded as declined?
 
 Answered on 2026-08-24:
 
@@ -1395,6 +1397,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.37.0 | 2026-09-07 | Added a Social Sharing Tags default policy to the Documentation prompt, covering the Open Graph and Twitter Card tags in a page head: six required tags, a per-page absolute `og:url` because the silent failure is every card linking back to the homepage, character budgets of 60/150/20 with 70/200 as ceilings, no `og:image` by default with `twitter:card` set to `summary`, an explicit exclusion list, and a set of read-only compliance checks. Written as a policy the audit records and checks rather than one it acts on, since the prompt's write scope is limited to the four documentation files. Applies only where the project serves a site. Recorded as open question 8 for this repository, which serves one and carries no such tags. |
 | 1.36.1 | 2026-08-24 | Followed the `.gitattributes` addition through the rest of this document, which v1.36.0 left describing the old state in five places: the section 13 file count and tree, the paragraph stating no `.gitattributes` exists, discrepancy 15, the deploy comparison caveat in section 20, and the technical debt row in section 30. Also corrected four line counts that had gone stale across earlier releases. |
 | 1.36.0 | 2026-08-24 | Added `.gitattributes` pinning `* text=auto eol=lf`, closing open question 5. A checkout now produces LF on any machine, so source files under `prompts/` cannot drift from their mirrored copies in `js/prompts-data.js` purely because of the checkout. Verified by deleting both files and restoring them from git, which previously produced CRLF and now produces LF, with the mirror check passing afterwards. |
 | 1.35.0 | 2026-08-24 | The folder structure now shows `sitemap.xml` at the root, with the distinction that separates it from `robots.txt`: it is root by default rather than root by requirement. A sitemap is scope-limited by its own location, so one under `/docs` may only list URLs under `/docs`, but one named on a `Sitemap:` line in `robots.txt` is trusted for the whole host wherever it sits. An audit finding a sitemap outside the root checks for that line rather than assuming it is broken. |

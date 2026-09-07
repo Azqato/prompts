@@ -4,7 +4,7 @@ description: Scan the entire codebase, then consolidate all documentation into f
 meta: Claude Code Prompt
 ---
 
-Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`, plus a LICENSE.md beside the README where the project has no licence of its own. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Licensing, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
+Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`, plus a LICENSE.md beside the README where the project has no licence of its own. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Licensing, Social Sharing Tags, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
 
 Use it when a project needs one authoritative, exhaustive doc set in a single pass. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, cross-checks the docs against reality, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
 
@@ -380,6 +380,81 @@ carries a comment marking that as deliberate, so a future tightening is a decisi
 rather than an accident. Name `LICENSE.md` as authoritative if the two ever disagree.
 A grants-nothing licence sitting next to an open `robots.txt` is a contradiction a
 cautious crawler operator may resolve the wrong way.
+Social Sharing Tags
+Record the project's rule for the Open Graph and Twitter Card tags in each page's
+head. If the project already states one, document it and leave it alone. If it does
+not, adopt this default and write it in. This section is a policy record, not a
+licence to edit pages: the audit reads the tags that exist, writes the rule into the
+PRD, and reports any page that does not match it as a discrepancy under Documentation
+Versus Reality. Editing a page head is a separate change, made deliberately and
+outside this audit. As with robots.txt and sitemap.xml, this applies only where the
+project actually serves a site.
+The default is written for how one chat platform renders a pasted link, since that is
+the strictest common case rather than a preference for that platform: the card is
+narrow, mobile truncates aggressively, and the renderer falls back to the page title
+tag or skips the embed entirely when og:title and og:description are absent. A page
+that satisfies the strictest renderer satisfies the rest.
+- Required on every shareable page: og:title, og:description, og:url, og:type,
+  og:site_name, and twitter:card. The first three are written per page. og:site_name
+  and og:type are the same across the site, and og:type is "website" unless a page is
+  genuinely an article.
+- og:url is the absolute https URL of that specific page, never a relative path and
+  never the site root. This is the most common failure and it is a silent one: every
+  card still renders, and every one of them links back to the homepage no matter what
+  was shared. Take the canonical domain from what the project already has, its
+  sitemap.xml, a CNAME file, robots.txt, or the deploy config, and use it exactly,
+  including whether it carries a www prefix. Do not guess it.
+- Character budgets, as safe caps rather than hard limits: og:title 60 characters
+  with 70 the absolute ceiling, og:description 150 with 200 the hard maximum, and
+  og:site_name 20. Renderers clip much later than this, near 256 and 350, but the
+  card is narrow and mobile shows far less, so those numbers are irrelevant in
+  practice. Emoji and markdown characters count as literal characters.
+- og:title does not repeat the site name. The renderer already prints og:site_name as
+  small text directly above the title, so a title carrying it too produces visible
+  duplication and spends a third of the budget on something already on screen.
+- Images are off by default. Do not add og:image, og:image:width, og:image:height, or
+  og:image:alt, and set twitter:card to "summary" rather than "summary_large_image",
+  because summary_large_image with no image renders an empty or broken frame in some
+  clients. A declared image that does not exist is worse than no image at all, so
+  og:image is never added speculatively or pointed at a placeholder. Where the project
+  already has an image sharing policy of its own, that rule wins, and the
+  requirements that go with it are: 1200 by 630 pixels at a 1.91:1 ratio, an absolute
+  https URL because a relative path fails silently, explicit og:image:width and
+  og:image:height so the card can be sized before the file finishes downloading, PNG
+  or JPG under about 8 MB, an og:image:alt under 100 characters, and only then
+  twitter:card set to "summary_large_image".
+- The title front-loads the distinct part. The first three or four words carry the
+  page, because that is all a reader sees before deciding. No trailing branding, and
+  no colon stacking a subtitle onto a subtitle.
+- The description is complete sentences stating what the page actually does, written
+  to end on a full stop rather than to be cut into one, since a sentence truncated
+  mid-word is what makes a card look broken. The tone is educational and pitched at
+  someone who has never been to the site and knows nothing about it: name the
+  concrete thing the page gives them, because a vague capability claim reads as
+  filler and gets scrolled past. It is not a restatement of the title. The two fields
+  are two chances to say something, not one thing said twice.
+- Every description is based on the page's actual content, read from the page rather
+  than inferred from its filename, which is the same rule this audit applies
+  everywhere else. A description that overpromises is worse than a plain one, because
+  the reader finds out in one click. Where a page already carries a meta description
+  that is accurate, reuse it for og:description rather than inventing a second,
+  competing description, and where the two differ, say why the difference is
+  deliberate.
+- Some pages are deliberately excluded: 404 and other error pages, mockups, scratch
+  or work in progress files, and anything already absent from sitemap.xml or marked
+  noindex. Sharing tags on those make a broken or unfinished address look legitimate
+  when it is pasted. List the exclusions in this section, so a later reader can tell
+  a decision from an oversight.
+- Record the checks that decide whether a page complies, so compliance is something
+  run rather than argued about. Every page that should carry the tags has all six.
+  og:title is 70 characters or fewer, og:description 200 or fewer, og:site_name 20 or
+  fewer, with the actual count reported for anything over the target budgets so a
+  person can judge the borderline cases. Every og:url is absolute, begins with https,
+  and is unique across the site, since duplicate values are a bug rather than a style
+  choice. No og:title contains the og:site_name string. Where og:image is present,
+  the width, height, and alt tags are present too, its URL is absolute, and the file
+  it names exists in the repository. Where og:image is absent, twitter:card is
+  "summary". These checks read files and report; they do not rewrite them.
 Deprecation and Removal
 - Removal policy: first check whether the project already has a removal rule of its
   own, stated in its docs, in a contributing guide, or established by a consistent
