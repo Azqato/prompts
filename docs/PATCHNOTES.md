@@ -4,6 +4,29 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.38.0 - 2026-09-07
+
+A planning release. No behaviour changed and no file outside `/docs` was touched.
+
+### Added
+
+- Section 27 of `docs/PRD.md`: a **Scoped** subsection recording the self-audit of this project against the documentation standard as it stands at v1.37.0, and a milestone row for it. The prompt gained six sections since this project was last audited against it in v1.27.0, and the gap had never been written down.
+- The findings of the partial read-only pass run on 2026-09-07, recorded in that subsection rather than discarded. The pass was stopped before anything was written, so these are observations with their reasoning attached, not decisions:
+  - `robots.txt` must **not** be created in this repository. The site is served from `https://azqato.github.io/prompts/`, a subdirectory rather than an origin, so a file at this root would deploy to `/prompts/robots.txt` where no crawler reads it. The governing `https://azqato.github.io/robots.txt` belongs to a different repository and returned 404 when checked. This is the outcome the prompt's own subdirectory clause prescribes.
+  - `sitemap.xml` would be valid at this root, since a sitemap covers URLs under its own location and `/prompts/` is the whole site, but it could hold only one URL. Every route here is a fragment and a crawler never sees a fragment.
+  - The social sharing tags collide with an existing rule. The default asks for a marketing-focused description; section 11 prohibits marketing language. Section 11 wins under the prompt's own precedence rule, and the collision is noted as something worth addressing in the prompt, since any project with a house style will hit it.
+  - `LICENSE.md` remains open question 7 and was deliberately not acted on.
+
+### Changed
+
+- Open question 8 in section 19 now points at the roadmap entry, so a reader arriving at the question finds the scheduled work rather than a dead end.
+
+### Notes
+
+The audit was scoped out at the author's request rather than deferred on its merits, so it is a planned milestone rather than a Deferred entry. The distinction matters in section 27: Deferred items carry a reason they will not be done.
+
+---
+
 ## v1.37.0 - 2026-09-07
 
 ### Added
