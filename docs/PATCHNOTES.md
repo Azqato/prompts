@@ -4,6 +4,19 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.39.1 - 2026-09-08
+
+### Changed
+
+- `prompts/documentation.md`: The sorting instruction now names the two kinds in the sentence that introduces them: "sort them into two kinds: Documentation Files and Project Files". Previously the reader met the categories only in the two sentences that followed and had to infer that a sort into named buckets was being described.
+- Capitalised the two later uses to match, so the terms read as defined labels rather than as ordinary noun phrases. A named category that changes case between uses looks like two different things.
+
+### Notes
+
+The prompt block is now 38,086 characters, up from 38,047.
+
+---
+
 ## v1.39.0 - 2026-09-08
 
 ### Changed
