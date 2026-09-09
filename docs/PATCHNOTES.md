@@ -4,6 +4,26 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.39.0 - 2026-09-08
+
+### Changed
+
+- `prompts/documentation.md`: The codebase scan line now tells the audit to scan the whole project for markdown and text files, not only `/docs`, and to sort what it finds into two kinds before consolidating anything. Documentation files are folded into the four main documents. Project files stay where they are, meaning anything a tool, a platform, or the product itself depends on, such as `LICENSE.md` or a markdown file that ships as content rather than describing it. A doc that is genuinely better maintained where it sits stays there and gets a pointer from the PRD.
+- The sorting rule is what makes the wider scan safe. Consolidation removes the original, so widening the search without a test for what must not be absorbed would turn a documentation pass into something that can delete a dependency. The test given is whether anything other than a reader depends on the file.
+- The clause about a markdown file that ships as content is the one this repository needs most. All four prompts are `.md` files that read exactly like documents, and an audit run here without that sentence could fold `prompts/*.md` into the PRD and delete the product.
+
+### Notes
+
+Applied as a single-line change to the existing scan instruction rather than as a rewrite of numbered item 1, which is where this rule was first drafted. Placing it in the scan line puts it before the consolidation steps, which is the order it has to run in.
+
+The author's text read "Documentation Files gets consolidated". Corrected to "Documentation files get consolidated" for subject-verb agreement and to match the lower-case "Project files" in the next sentence. No other wording was changed.
+
+The pasted source also had the blank line removed between the `PRD.md` description and the `---` that follows it. Not applied, and treated as a copy-paste artifact rather than an edit: in markdown, text directly above `---` becomes a setext heading. It renders harmlessly inside the fenced block on the site, but the prompt is copied into other contexts where it would not.
+
+The prompt block is now 38,047 characters, up from 37,543.
+
+---
+
 ## v1.38.0 - 2026-09-07
 
 A planning release. No behaviour changed and no file outside `/docs` was touched.

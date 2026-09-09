@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.38.0
+**Version:** 1.39.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1412,6 +1412,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.39.0 | 2026-09-08 | Widened the Documentation prompt's codebase scan to the whole project rather than `/docs` alone, and added the rule that sorts what it finds: documentation files are consolidated into the four main documents, project files stay where they are, and a doc better maintained in place stays there with a pointer from the PRD. The sorting test is whether anything other than a reader depends on the file. Necessary because consolidation removes the original, so a wider search without that test could absorb a file something depends on, including a markdown file that ships as content, which is what all four prompts in this repository are. |
 | 1.38.0 | 2026-09-07 | Put the self-audit against the v1.37.0 documentation standard on the roadmap in section 27 rather than running it, and recorded the findings of the partial read-only pass that preceded the decision: `robots.txt` must not be created here because the site is served from a subdirectory and the governing file belongs to another repository, `sitemap.xml` would be valid but would hold one URL because a crawler never sees a fragment, the social sharing tags collide with the section 11 ban on marketing language, and `LICENSE.md` stays open question 7. No file outside `/docs` was touched. |
 | 1.37.0 | 2026-09-07 | Added a Social Sharing Tags default policy to the Documentation prompt, covering the Open Graph and Twitter Card tags in a page head: six required tags, a per-page absolute `og:url` because the silent failure is every card linking back to the homepage, character budgets of 60/150/20 with 70/200 as ceilings, no `og:image` by default with `twitter:card` set to `summary`, an explicit exclusion list, and a set of read-only compliance checks. Written as a policy the audit records and checks rather than one it acts on, since the prompt's write scope is limited to the four documentation files. Applies only where the project serves a site. Recorded as open question 8 for this repository, which serves one and carries no such tags. |
 | 1.36.1 | 2026-08-24 | Followed the `.gitattributes` addition through the rest of this document, which v1.36.0 left describing the old state in five places: the section 13 file count and tree, the paragraph stating no `.gitattributes` exists, discrepancy 15, the deploy comparison caveat in section 20, and the technical debt row in section 30. Also corrected four line counts that had gone stale across earlier releases. |

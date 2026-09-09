@@ -33,7 +33,7 @@ Read files rather than inferring from their names. A guess presented as a fact i
 Be thorough. In /docs, and in PRD.md above all, completeness beats brevity. A section that restates context to stand on its own is doing its job, not padding, because the reader may arrive at it directly and should not have to assemble the answer from three other sections. When in doubt, include it. The cost of a document that says too much is a longer read; the cost of one that says too little is someone guessing, and guessing is what this whole exercise exists to prevent.
 This is not licence for filler. Do not write marketing language, do not restate the obvious to fill space, and do not add a sentence that carries no information the reader did not already have. Thorough means more facts, not more words around the same facts. The README is the exception to all of this and stays tight, since everything it omits is one link away.
 
-Make sure to perform a full codebase scan before touching any documentation.
+Make sure to perform a full codebase scan before touching any documentation. Scan the whole project for markdown and text files and sort them into two kinds. Documentation files get consolidated into the 4 main documents: README.md, /docs/PRD.md, /docs/DESIGN.md, /docs/PATCHNOTES.md. Project files stay where they are, meaning anything a tool, a platform, or the product itself depends on, such as LICENSE.md or a markdown file that ships as content rather than describing it. Where a doc is genuinely better maintained where it sits, leave it there and point at it from the PRD.
 
 1) Consolidate all of the files in docs into 4 main documents: README.md, /docs/PRD.md, /docs/DESIGN.md, /docs/PATCHNOTES.md
 
