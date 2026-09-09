@@ -4,6 +4,30 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.40.0 - 2026-09-09
+
+### Added
+
+- `prompts/documentation.md`: a **Page Titles** section, placed after Social Sharing Tags because the two share a layer, a condition, and a field. Both govern what a page says about itself in its head, both apply only where the project serves a site, and both have an opinion about the same brand string. The default sets the shape `<unique page name> - <brand>` under two limits: the first 30 characters must identify the page on their own, and the whole title stays at 60 or fewer.
+- The two numbers are stated as measuring different things rather than as a compromise. Truncation removes from the end, so a title is read at two lengths at once: the first 30 characters are what survives a crowded tab strip, and the full 60 is what a search result renders. Front-loading satisfies both, so nothing has to be traded off. The front budget is 30 rather than 50 because a tab is measured in pixels, and a title of capitals and wide letters fills the same physical tab as a longer one in lowercase.
+- The uniqueness rule is written against the first 30 characters rather than against the whole title. Two titles that differ only after character 30 are the same title as far as a tab is concerned, so requiring unique titles is the weaker test and requiring unique prefixes is the one that matters.
+- A verification sub-list of six read-only checks, covering presence, length, prefix uniqueness with collisions reported as pairs, separator consistency, brand placement, and per-route title reading on a client-rendered site. The last of those exists because a title set once in the head and never updated passes a source check and fails in a browser.
+- Section 27 of `docs/PRD.md`: a fifth finding in the self-audit entry, recording that this site now falls under a policy it only half meets.
+
+### Notes
+
+Three decisions were put to the author while the section was drafted, and all three are recorded here because each rules out a reading someone would otherwise reach for later.
+
+The hard limit is 30 on the front of the title and 60 on the whole, not 30 on the whole. A 30-character total was considered and rejected on arithmetic: `Azqato's Prompts - ` costs 19 characters before the page name begins, so a 30-character ceiling leaves 11 for the page name and two of this site's four prompts already do not fit. The only way to reach 30 total is to drop the brand from every page, which removes it from exactly the two places it was earning its keep, the search result and the bookmark. Truncation past 30 is not a failure under this rule, it is the mechanism working: what gets eaten is the brand, which the favicon has already said.
+
+The homepage rule states the principle and stops. It leads with the brand, and whether anything follows is the project's call, with the bare site name and no separator named explicitly as a valid answer where the brand is already what people search for. The cost of the bare name is recorded next to it, since the homepage is usually the page where a stranger in a search result most needs telling what the site is.
+
+The checks are a sub-list rather than one prose bullet, which is a departure from Social Sharing Tags. Deprecation and Removal already nests a sub-list at the same indent, so the form is not new to the prompt, and a list of assertions is easier to work through mechanically than the same assertions in a paragraph.
+
+The prompt block is now 43,713 characters, up from 38,086. It has grown 92 percent this session, from 22,785 at the start. That is worth watching rather than acting on: every section added has been a policy the author asked for, but a prompt long enough that a reader skims it stops being enforced, and there is no rule yet for what would ever come out.
+
+---
+
 ## v1.39.1 - 2026-09-08
 
 ### Changed

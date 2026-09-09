@@ -4,7 +4,7 @@ description: Scan the entire codebase, then consolidate all documentation into f
 meta: Claude Code Prompt
 ---
 
-Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`, plus a LICENSE.md beside the README where the project has no licence of its own. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Licensing, Social Sharing Tags, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
+Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`, plus a LICENSE.md beside the README where the project has no licence of its own. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Licensing, Social Sharing Tags, Page Titles, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
 
 Use it when a project needs one authoritative, exhaustive doc set in a single pass. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, cross-checks the docs against reality, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
 
@@ -455,6 +455,79 @@ that satisfies the strictest renderer satisfies the rest.
   the width, height, and alt tags are present too, its URL is absolute, and the file
   it names exists in the repository. Where og:image is absent, twitter:card is
   "summary". These checks read files and report; they do not rewrite them.
+Page Titles
+Record the project's rule for the title of each page. If the project already states
+one, document it and leave it alone. If it does not, adopt this default and write it
+in. As with Social Sharing Tags, this is a policy record rather than a licence to edit
+pages: the audit reads the titles that exist, writes the rule into the PRD, and
+reports any page that does not match it as a discrepancy under Documentation Versus
+Reality. Changing a title is a separate change, made deliberately and outside this
+audit. It applies only where the project actually serves a site.
+The shape is "<unique page name> - <brand>", under two limits that measure different
+things rather than compromising between two opinions. The first 30 characters must
+identify the page on their own, without the brand and without the rest of the string.
+The whole title is 60 characters or fewer. Truncation removes from the end, so a title
+is read at two lengths at once: the first 30 characters are what survives on a tab
+strip once three or four tabs are open, and the full 60 is what a search result
+renders. Front-loading the distinct part satisfies both, so there is nothing to trade
+off. The front budget is 30 rather than 50 because a tab is measured in pixels, not
+characters, and a title of capitals and wide letters fills the same physical tab as a
+longer one in lowercase.
+- Front-load the distinct part and put the brand last. The brand is last precisely
+  because it is the part that can afford to be lost: a reader looking at the tab
+  already has the favicon in front of them. Brand-first collapses every tab on the
+  site to the same visible string, which defeats the one job a tab title has, and it
+  is the pattern a search engine is most likely to rewrite, because a title led by
+  boilerplate says nothing that distinguishes the page.
+- The homepage inverts this, and only the homepage, because there the brand is the
+  distinct part, so it leads. Whether anything follows it is the project's call, and
+  the bare site name with no separator at all is a valid answer: it is correct
+  wherever the brand is already the thing people search for. Where it is not, a short
+  descriptor after the separator is what tells a stranger reading a search result what
+  the site actually is, and the homepage is usually the page where that matters most.
+- Every page's first 30 characters are unique across the site. Two titles that differ
+  only after character 30 are the same title as far as a tab is concerned, so this is
+  stricter than requiring unique titles and it is the rule that matters.
+- One separator, chosen once and used on every page. It costs 3 characters of the
+  budget, so count it. Where the project has no rule, use " - ", which matches the
+  single hyphen the Writing Style section already prefers in titles and headings.
+- No placeholder titles. "Untitled", "Document", "Home", "index", and framework
+  defaults are failures. Search for them explicitly, since they survive from templates
+  and nobody notices them.
+- The brand appears once, at the end. No keyword stuffing, and never repeat the brand
+  inside the page name.
+- No emoji by default, since the favicon is already the visual marker in that tab, and
+  avoid all caps in the first 30 characters, which is the fastest way to spend the
+  pixel budget without spending the character budget.
+- Write every title to survive being read months later with no site around it. A
+  bookmark saves the title as its name, and the bookmarks bar truncates harder than a
+  tab does. "Overview" is a usable tab title and a useless bookmark. This is the same
+  front-loading rule tested against the harsher case.
+- Where the title changes at runtime, it must actually change on client-side
+  navigation. A single-page application that sets the title once in the head and never
+  again shows one title for every route, which is the most common failure in this area
+  and is invisible to anyone who checks a single page. State goes in front of the name
+  rather than behind it, because the front is what survives: "(3) Inbox - Acme". Error
+  and loading states get real titles too. A tab reading "Loading" for two seconds is
+  fine; one reading it forever, because the title is never replaced, is a bug.
+- The title and og:title are different fields with different rules, and neither is
+  copied into the other. The title carries the brand as a suffix, because a tab and a
+  search result have nothing else to say who the site is. og:title omits it, because
+  the card already renders the site name directly above the title. Expect the two
+  strings to differ on the same page, and say so, rather than letting a later reader
+  treat the difference as a mistake.
+- Record the checks that decide whether a page complies, so compliance is something
+  run rather than argued about. These checks read and report; they do not rewrite.
+    - A title exists on every page and is not a placeholder.
+    - Every title is 60 characters or fewer, with the actual count reported.
+    - The first 30 characters are unique across every page in the project. Report each
+      collision as a pair, since a collision is never one page's fault.
+    - The separator matches the one the project uses, on every page that has one.
+    - The brand suffix is present on every page except the homepage, and does not also
+      appear inside the page name.
+    - Where the site renders titles client-side, each route is loaded and the
+      resulting title is read, rather than the source being read. A title set once in
+      the head and never updated passes a source check and fails in a browser.
 Deprecation and Removal
 - Removal policy: first check whether the project already has a removal rule of its
   own, stated in its docs, in a contributing guide, or established by a consistent
