@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.40.0
+**Version:** 1.41.0
 **Status:** Active
 **Author:** Azqato
 
@@ -726,9 +726,11 @@ A partial read-only pass was run on 2026-09-07 and stopped before any file was w
 
 **3. Social sharing tags are absent, and adding them runs into a conflict between two rules this project holds.** `index.html` carries a `<meta name="description">` and nothing else, so a pasted link renders from the title tag alone. The blocker is not the tags themselves. The Social Sharing Tags default asks for a description written in a marketing-focused tone, and section 11 of this document prohibits marketing language outright. Under the prompt's own rule that every policy yields to a rule the project already states, section 11 wins and the description is written plain, with the difference flagged rather than silently resolved. That is the correct outcome here, and it is also a signal worth acting on in the prompt itself: a default that contradicts the writing style in the same document will produce this collision on any project that has a house style. See open question 8 for the two things that have to be settled before the tags can be written at all, the canonical domain and how a hash-routed single page satisfies a rule that wants `og:url` unique per page.
 
+**4. `LICENSE.md` is out of scope for an audit.** Open question 7 has been open since v1.33.0 and stays open. Publishing an all-rights-reserved licence over four prompts written to be copied is a legal assertion made under the author's name, not a documentation change, and it is not something a documentation pass should decide on its way past.
+
 **5. Page titles are half right, and the half that is missing is the brand.** Recorded when the Page Titles section was written in v1.40.0. `js/script.js` sets `document.title` on every route, so this site already avoids the failure that section calls the most common one: the title genuinely changes as the reader navigates. What it produces is a bare page name, so a detail tab reads "Documentation" and a bookmark saved from it reads "Documentation" too, which is unusable out of context months later. Under the default the titles would be "Documentation - Azqato's Prompts" at 32 characters and "Azqato's Prompts" or a descriptor form on the home view, all inside both budgets, with the distinct part inside the first 30 in every case. This is the cheapest of the five findings to act on and the only one that needs no decision first.
 
-**4. `LICENSE.md` is out of scope for an audit.** Open question 7 has been open since v1.33.0 and stays open. Publishing an all-rights-reserved licence over four prompts written to be copied is a legal assertion made under the author's name, not a documentation change, and it is not something a documentation pass should decide on its way past.
+**6. Repository hygiene is the one default this project already met.** Recorded when the Repository Hygiene section was written in v1.41.0, and noted because it is the first time an addition to the prompt has found nothing to fix here. There is no `.gitignore`, and section 13 already states why, which is what the default asks of a project that generates nothing. `.gitattributes` pins `* text=auto eol=lf`, and the reasoning the section generalises was this project's own from v1.36.0. There is no lockfile because there are no dependencies, no environment file because nothing reads an environment variable, and section 17 already records the canonical remote, the single branch, and the published address. `js/prompts-data.js` is the generated-output-committed-on-purpose case, and section 13 names both what regenerates it and what keeps it in step with its source. Nothing to act on.
 
 ### Deferred
 
@@ -988,7 +990,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
     └── PATCHNOTES.md       Changelog, reverse chronological.
 ```
 
-Thirteen files, five folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+Fourteen files, five folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 ### Data models
 
@@ -1414,6 +1416,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.41.0 | 2026-09-18 | Added a Repository Hygiene default policy to the Documentation prompt, after Security, whose environment-variable sentence it enforces. States the default outright: an ignore file, a `.gitattributes`, a committed lockfile, no secret in history, and `main` as the default branch. Researched rather than written from memory, which caught that a blanket `eol=lf` breaks a Windows batch script and added the `.env*` plus `!.env.example` negation, the committed-lockfile rule, and the framing of an ignore file as prevention rather than protection. Added `.gitignore` and `.gitattributes` to the folder structure tree, with the note that a nested copy of either is legitimate rather than a misplacement. Commit and branch style stay with Conventions. Also corrected the stale "Thirteen files" in section 30, which has been 14 since v1.36.0. |
 | 1.40.0 | 2026-09-09 | Added a Page Titles default policy to the Documentation prompt, after Social Sharing Tags and sharing its serves-a-site condition. Sets `<unique page name> - <brand>` with two budgets that measure different things: the first 30 characters must identify the page alone, and the whole title stays at 60. Uniqueness is required of the first 30 characters rather than the whole title, since two titles differing only after character 30 are one title on a tab strip. A 30-character total was rejected because the brand suffix costs 19 characters here and the only way to reach 30 is to drop the brand from every page. Recorded as finding 5 in the section 27 self-audit: this site updates its titles per route already but ships them without the brand. |
 | 1.39.1 | 2026-09-08 | Named the two kinds in the sentence that introduces them, so the Documentation prompt reads "sort them into two kinds: Documentation Files and Project Files" rather than leaving the categories to be inferred from the sentences that follow. Capitalised the later uses so the terms read as defined labels. |
 | 1.39.0 | 2026-09-08 | Widened the Documentation prompt's codebase scan to the whole project rather than `/docs` alone, and added the rule that sorts what it finds: documentation files are consolidated into the four main documents, project files stay where they are, and a doc better maintained in place stays there with a pointer from the PRD. The sorting test is whether anything other than a reader depends on the file. Necessary because consolidation removes the original, so a wider search without that test could absorb a file something depends on, including a markdown file that ships as content, which is what all four prompts in this repository are. |

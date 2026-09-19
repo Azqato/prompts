@@ -4,6 +4,33 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.41.0 - 2026-09-18
+
+### Added
+
+- `prompts/documentation.md`: a **Repository Hygiene** section, placed after Security because it is the enforcement and verification side of a sentence Security already carries, that no secret is hardcoded and every environment variable is listed but never its value. The default is stated outright: the repository carries an ignore file and a `.gitattributes`, commits its lockfile, keeps every secret out of history, and names its default branch `main`.
+- Nine rules behind that default, each with its reasoning: secrets kept out by an ignore rule with `.env*` and a `!.env.example` negation so the key-name file travels and the value file never does; an ignore file wherever anything is generated; lockfiles committed rather than ignored; every ignore entry naming something the project actually produces; ignoring not untracking; generated output committed on purpose being recorded rather than forbidden; line endings pinned; large binaries kept out of history; and the remote, default branch, and history notes recorded in the PRD.
+- A verification sub-list of seven read-only checks, including the one that cannot be answered by reading a file: no tracked file matches a pattern the ignore file claims to exclude.
+- `.gitignore` and `.gitattributes` in the enforced folder structure tree, with a paragraph on the way they differ from every other root file: a nested copy of either is legitimate rather than a mistake, because version control reads an ignore or attributes file in any directory and applies it downward, which is how one part of a repository narrows a rule the root file sets. An audit that finds one in a subdirectory records what it does and leaves it there, the same treatment a sitemap named on a `Sitemap:` line already gets.
+- Section 27 of `docs/PRD.md`: finding 6 in the self-audit entry, recording that this is the first default in the prompt that this repository already satisfied.
+
+### Fixed
+
+- The findings in section 27 of `docs/PRD.md` ran 1, 2, 3, 5, 4, 6. Finding 5 was inserted above finding 4 in v1.40.0 by anchoring on the wrong paragraph, which went unnoticed because nothing reads that list in order until a sixth entry arrives. Resequenced. No wording changed.
+- Section 30 of `docs/PRD.md` said "Thirteen files, five folders". The repository has tracked 14 since `.gitattributes` landed in v1.36.0, and section 13 was corrected then while this copy was missed. Corrected in place under the mechanical-fact exception in section 33, since a file count carries no intent. This is the third time the same pattern has produced a stale fact, and the same technique caught it: grep for the thing that changed rather than trusting that the section already edited was the only mention.
+
+### Notes
+
+The section was researched rather than written from memory, and the research changed four things. A blanket `eol=lf` breaks a Windows batch script, so the rule now pairs the repository-wide setting with an explicit `eol=crlf` for formats that need it; the first draft would have shipped that defect. The `.env*` and `!.env.example` negation replaced a vaguer instruction to keep secrets out. Lockfiles got their own rule, because the inversion people actually commit is ignoring the dependency directory and the lockfile that pins it together. And the ignore file is now described as prevention rather than protection, since treating it as a security control is how a project ends up with one and no scanning.
+
+Two boundaries are stated rather than left implied. Commit message style and branching pattern stay with Conventions, which reads them from the history, so that no two sections govern one topic. And a secret found in history is reported with a rotation recommendation, never remediated: rewriting history is destructive, it is outside the audit's write scope, and it does not undo an exposure that became public the moment it was pushed.
+
+This repository already met the default before the section existed, which has not happened with any other policy added to this prompt. It has no ignore file and section 13 already explains why, which is exactly what the "a project that generates nothing says so" clause asks for. `.gitattributes` pins `* text=auto eol=lf`, and the reasoning that section generalises came from this project in v1.36.0. `js/prompts-data.js` is the generated-output-committed-on-purpose case, and section 13 already names what regenerates it and what keeps it in step.
+
+The prompt block is now 51,144 characters, up from 43,713. It has grown 124 percent this session, from 22,785. That number is recorded each release rather than acted on, and the rule for what would ever come out still does not exist.
+
+---
+
 ## v1.40.0 - 2026-09-09
 
 ### Added

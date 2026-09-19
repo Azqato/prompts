@@ -4,7 +4,7 @@ description: Scan the entire codebase, then consolidate all documentation into f
 meta: Claude Code Prompt
 ---
 
-Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`, plus a LICENSE.md beside the README where the project has no licence of its own. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Licensing, Social Sharing Tags, Page Titles, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
+Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`, plus a LICENSE.md beside the README where the project has no licence of its own. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Repository Hygiene, Licensing, Social Sharing Tags, Page Titles, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
 
 Use it when a project needs one authoritative, exhaustive doc set in a single pass. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, cross-checks the docs against reality, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
 
@@ -46,6 +46,8 @@ Make sure to perform a full codebase scan before touching any documentation. Sca
    ├── LICENSE.md         ← root only, and never moved. See below
    ├── robots.txt         ← root only, where the project serves a site
    ├── sitemap.xml        ← root by default, where the project serves a site
+   ├── .gitignore         ← root only for the repository-wide rule. See below
+   ├── .gitattributes     ← root only, where line endings need pinning
    └── /docs
        ├── PRD.md
        ├── DESIGN.md
@@ -53,7 +55,8 @@ Make sure to perform a full codebase scan before touching any documentation. Sca
 
    If any of these files exist outside of /docs, move them into /docs. If /docs does
    not exist, create it. README.md, LICENSE.md, robots.txt, and sitemap.xml are
-   excluded from that rule and stay at the root.
+   excluded from that rule and stay at the root, as are `.gitignore` and
+   `.gitattributes`.
 
    LICENSE.md is root only, for the same reason the README is: it is one of the few
    files a person or a tool expects to find without looking. Hosting platforms detect
@@ -85,6 +88,17 @@ Make sure to perform a full codebase scan before touching any documentation. Sca
    robots.txt points at it, and an audit that finds one elsewhere should check for
    that line rather than assume it is broken or move it. The same condition as
    robots.txt applies: only where the project actually serves a site.
+
+   `.gitignore` and `.gitattributes` are read from the root by default, and the rule
+   that covers the whole repository belongs there. They differ from the other root
+   files in one way worth knowing before moving one: a nested copy of either is
+   legitimate rather than a mistake. Version control reads an ignore or attributes
+   file in any directory and applies it to that directory and everything below it,
+   which is how one part of a repository narrows a rule the root file sets. So an
+   audit that finds one in a subdirectory records what it does and leaves it where
+   it is, exactly as it would for a sitemap named on a `Sitemap:` line. What each
+   file should contain is the Repository Hygiene policy in the PRD section list
+   below.
 
 ---
 README.md - The front door. First thing anyone sees. Explains what the project is and how to use it.
@@ -316,6 +330,91 @@ Security
 - Known attack surface: any areas of the app with elevated risk and
   what mitigations are in place
 - Dependency policy: how dependencies are monitored for vulnerabilities
+Repository Hygiene
+Record the project's rule for what its version control carries and what it keeps out.
+If the project already states one, document it and leave it alone. If it does not,
+adopt the default below and write it in. This is a policy record rather than an
+action: the audit reads the repository's configuration, writes the rule into the PRD,
+and reports any gap as a discrepancy under Documentation Versus Reality. Creating or
+editing an ignore file is a separate change, and nothing here authorises a version
+control command that changes state, which steps 1 through 3 forbid and which stays
+forbidden.
+Commit message style and branching pattern are not covered here. They belong to
+Conventions, which reads them from the history rather than from a rule, because two
+sections governing one topic is how a document starts contradicting itself.
+Default: the repository carries an ignore file and a `.gitattributes`, commits its
+lockfile, keeps every secret out of history, and names its default branch `main`.
+- Secrets are never committed, and this is the one item on the list whose cost is not
+  recoverable. An ignore rule keeps them out before they exist: ignore the whole
+  environment file family and re-include the example with a negation, `.env*` followed
+  by `!.env.example`, so the file listing key names travels with the repository and
+  the file holding values never does. The example carries every key name and no value,
+  which is the rule the Security section already states for the environment variable
+  reference.
+  Treat the ignore file as prevention, not protection. It stops a mistake that has not
+  happened yet and does nothing about one that has, so a project holding real secrets
+  pairs it with scanning and a secret manager rather than trusting it alone. Where the
+  audit finds a secret already committed, report it, name the file, and recommend
+  rotation. Do not rewrite history: it is destructive, it is outside this audit, and
+  it does not undo the exposure, because a pushed value is public from that moment.
+- An ignore file exists wherever the project generates anything: build output,
+  dependency directories, caches, logs, coverage reports, and local editor or
+  operating system files. A project that generates nothing says so in the PRD rather
+  than carrying an empty file for the look of it.
+- Lockfiles are committed, never ignored. A lockfile is what makes a build
+  reproducible, and ignoring one is the common inversion of this rule: the dependency
+  directory is what gets ignored, and the lockfile that pins it is what gets kept.
+- Every ignore entry names something this project actually produces. A file copied
+  wholesale from a template lists rules for tools the project does not use, which is
+  worse than a short one because it buries what the project really generates. Where an
+  entry cannot be explained, say so rather than removing it unexamined.
+- Ignoring a file does not untrack it. The rule applies only to files version control
+  is not already following, so anything committed before the rule was added stays
+  tracked and keeps being committed. This is the most common reason an ignore file
+  looks correct and does nothing, so compare the tracked list against the rules rather
+  than reading the rules alone.
+- Generated output is sometimes committed on purpose, and the rule is to say why
+  rather than to forbid it. A site served directly from the repository, a vendored
+  build, or a file a tool regenerates that the deployment reads are all legitimate.
+  Record which files those are, what regenerates them, and what keeps them in step
+  with their source, because a generated file nobody knows is generated gets edited by
+  hand eventually.
+- Pin line endings where the project is worked on across more than one platform, or
+  where any tool compares two copies of the same text byte for byte. `* text=auto
+  eol=lf` in `.gitattributes` makes a checkout produce the same bytes everywhere,
+  whatever each machine is configured to do. Fix it in the repository rather than in
+  each tool that reads the files, because the failure is silent rather than loud: a
+  comparison does not error, it reports a difference that is not there, and the
+  natural response is to correct the file that was already correct. Three things
+  belong in the same file. A format that must keep CRLF to run, such as a Windows
+  batch script, gets an explicit `eol=crlf` rule, because a blanket `eol=lf` breaks
+  it. Binary formats are marked as binary so they are never normalised or diffed as
+  text. Generated files can be marked as generated so they stay out of diffs and
+  language statistics.
+- Large binaries are kept out of history. Every revision of one is stored forever, so
+  committing a handful repeatedly is what makes a clone slow years later, and the cost
+  cannot be removed afterwards without rewriting history. Where large files genuinely
+  have to be versioned, use the platform's large file mechanism and record that
+  decision, rather than committing them directly and discovering the cost later.
+- Record in the PRD what the repository is and how to reach it: where the canonical
+  remote lives, the default branch name, and anything about the history a reader
+  should know. Someone cloning for the first time needs the first two, and neither can
+  be read from a file in the tree.
+- Record the checks that decide whether the repository complies. These checks read and
+  report; they do not rewrite, and they never run a command that changes state.
+    - An ignore file exists, or the PRD says why the project needs none.
+    - No tracked file matches a pattern the ignore file claims to exclude. Report each
+      one, since this is the case where the rules look right and do nothing.
+    - No dependency directory, build output, or cache is tracked.
+    - No tracked file holds credentials by convention: an environment file other than
+      the example, a private key, a certificate, or a package manager configuration
+      carrying a token. Report by name and recommend rotation rather than acting.
+    - The lockfile is tracked, where the ecosystem has one.
+    - Where the project is worked on across platforms or compares file contents byte
+      for byte, `.gitattributes` exists and pins line endings, with an explicit rule
+      for any format that must keep CRLF.
+    - Every ignore entry corresponds to something the project produces, with any that
+      do not listed rather than removed.
 Licensing
 Record the project's licensing posture. If it already has a well defined licence,
 document it and leave it alone: name the licence, point at the file, and state what
