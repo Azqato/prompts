@@ -4,7 +4,7 @@ description: Add a new prompt to the site by providing the raw prompt text: Clau
 meta: Claude Code Prompt
 ---
 
-Takes a raw prompt text and handles the full addition workflow: generates the title and one-line description, creates the markdown file in `prompts/`, mirrors it into `prompts-data.js`, updates the Files table in `README.md`, and adds a version entry to `docs/PATCHNOTES.md`.
+Takes a raw prompt text and handles the full addition workflow: generates the title and one-line description, creates the markdown file in `prompts/`, mirrors it into `prompts-data.js`, adds it to the prompt list in `README.md`, and adds a version entry to `docs/PATCHNOTES.md`.
 
 Use it when adding any new prompt to the site. Paste the prompt text below the `Prompt:` label before running.
 

@@ -4,6 +4,28 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.43.0 - 2026-09-23
+
+### Changed
+
+- `prompts/documentation.md`: five instructions removed or rewritten after a `/claude-api prompt-audit` pass found them written in a register that current models over-apply, or contradicting another line of the same prompt.
+  - The read-only paragraph no longer says "Do not skip a step because it looks obvious or because you think you already know the answer". The rule that a step which finds nothing must say so stays, since that is an output requirement rather than a push.
+  - Step 5, "Do not skip any document. Every single file in /docs must be reviewed and updated", was removed and step 6 became step 5. It repeated step 2, and "must be updated" contradicted the Merge rule, which leaves text alone where the code agrees with it.
+  - "Be thorough." and "When in doubt, include it." were removed from the completeness paragraph. The reasoning around them, completeness over brevity in `/docs` and why, is unchanged and still carries the quality bar.
+  - "1) Consolidate all of the files in docs into 4 main documents" was removed and the list renumbered. It restated the scan paragraph directly above it with a narrower scope (`/docs` only, where the scan covers the whole project), so the two gave different instructions for the same step.
+  - The README rule "Be as thorough as possible while ensuring readability" now reads "Cover every required section, and where completeness and readability pull apart, brevity wins", since the old wording pointed in two directions at once.
+
+### Fixed
+
+- `prompts/prompt-audit.md`: the page description said the command would "remove" dated patterns. It proposes changes and applies them only when asked, which is what the page body and the README already said. The v1.42.0 notes claimed this wording had been corrected; it had been corrected in the body but not in the description.
+- Discrepancy 17 is now fully corrected. v1.42.0 fixed the stale README Files table instruction in Adding step 5 only. The same instruction survived in `docs/PRD.md` Renaming step 3, Removing step 3, and the section 16 binding rules list, and in the `prompts/add-prompt.md` page description. All four now name the prompt list under "What You Will Find Here". The v1.42.0 entry and its version history row are left as written, as section 33 requires.
+
+### Notes
+
+The audit found nothing written for a specific older model, no retired model names, and no API code, tool definitions, or skill files. The other prompts were left unchanged. Five low-confidence items were reported and not edited: three uses of emphasis that carry a stated reason, and two factual claims with no verification date (the headless minimum viewport in Mobile Audit and the renderer clip lengths in the Social Sharing Tags section).
+
+---
+
 ## v1.42.0 - 2026-09-23
 
 ### Added

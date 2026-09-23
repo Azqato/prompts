@@ -14,14 +14,13 @@ Use it when a project needs one authoritative, exhaustive doc set in a single pa
 Perform a full documentation audit of the /docs folder. Your goal is to ensure every document accurately reflects the current state of the codebase with no gaps, outdated information, or missing coverage.
 Steps to follow:
 
-Steps 1 through 3 are strictly read-only. Do not write, edit, refactor, rename, delete, or move any file. Do not run installers, migrations, formatters, builds that write output, or any version control command that changes state. Read-only commands and searches are encouraged. Writing begins at step 4, and is limited to the documentation files named in this prompt. Do not skip a step because it looks obvious or because you think you already know the answer, and if a step turns up nothing, say so explicitly rather than staying silent.
+Steps 1 through 3 are strictly read-only. Do not write, edit, refactor, rename, delete, or move any file. Do not run installers, migrations, formatters, builds that write output, or any version control command that changes state. Read-only commands and searches are encouraged. Writing begins at step 4, and is limited to the documentation files named in this prompt. If a step turns up nothing, say so explicitly rather than staying silent.
 
 1. Crawl the entire codebase and build a complete picture of what exists: all files, features, components, routes, configs, and logic.
 2. Open every document in /docs one by one, and read each in full.
 3. For each document, compare its content against the actual codebase and identify anything that is outdated, missing, inaccurate, or incomplete.
 4. Rewrite or update each document so it is fully accurate and comprehensive based on the current version of the site.
-5. Do not skip any document. Every single file in /docs must be reviewed and updated.
-6. After all documents are updated, provide a summary of what changed in each file and why.
+5. After all documents are updated, provide a summary of what changed in each file and why.
 
 Standards to uphold:
 
@@ -30,16 +29,14 @@ If a document is missing a section that the codebase clearly warrants, add it.
 Merge, do not overwrite. Documentation holds intent, decisions, and rationale that cannot be reconstructed by reading code. Where a document already covers a topic and the code agrees, leave the text alone. Where the code contradicts it, do not silently correct the document: keep the original text, add the observed reality next to it, and mark it as a discrepancy for the author to resolve. Code can be wrong just as easily as a document can be stale.
 Every policy in the specifications below is a default. Where the project already states a rule of its own on that topic, in its docs, a contributing guide, or a consistent pattern in the code and changelog, document that rule and leave it alone. Adopt the default only where no rule exists, and where an existing rule and a default differ, keep the existing rule and flag the difference rather than silently replacing one with the other.
 Read files rather than inferring from their names. A guess presented as a fact is a failure of this task. Where you are uncertain, mark it as uncertain in the document rather than smoothing it over: a confident sentence outlives the session that produced it.
-Be thorough. In /docs, and in PRD.md above all, completeness beats brevity. A section that restates context to stand on its own is doing its job, not padding, because the reader may arrive at it directly and should not have to assemble the answer from three other sections. When in doubt, include it. The cost of a document that says too much is a longer read; the cost of one that says too little is someone guessing, and guessing is what this whole exercise exists to prevent.
+In /docs, and in PRD.md above all, completeness beats brevity. A section that restates context to stand on its own is doing its job, not padding, because the reader may arrive at it directly and should not have to assemble the answer from three other sections. The cost of a document that says too much is a longer read; the cost of one that says too little is someone guessing, and guessing is what this whole exercise exists to prevent.
 This is not licence for filler. Do not write marketing language, do not restate the obvious to fill space, and do not add a sentence that carries no information the reader did not already have. Thorough means more facts, not more words around the same facts. The README is the exception to all of this and stays tight, since everything it omits is one link away.
 
 Make sure to perform a full codebase scan before touching any documentation. Scan the whole project for markdown and text files and sort them into two kinds: Documentation Files and Project Files. Documentation Files get consolidated into the 4 main documents: README.md, /docs/PRD.md, /docs/DESIGN.md, /docs/PATCHNOTES.md. Project Files stay where they are, meaning anything a tool, a platform, or the product itself depends on, such as LICENSE.md or a markdown file that ships as content rather than describing it. Where a doc is genuinely better maintained where it sits, leave it there and point at it from the PRD.
 
-1) Consolidate all of the files in docs into 4 main documents: README.md, /docs/PRD.md, /docs/DESIGN.md, /docs/PATCHNOTES.md
+1) Create any missing documentation files and populate them accordingly.
 
-2) Create any missing documentation files and populate them accordingly.
-
-3) Enforce the following folder structure:
+2) Enforce the following folder structure:
 
    /project-root
    ├── README.md          ← Important: README.MD is always root only, never inside /docs
@@ -131,9 +128,9 @@ Rules:
   Those belong in /docs.
 - No version numbers or dependency lists.
 - Plain descriptive language. Clear and factual, not salesy.
-- Be as thorough as possible while ensuring readability. The README is the
-  one document where brevity wins a tie: it is read by people deciding
-  whether to care, and everything it leaves out is in /docs.
+- Cover every required section, and where completeness and readability
+  pull apart, brevity wins: the README is read by people deciding whether
+  to care, and everything it leaves out is in /docs.
 
 ---
 

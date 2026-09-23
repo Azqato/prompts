@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.42.0
+**Version:** 1.43.0
 **Status:** Active
 **Author:** Azqato
 
@@ -207,7 +207,7 @@ When a prompt's title changes in a way that makes its slug or filename wrong:
 
 1. Rename the `.md` file in `prompts/` to match the new slug, using `git mv` so the file's history is preserved
 2. Update the `slug` for that entry in `js/prompts-data.js`. The `raw` value is resynced from the renamed `.md` file rather than hand-edited, so the two cannot drift
-3. Update the Files table and the file structure tree in `README.md`
+3. Update the prompt's line under "What You Will Find Here" in `README.md` if it names the old title
 4. Search the repository for the old slug and the old title, and fix any reference that describes the current state
 5. Add a version entry to `docs/PATCHNOTES.md` recording the old name and the new name
 
@@ -230,7 +230,7 @@ Deleting a prompt touches:
 
 1. Delete the `.md` file from `prompts/`
 2. Remove its `{ slug, raw }` entry from `js/prompts-data.js`
-3. Remove its row from the Files table and its line from the file structure tree in `README.md`
+3. Remove its line from the list under "What You Will Find Here" in `README.md`
 4. Search the repository for references to the prompt by slug and by title, and fix any that describe the current state. One prompt's description referring to another by name is the common case
 5. Add a version entry to `docs/PATCHNOTES.md` recording what was deleted and why
 
@@ -342,7 +342,7 @@ Every explicit rule found in the documentation, collected in one place. Sources 
 - The public surface is the deployed page, not the source that builds it. Files under `prompts/` are source, so renaming or removing a prompt is done bare, with no redirect (PRD 12).
 - A genuine public address is retired behind a `REDIRECTS` entry, which is then permanent, never chains, and is never reused for different content (PRD 12).
 - Historical patch notes and version history rows are never rewritten during a rename (PRD 12).
-- Adding a prompt touches five places in order: the `.md` file, `js/prompts-data.js`, the README Files table, the README structure tree, and `docs/PATCHNOTES.md` (PRD 12, README).
+- Adding a prompt touches four places in order: the `.md` file, `js/prompts-data.js`, the README prompt list, and `docs/PATCHNOTES.md` (PRD 12, README).
 - Documentation consolidates into exactly four files: `README.md` at the root, and `PRD.md`, `DESIGN.md`, `PATCHNOTES.md` in `/docs` (README, and the project's own Documentation prompt).
 - The Content Security Policy in `index.html` keeps `script-src 'self'` and `connect-src 'none'`. Weakening either removes the runtime enforcement of the no-dependency rule (PRD 7, 31).
 - `tools/prompts-mirror.py` is run after any change to `prompts/*.md`, and its check must pass before a commit (PRD 20, 29).
@@ -387,7 +387,7 @@ Observed on 2026-08-23 by reading the code against the docs. Items 2, 5, and 6 w
 | 14 | `docs/DESIGN.md` section 9 responsive table lists what changes below 1024px | It omits `height: auto` on `.sidebar-sticky` and `flex-basis: 100%` on `.sidebar-nav`, both of which are the load-bearing v1.11.0 bug fixes | Trust the stylesheet. Documented in DESIGN section 9 in v1.27.0, because a future edit that removes either one silently reintroduces a shipped bug |
 | 15 | Nothing documented it, because nothing had noticed | `core.autocrlf` is true system-wide and there is no `.gitattributes`, so a fresh Windows clone gets CRLF `prompts/*.md` while the `raw` values in `js/prompts-data.js` stay LF. The two would never compare equal | **Found in v1.28.0** while testing `tools/prompts-mirror.py`, which failed on a file git had just checked out. The script now normalizes line endings on both sides, since they are a property of the checkout rather than of the content. **Resolved in v1.36.0** by adding a `.gitattributes` that pins `* text=auto eol=lf`, so a checkout can no longer produce the mismatch at all. The script still normalizes, which is now redundant on purpose |
 | 16 | Section 24 of this document, Assumptions: "`escapeHtml()` does not escape quotes, and `renderInline()` writes a markdown link target directly into an `href` attribute" | Both quote forms have been escaped since v1.28.0, and section 30 of this same document records the fix and strikes it from the debt table | **Corrected in v1.29.0.** The v1.28.0 pass updated sections 30 and 31 for the escaping change and missed this one, so the document contradicted itself for a release. Found by reading section 24 while checking whether the collapse work touched any stated assumption. Worth noting as a pattern: a fact repeated in more than one section will go stale in the copy nobody was editing |
-| 17 | Section 12 of this document, step 5 of Adding Prompts: "Add a row to the Files table and the file structure tree in `README.md`" | `README.md` has had neither since v1.26.0 rewrote it for a general reader and moved all structure into this document. A model following step 5 literally would look for a table that does not exist | **Corrected in v1.42.0**, when adding the fifth prompt exercised the step for the first time since the rewrite. The step now names the prose list the README actually carries. The intent was always to keep the README's prompt list in step with the data file, and only the mechanism changed, so this was corrected rather than left flagged |
+| 17 | Section 12 of this document, step 5 of Adding Prompts: "Add a row to the Files table and the file structure tree in `README.md`" | `README.md` has had neither since v1.26.0 rewrote it for a general reader and moved all structure into this document. A model following step 5 literally would look for a table that does not exist | **Corrected in v1.42.0**, when adding the fifth prompt exercised the step for the first time since the rewrite. The step now names the prose list the README actually carries. The intent was always to keep the README's prompt list in step with the data file, and only the mechanism changed, so this was corrected rather than left flagged. The v1.42.0 correction reached one of four places. The same instruction survived in Renaming step 3, Removing step 3, the binding rules list in section 16, and the Add Prompt page description, and a prompt audit found all four the same day. **Fully corrected in v1.43.0** |
 
 Confirmed accurate, checked rather than assumed:
 
@@ -1418,6 +1418,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.43.0 | 2026-09-23 | Applied a `/claude-api prompt-audit` pass. Completed discrepancy 17: the README Files table instruction was corrected in Renaming step 3, Removing step 3, and the section 16 binding rules list, and in the Add Prompt page description, after v1.42.0 had corrected only Adding step 5. Corrected the Prompt Audit card description, which said the command removes patterns when it proposes changes. Removed five dated or self-contradicting instructions from the Documentation prompt. |
 | 1.42.0 | 2026-09-23 | Added the Prompt Audit prompt (`prompts/prompt-audit.md`), the fifth, and the first that is a single command rather than a block of text: `/claude-api prompt-audit` runs the built-in skill's audit of a project's skills, instruction files, and prompts for patterns written for an older model. Updated the four file and prompt counts across sections 13, 16, 23, and 30. Corrected section 12 step 5, which had instructed adding a row to a README Files table that has not existed since v1.26.0, logged as discrepancy 17. |
 | 1.41.0 | 2026-09-18 | Added a Repository Hygiene default policy to the Documentation prompt, after Security, whose environment-variable sentence it enforces. States the default outright: an ignore file, a `.gitattributes`, a committed lockfile, no secret in history, and `main` as the default branch. Researched rather than written from memory, which caught that a blanket `eol=lf` breaks a Windows batch script and added the `.env*` plus `!.env.example` negation, the committed-lockfile rule, and the framing of an ignore file as prevention rather than protection. Added `.gitignore` and `.gitattributes` to the folder structure tree, with the note that a nested copy of either is legitimate rather than a misplacement. Commit and branch style stay with Conventions. Also corrected the stale "Thirteen files" in section 30, which has been 14 since v1.36.0. |
 | 1.40.0 | 2026-09-09 | Added a Page Titles default policy to the Documentation prompt, after Social Sharing Tags and sharing its serves-a-site condition. Sets `<unique page name> - <brand>` with two budgets that measure different things: the first 30 characters must identify the page alone, and the whole title stays at 60. Uniqueness is required of the first 30 characters rather than the whole title, since two titles differing only after character 30 are one title on a tab strip. A 30-character total was rejected because the brand suffix costs 19 characters here and the only way to reach 30 is to drop the brand from every page. Recorded as finding 5 in the section 27 self-audit: this site updates its titles per route already but ships them without the brand. |

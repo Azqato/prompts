@@ -1,6 +1,6 @@
 ---
 title: Prompt Audit
-description: Audit a project's skills, instruction files, and prompts for patterns written for older models, and remove the ones that now work against current ones.
+description: Audit a project's skills, instruction files, and prompts for patterns written for older models, and propose changes for the ones that now work against current ones.
 meta: Claude Code Prompt
 ---
 
