@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.44.0
+**Version:** 1.45.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1450,6 +1450,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.45.0 | 2026-09-23 | The Prompt Audit prompt now applies its fixes. The command became `/claude-api prompt-audit and apply the proposed changes`, the explicit request the skill's audit guide requires before it edits anything; without it the audit only reports and proposes. Tested first in another project, where it applied only high- and medium-confidence findings. The page description, the card description, and the README line were rewritten to match, and the page now says to run it on a committed working tree and review with `git diff`, and that dropping the added words gives the report alone. |
 | 1.44.0 | 2026-09-23 | Added per-prompt social sharing cards to the roadmap in section 27, scoped from a Discord card observed that day that showed the site's generic title and description for a prompt link. The scope records why tags on `index.html` cannot fix it (a link renderer never sees the hash route), applies the Documentation prompt's Social Sharing Tags default in the absence of a policy here, proposes generated static share pages per prompt, and lists the three decisions needed first. Added a correction beside finding 3 of the self-audit: the tone conflict it described does not exist. |
 | 1.43.0 | 2026-09-23 | Applied a `/claude-api prompt-audit` pass. Completed discrepancy 17: the README Files table instruction was corrected in Renaming step 3, Removing step 3, and the section 16 binding rules list, and in the Add Prompt page description, after v1.42.0 had corrected only Adding step 5. Corrected the Prompt Audit card description, which said the command removes patterns when it proposes changes. Removed five dated or self-contradicting instructions from the Documentation prompt. |
 | 1.42.0 | 2026-09-23 | Added the Prompt Audit prompt (`prompts/prompt-audit.md`), the fifth, and the first that is a single command rather than a block of text: `/claude-api prompt-audit` runs the built-in skill's audit of a project's skills, instruction files, and prompts for patterns written for an older model. Updated the four file and prompt counts across sections 13, 16, 23, and 30. Corrected section 12 step 5, which had instructed adding a row to a README Files table that has not existed since v1.26.0, logged as discrepancy 17. |

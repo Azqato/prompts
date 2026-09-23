@@ -4,6 +4,23 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.45.0 - 2026-09-23
+
+### Changed
+
+- `prompts/prompt-audit.md`: the command is now `/claude-api prompt-audit and apply the proposed changes`. The bare `/claude-api prompt-audit` produced a report and a proposed diff and edited nothing, because the skill's audit guide applies edits only when the request explicitly asks for them. With the added words it edits the files directly for every high- and medium-confidence finding, and leaves low-confidence findings in the report untouched.
+- `prompts/prompt-audit.md`: the card description now says the command fixes what it finds, and the page body says so too. The page now advises running it on a committed working tree, because nothing pauses for approval and the edits can land before the report is on screen, so `git diff` is where they are reviewed and reverted. It also says how to get the report alone: drop "and apply the proposed changes" and run the bare `/claude-api prompt-audit`, which edits nothing.
+- `README.md`: the Prompt Audit line now says it fixes the patterns rather than reporting them.
+- `js/prompts-data.js`: resynced.
+
+### Notes
+
+The wording was tested before publishing, twice. In this repository the request routed to the audit guide and ran without pausing, but found nothing to apply, since v1.43.0 already had. In a second project it made real edits, with four observations recorded here. It applied only high- and medium-confidence findings, and every edit traced to a reported finding. It applied the edits before presenting the report, which the page now warns about. It initially left the low-confidence findings out of its report, which was caught and corrected in that session. And it also updated that project's own PRD and patch notes, because that project's instruction file requires docs to match every change, which is the project's rule operating rather than the audit reaching outside its scope.
+
+With words after it the request is no longer a bare subcommand, so the skill reaches the audit through its general routing rather than its subcommand table. Both tests show that routing holds, but it depends on the skill's wording, which can change between Claude Code versions without this page knowing.
+
+---
+
 ## v1.44.0 - 2026-09-23
 
 ### Added
