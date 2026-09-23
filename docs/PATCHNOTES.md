@@ -4,6 +4,23 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.51.0 - 2026-09-23
+
+### Changed
+
+- `prompts/brand-identity.md`: revised after a line-by-line review with the author. Each change below answers one question from that review; the prompt's structure, phases, and tone are otherwise as written.
+  - **Render check.** A new section, used in Phases 3, 4, and 5, has every logo judged from a rendered image rather than its SVG code: a contact sheet at 16, 32, and 512px, in color and grayscale, on light and dark, screenshotted in headless Microsoft Edge (Chrome if Edge is missing) and then looked at. Before this the legibility check had no method, so it could only ever pass.
+  - **Concept A** takes its palette from the brief (one or two colors plus black and white) instead of a fixed black, white, and gold, which ignored the brief's color constraints and is itself a luxury cliché.
+  - **Concept B** sets the name in an open-license typeface and customizes one or two details, instead of hand-drawing letterforms as SVG paths, which models do poorly. The typeface and its license are recorded in DESIGN.
+  - **Existing brand.** The brief gains an `[existing brand]` field. When one is found, Phase 3 adds a fourth concept, D. Evolved, which refines the current brand, and A, B, and C take it only as a suggestion.
+  - **Phase 4 specs.** Adds `favicon.ico`, keeps app icon marks inside the central 80% so masked crops cannot cut them, gives the 1024 icon a solid background (the App Store rejects transparency), and sets a minimum line and gap of about 1mm for embroidery. When no image converter is installed, PNGs are rendered in headless Edge, and anything still missing is listed with the command to produce it.
+  - **Presentation fonts.** The page loads the brand typeface from Google Fonts as its only external link, which resolves the conflict between "self-contained" and a type specimen. The finished page is screenshotted and reviewed.
+  - **Scope rule.** The prompt must not change the project's site or app. Everything stays in `brand/` and the two `## Brand Identity` sections until the reader decides how to use it.
+  - The page description's three paragraphs are updated to match. The frontmatter description is unchanged.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.50.0 - 2026-09-23
 
 ### Removed
