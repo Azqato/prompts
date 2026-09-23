@@ -4,6 +4,20 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.53.0 - 2026-09-23
+
+### Changed
+
+- `prompts/brand-identity.md`: now six phases. The author has marked this the prompt's final revision.
+  - **New Phase 5, Brand kit**, in `brand/kit/`: a 1200x630 link preview image, a 400x400 profile picture that survives a circular crop, X (1500x500) and LinkedIn (1584x396) banners, `tokens.css` and `tokens.json` with the palette and type, a WCAG contrast table in DESIGN, an email signature PNG at twice its display size (most mail clients do not show SVG), and a `site.webmanifest` that is created but not linked, per the scope rule. Each image is rendered from SVG and passes the render check.
+  - **Phase 4** gains a favicon that switches to a lighter variant in dark mode, and 192px regular and maskable icons for the manifest.
+  - **Phase 6, Presentation** (formerly Phase 5): gets print styles and is also saved as `brand/brand-guidelines.pdf` with headless Edge, the file to hand to a printer or collaborator.
+  - The render check now covers Phases 3 to 6, and the page description covers the kit and the PDF.
+- `README.md`: the Brand Identity bullet mentions the kit and the PDF.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.52.0 - 2026-09-23
 
 ### Changed

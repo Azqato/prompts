@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.52.0
+**Version:** 1.53.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1562,6 +1562,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.53.0 | 2026-09-23 | Brand Identity prompt: a new Phase 5, Brand kit, adds social images, `tokens.css` and `tokens.json`, a contrast table, an email signature logo, and `site.webmanifest`. Phase 4 adds a dark-mode favicon and 192 icons, and the presentation, now Phase 6, is also saved as a PDF. The author has marked this the prompt's final revision. README bullet updated. |
 | 1.52.0 | 2026-09-23 | Brand Identity prompt: presentation mockups use the reader's own photos from `brand/mockups/` when present, and otherwise are built in CSS and SVG with perspective, shadows, textures, and lighting so they read as physical objects. Downloading images is ruled out. Logo files stay SVG only. |
 | 1.51.0 | 2026-09-23 | Brand Identity prompt revised after a review with the author. Logos are now judged from renders in headless Edge rather than from SVG code, Concept A takes its palette from the brief, Concept B starts from a named open-license typeface, a fourth Evolved concept appears when the project already has a brand, Phase 4 gains `favicon.ico`, an app icon safe zone, an opaque 1024 icon, a minimum line thickness for embroidery, and a fallback when no image converter is installed, and a scope rule keeps the prompt out of the project's own files. Tone and wording otherwise kept as written. |
 | 1.50.0 | 2026-09-23 | Brand Identity prompt: removed the `Input from the user: $ARGUMENTS` line, a slash-command placeholder that stays literal text when the prompt is pasted, and the page paragraph that explained it. Phase 1 already gathers the brand details from the project and asks for whatever is missing. |
