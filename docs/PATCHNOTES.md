@@ -4,6 +4,26 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.44.0 - 2026-09-23
+
+### Added
+
+- `docs/PRD.md` section 27: a roadmap milestone and a scoped item, "Per-prompt social sharing cards". A link to a prompt should render a card with that prompt's title and a short summary. Today every prompt link renders the site's generic card, observed in Discord on 2026-09-23 with the Prompt Audit link. The item records the cause, the standard, a proposed approach, the decisions needed first, and how to verify it.
+  - The cause is the architecture, not only the missing tags. A link renderer requests the URL without its `#` fragment and runs no JavaScript, so every prompt link is the same `index.html` to it, and tags in that file can describe only the home page.
+  - The standard is the Social Sharing Tags default from the Documentation prompt, since this PRD states no sharing policy of its own. The item spells out how each rule applies here: six tags, a unique absolute `og:url` per prompt, no site name in `og:title`, a 150 to 200 character description in complete sentences, and no images.
+  - The proposed approach is one generated static share page per prompt, with the tags and a meta refresh to the prompt's hash route. It is generated and verified by `tools/prompts-mirror.py`, so no dependency is added and the Content Security Policy stays unchanged.
+  - The decisions needed first are the share path shape, which becomes a permanent public address once pasted anywhere; whether to tighten the existing descriptions, four of which exceed the 150 character target and one the 200 ceiling, or add a separate short field; and how the share URL reaches someone copying from the address bar.
+
+### Fixed
+
+- `docs/PRD.md` section 27, finding 3 of the self-audit: it said the Social Sharing Tags default asks for a marketing-focused tone that section 11 prohibits. It never did. The prompt has asked for an educational tone since v1.37.0, and the phrase appears only in that finding. A correction was added beside the original text rather than replacing it, so the record shows what was believed and when.
+
+### Changed
+
+- `docs/PRD.md` section 19, open question 8: now points at the new roadmap item, which settles the canonical domain half of the question from section 17 and proposes an answer to the architecture half.
+
+---
+
 ## v1.43.0 - 2026-09-23
 
 ### Changed
