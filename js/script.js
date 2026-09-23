@@ -12,6 +12,12 @@ const SITE_INTRO =
   'markdown file: a plain description of what it does and a copyable block with the full ' +
   'prompt text. Pick one, copy it, drop it into Claude Code.';
 
+// The brand, suffixed to every prompt's page title, and the published
+// address of the share pages. Both match what tools/prompts-mirror.py writes
+// into p/*.html; the address is the one recorded in docs/PRD.md section 17.
+const SITE_NAME = "Azqato's Prompts";
+const SITE_URL = 'https://azqato.github.io/prompts/';
+
 let PROMPTS = [];
 
 /* ---------- Parsing ---------- */
@@ -149,7 +155,7 @@ function renderHome() {
   });
   html += '</div>';
   document.getElementById('content').innerHTML = html;
-  document.title = "Azqato's Prompts";
+  document.title = SITE_NAME;
 }
 
 function renderDetail(p) {
@@ -169,14 +175,15 @@ function renderDetail(p) {
   // Before Copy in the DOM as well as visually, so tab order matches reading
   // order. Its click bubbles to the header handler like any other.
   html += '<button class="code-toggle" aria-expanded="false" aria-controls="prompt-body">Expand</button>';
+  html += '<button class="link-btn" aria-label="Copy link to this prompt">Copy link</button>';
   html += '<button class="copy-btn" aria-label="Copy prompt to clipboard">Copy</button>';
   html += '</div>';
   html += '</div>';
   html += '<pre id="prompt-body"><code>' + escapeHtml(p.prompt) + '</code></pre>';
   html += '</div>';
   document.getElementById('content').innerHTML = html;
-  document.title = p.title;
-  wireCopyButton();
+  document.title = p.title + ' - ' + SITE_NAME;
+  wireCopyButton(p);
   wireCollapseToggle();
 }
 
@@ -203,7 +210,7 @@ function wireCollapseToggle() {
   // div and cannot be focused or announced; a click on it bubbles up to here,
   // which is why there is no second listener on the button itself.
   header.addEventListener('click', function (e) {
-    if (e.target.closest('.copy-btn')) return;
+    if (e.target.closest('.copy-btn, .link-btn')) return;
     const collapsed = wrapper.classList.toggle('collapsed');
     btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
     // The label names the action the button performs, not the current state,
@@ -212,41 +219,65 @@ function wireCollapseToggle() {
   });
 }
 
-/* ---------- Copy button ---------- */
+/* ---------- Copy buttons ---------- */
 
-function wireCopyButton() {
-  const btn = document.querySelector('.copy-btn');
-  if (!btn) return;
+/* The address to share for a prompt. Always the published https address,
+   whatever the page was opened from, because a file:// or localhost URL is
+   useless to anyone else. A visible prompt gets its share page, which link
+   previews can read; a hidden one has no share page and gets its hash route. */
+function shareUrl(p) {
+  return p.hidden ? SITE_URL + '#/' + p.slug : SITE_URL + 'p/' + p.slug + '.html';
+}
 
-  function flash(label, cls, ariaLabel) {
-    btn.textContent = label;
+/* Wires one copy button. text() supplies what to copy at click time. */
+function wireCopy(btn, label, ariaLabel, failLabel, text) {
+  function flash(shown, cls, aria) {
+    btn.textContent = shown;
     btn.classList.add(cls);
-    btn.setAttribute('aria-label', ariaLabel);
+    btn.setAttribute('aria-label', aria);
     setTimeout(function () {
-      btn.textContent = 'Copy';
+      btn.textContent = label;
       btn.classList.remove(cls);
-      btn.setAttribute('aria-label', 'Copy prompt to clipboard');
+      btn.setAttribute('aria-label', ariaLabel);
     }, 2000);
   }
 
   btn.addEventListener('click', function () {
-    const code = document.querySelector('.code-block-wrapper pre code');
-    if (!code) return;
+    const value = text();
+    if (value === null) return;
     // The Clipboard API needs a secure context. https:// and file:// both
     // qualify, but a local server on a bare IP does not, and there the
     // property is missing outright rather than returning a rejection.
     // Either way the reader must be told, because the failure is otherwise
     // silent and they will paste whatever was on the clipboard before.
     if (!navigator.clipboard || !navigator.clipboard.writeText) {
-      flash('Copy failed', 'copy-failed', 'Copy failed. Select the prompt text and copy it manually');
+      flash('Copy failed', 'copy-failed', failLabel);
       return;
     }
-    navigator.clipboard.writeText(code.textContent).then(function () {
+    navigator.clipboard.writeText(value).then(function () {
       flash('Copied!', 'copied', 'Copied!');
     }).catch(function () {
-      flash('Copy failed', 'copy-failed', 'Copy failed. Select the prompt text and copy it manually');
+      flash('Copy failed', 'copy-failed', failLabel);
     });
   });
+}
+
+function wireCopyButton(p) {
+  const btn = document.querySelector('.copy-btn');
+  if (btn) {
+    wireCopy(btn, 'Copy', 'Copy prompt to clipboard',
+      'Copy failed. Select the prompt text and copy it manually', function () {
+        const code = document.querySelector('.code-block-wrapper pre code');
+        return code ? code.textContent : null;
+      });
+  }
+  const link = document.querySelector('.link-btn');
+  if (link) {
+    wireCopy(link, 'Copy link', 'Copy link to this prompt',
+      'Copy failed. The link is ' + shareUrl(p), function () {
+        return shareUrl(p);
+      });
+  }
 }
 
 /* ---------- Redirects ---------- */
@@ -267,16 +298,50 @@ const REDIRECTS = {};
 
 /* ---------- Routing ---------- */
 
+/* The slug comes from the hash when there is one. Without a hash, a path
+   ending in p/<slug>.html also names a prompt, because the address bar is
+   rewritten to that form below and a reload or a back step can land on it. */
 function currentSlug() {
-  const hash = window.location.hash.replace(/^#\/?/, '');
-  return hash.trim();
+  if (window.location.hash) {
+    return window.location.hash.replace(/^#\/?/, '').trim();
+  }
+  const m = window.location.pathname.match(/\/p\/([^\/]+)\.html$/);
+  return m ? m[1] : '';
 }
 
+/* The folder the site is served from, whichever page the address names. */
+function appBase() {
+  return window.location.pathname.replace(/p\/[^\/]*\.html$/, '').replace(/[^\/]*$/, '');
+}
+
+/* Rewrites the address bar to the address worth sharing: the site root for
+   home, the share page for a visible prompt, and the hash route for a hidden
+   one, which has no share page. Copying from the address bar then gives the
+   same link as the Copy link button. Only over http(s): file:// does not
+   allow a path change, and there the hash URL simply stays. */
+function syncAddress(p) {
+  if (!/^https?:$/.test(window.location.protocol) || !window.history.replaceState) return;
+  const base = appBase();
+  let target = base;
+  if (p) target = p.hidden ? base + '#/' + p.slug : base + 'p/' + p.slug + '.html';
+  if (target !== window.location.pathname + window.location.hash) {
+    window.history.replaceState(null, '', target);
+  }
+}
+
+let lastRouted = null;
+
 function route() {
+  // hashchange and popstate can both fire for one navigation. The second
+  // finds the address it would route already routed, and stops.
+  if (window.location.href === lastRouted) return;
+
   const slug = currentSlug();
   if (!slug) {
     renderHome();
     setActiveLink('');
+    syncAddress(null);
+    lastRouted = window.location.href;
     return;
   }
   // A retired slug rewrites the hash to the current one, which fires
@@ -296,6 +361,8 @@ function route() {
     renderHome();
     setActiveLink('');
   }
+  syncAddress(p);
+  lastRouted = window.location.href;
   window.scrollTo(0, 0);
 }
 
@@ -317,6 +384,9 @@ function init() {
   }
   buildSidebar();
   window.addEventListener('hashchange', route);
+  // Back and forward between rewritten addresses change the path, not
+  // necessarily the hash, so hashchange alone would miss them.
+  window.addEventListener('popstate', route);
   route();
 }
 

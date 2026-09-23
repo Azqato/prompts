@@ -1,6 +1,6 @@
 ---
 title: Mobile Audit
-description: Audit every page at multiple breakpoints for overflow and layout bugs, fix root causes, verify with real DOM measurements instead of screenshots, then document the fixes.
+description: Check every page at seven screen widths for overflow and layout bugs, fix the root causes, and verify with DOM measurements rather than screenshots.
 meta: Claude Code Prompt
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Prompt Audit
-description: Audit a project's skills, instruction files, and prompts for patterns written for older models, and fix the ones that now work against current ones.
+description: Find the instructions in a project's prompts, skills, and CLAUDE.md files that were written for older models, and fix the ones that now hold it back.
 meta: Claude Code Prompt
 ---
 

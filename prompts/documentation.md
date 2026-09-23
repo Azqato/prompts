@@ -1,6 +1,6 @@
 ---
 title: Documentation
-description: Scan the entire codebase, then consolidate all documentation into four core files, packing every supporting doc, the house conventions, and the writing style into a deeply sectioned PRD.
+description: Scan a whole codebase and consolidate its documentation into four files: a README, plus a detailed PRD, design guide, and changelog in /docs.
 meta: Claude Code Prompt
 ---
 

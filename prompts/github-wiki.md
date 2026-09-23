@@ -1,6 +1,6 @@
 ---
 title: GitHub Wiki
-description: Review every documentation file, then set up a new GitHub wiki or diff and update an existing one, curating content into a Home, Product Overview, Patch Notes, and other pages with a maintained sidebar.
+description: Build or update a repository's GitHub wiki from its documentation, curated into Home, Product Overview, Patch Notes, and other pages with a sidebar.
 meta: Claude Code Prompt
 ---
 

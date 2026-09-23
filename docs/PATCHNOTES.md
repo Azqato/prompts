@@ -4,6 +4,44 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.46.0 - 2026-09-23
+
+### Added
+
+- `p/`: one generated share page per visible prompt, `p/<slug>.html`. Each carries that prompt's `og:title`, `og:description`, `og:url`, `og:type`, `og:site_name`, and `twitter:card`, a `<title>` in the form "Prompt Audit - Azqato's Prompts", and a meta refresh plus a plain link forwarding to `index.html#/<slug>`. A link renderer never sees the `#/<slug>` part of a URL and runs no script, so until now every prompt link previewed as the home page, observed in Discord on 2026-09-23. A share page is a real file at a real path, so a renderer can read it. Its Content Security Policy is `default-src 'none'`, since it loads nothing.
+- `index.html`: the same six tags, describing the site. `og:title` is "Claude Code Prompts", the home heading, so it does not repeat `og:site_name`.
+- `js/script.js`: a Copy link button in the prompt header bar, between the collapse toggle and Copy. It copies the published https share address whatever the page was opened from, and reports success and failure exactly as Copy does, through the same code path.
+- `js/script.js`: over http and https the address bar is rewritten to the view's share address after rendering, with `history.replaceState()`, so copying from the address bar gives the same link as Copy link. The router now reads the slug from a `p/<slug>.html` path when there is no hash, and listens for `popstate` as well as `hashchange`, guarded so one navigation renders once. On `file://` the browser forbids the rewrite and the hash route stays.
+- `tools/prompts-mirror.py`: writes the share pages on `--sync` and checks them. The check fails on a missing page, a page that differs by a byte from what its prompt would generate, a page with no visible prompt that is not marked retired, a title over 70 characters or containing the site name, and a description over 200 characters or not ending on a full stop. Titles over 60 and descriptions over 150 are printed as notes. `--sync` never deletes a share page.
+- `docs/PRD.md` section 32a: the Social Sharing Tags and Page Titles policy, covering the share pages, the six tags, the budgets, the title form, how the share address reaches the person sharing, and how a share page is retired.
+
+### Changed
+
+- Prompt page titles now carry the site name: "Documentation - Azqato's Prompts" rather than "Documentation". Finding 5 of the self-audit in PRD section 27.
+- Three prompt descriptions were over the 150 character sharing target and were tightened, and Prompt Audit's, already inside it, was reworded to lead with what it finds. This also changes the home page cards, since they show the same text. All five now run 140 to 149 characters.
+  - Documentation, 186 to 141: "Scan a whole codebase and consolidate its documentation into four files: a README, plus a detailed PRD, design guide, and changelog in /docs."
+  - GitHub Wiki, 202 to 148: "Build or update a repository's GitHub wiki from its documentation, curated into Home, Product Overview, Patch Notes, and other pages with a sidebar."
+  - Mobile Responsive Audit, 170 to 148: "Check every page at seven screen widths for overflow and layout bugs, fix the root causes, and verify with DOM measurements rather than screenshots."
+  - Prompt Audit, 148 to 149: "Find the instructions in a project's prompts, skills, and CLAUDE.md files that were written for older models, and fix the ones that now hold it back."
+- `css/style.css`: `.link-btn` joins the shared button rule and both copy states. The shared rule gains `white-space: nowrap`, the header bar a 12px gap between its label and its buttons, and a new `max-width: 400px` query trims the bar's padding, the button gap, and the buttons' padding, so the label and three buttons fit one line at 320px.
+- `README.md`: one sentence on Copy link, in What This Is.
+- `js/prompts-data.js`: resynced.
+- `docs/PRD.md`: sections 8, 9, 10, 10a, 12, 13, 14, 15, 16, 17, 20, 23, 27, 28, 29, 30, 31, and 32 updated for the share pages, the new button, and the address rewrite. Section 12 gains a sixth step in Renaming and in Removing, because a prompt now has one public address of its own. Open question 8 is answered, and self-audit findings 3 and 5 are closed. The roadmap milestone is complete.
+- `docs/DESIGN.md` 1.10: Copy link specced, the third breakpoint documented, and the button inventory, CSS structure, and shell template updated.
+
+### Fixed
+
+- `docs/PRD.md` section 20, "Where to look first": the prompt edit row still sent the reader to "the README table and tree", which the README has not had since v1.26.0. It is the same stale instruction discrepancy 17 recorded in four other places, surviving in a fifth. Now names the README prompt list.
+- `docs/PRD.md` and `docs/DESIGN.md`: the `index.html`, `css/style.css`, and `js/script.js` line counts, which had drifted, corrected in place under the mechanical-fact exception.
+
+### Notes
+
+Verified before pushing. Locally over `python -m http.server`: a share page forwards to its prompt and the address bar is rewritten back to the share address; a hash route is rewritten to its share address; home is rewritten to the root; a sidebar click from a rewritten address routes and rewrites again; the back button returns to the previous prompt; a click on Copy link does not toggle the collapse. From `file://`: a share page forwards, and the prompt renders with the new title and all three buttons. The header bar was measured in the DOM at 320, 375, 414, 768, 1024, 1280, and 1920px, one line and no horizontal overflow at each. The mirror check was run against a planted orphan page, the same page marked retired, and a hand-edited share page, and failed, passed, and failed as it should.
+
+Not verified: how any particular service renders the cards. That depends on the service, and is checked by pasting a link after the deploy.
+
+---
+
 ## v1.45.0 - 2026-09-23
 
 ### Changed
