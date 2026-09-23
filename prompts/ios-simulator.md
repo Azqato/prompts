@@ -1,5 +1,5 @@
 ---
-title: iPhone and iPad Simulator
+title: iOS Simulator
 description: Set up Xcode and the simulator, build and launch your iPhone or iPad app, then check it at every screen size, in dark mode, and with large text.
 meta: Claude Code Prompt
 ---

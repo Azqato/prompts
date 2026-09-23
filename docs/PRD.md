@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.55.0
+**Version:** 1.56.0
 **Status:** Active
 **Author:** Azqato
 
@@ -251,7 +251,7 @@ The `hidden: true` flag remains supported for retiring a prompt from navigation 
 
 ## 13. Repository Structure
 
-The whole project is 24 files in six folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+The whole project is 25 files in six folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 `.gitattributes` is the one piece of git configuration the repository carries, added in v1.36.0. It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
 
@@ -268,7 +268,7 @@ The whole project is 24 files in six folders. There is no build output, no vendo
 │   ├── prompts-data.js Hand-maintained mirror of prompts/*.md. Largest file by far.
 │   └── script.js       All client logic: parse, render, route, copy.
 ├── prompts/            Seven .md files, one per prompt. The readable source.
-├── p/                  Seven generated share pages, one per visible prompt.
+├── p/                  Seven generated share pages, one per visible prompt, and one retired.
 │                       Public addresses: retired, never deleted. Section 32a.
 ├── tools/
 │   └── prompts-mirror.py  Maintenance only. Checks or resyncs the mirror
@@ -351,7 +351,7 @@ Every explicit rule found in the documentation, collected in one place. Sources 
 - Em dashes are prohibited in all three forms in all copy, including markdown docs and inline comments. CSS custom properties such as `--color-bg` are exempt (PRD 11). See section 18 for where the docs currently break this.
 - No marketing language, no filler phrases, plain declarative sentences (PRD 11).
 - A prompt page contains exactly three things: title, description, code block. No other sections (PRD 8).
-- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all seven prompts, four on 2026-08-23, and `prompt-audit`, `brand-identity`, and `iphone-ipad-simulator` on 2026-09-23.
+- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all seven prompts, four on 2026-08-23, and `prompt-audit`, `brand-identity`, and `ios-simulator` on 2026-09-23.
 - Prompt text must not reference the author's specific services, accounts, or credentials (PRD 11).
 - The public surface is the deployed page, not the source that builds it. Files under `prompts/` are source, so renaming or removing a prompt is done bare, with no redirect, except for its share page, which is retired (PRD 12, 32a).
 - A genuine public address is retired behind a `REDIRECTS` entry, which is then permanent, never chains, and is never reused for different content (PRD 12).
@@ -1009,7 +1009,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 
 | Layer | Technology | Version |
 | --- | --- | --- |
-| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus seven generated share pages of 21 lines each |
+| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus seven generated share pages of 21 lines each and one retired share page |
 | Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 569 lines, no `@import` |
 | Logic | JavaScript, ES5-flavoured with `const` and `let` | No transpiler. Runs as written. 370 lines |
 | Maintenance tooling | Python 3, standard library only | `tools/prompts-mirror.py`. Never runs in a browser, never required to build or serve |
@@ -1041,12 +1041,14 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 │   ├── brand-identity.md
 │   ├── documentation.md
 │   ├── github-wiki.md
-│   ├── iphone-ipad-simulator.md
+│   ├── ios-simulator.md
 │   ├── mobile-responsive-audit.md
 │   └── prompt-audit.md
 ├── p/                      One generated share page per visible prompt, named
 │                           by slug. Sharing tags and a meta refresh, nothing
 │                           else. Public addresses, never deleted. See 32a.
+│                           iphone-ipad-simulator.html is retired: it forwards
+│                           to ios-simulator.
 ├── tools/
 │   └── prompts-mirror.py   Maintenance only, standard library only. Checks or
 │                           resyncs the mirror, and writes p/. Not loaded by the
@@ -1058,7 +1060,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
     └── PATCHNOTES.md       Changelog, reverse chronological.
 ```
 
-Twenty-four files, six folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+Twenty-five files, six folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 ### Data models
 
@@ -1289,6 +1291,7 @@ Everything removed from this project, so that a reader who finds a reference to 
 | Project Onboarding (`prompts/project-onboarding.md`) | v1.23.0 | Absorbed into the Documentation prompt as its Conventions, Documentation Versus Reality, Risks and Open Questions, and Working Practice sections in v1.22.0 |
 | `REDIRECTS` entry `github-wiki-setup` | v1.24.0 | None needed. Prompt slugs are not a public surface |
 | `REDIRECTS` entries `em-dash-audit`, `project-onboarding` | v1.24.0 | Same |
+| `prompts/iphone-ipad-simulator.md` | v1.56.0 | Renamed to `prompts/ios-simulator.md`, title iOS Simulator. Its share page, `p/iphone-ipad-simulator.html`, was public from v1.54.0 and is retired, forwarding to `index.html#/ios-simulator` |
 
 Every deleted file remains recoverable from git history. None of these removals required a redirect under the current policy, and the two that were given one in v1.23.0 had it removed in v1.24.0 when the policy was corrected.
 
@@ -1327,7 +1330,7 @@ Six on every share page, and the same six on `index.html` describing the site.
 
 No image is declared, so `twitter:card` is `summary` and there is no `og:image`. The canonical address comes from section 17 and is written into `tools/prompts-mirror.py` and `js/script.js` as a constant, because `og:url` has to be absolute and nothing on a static site can derive it.
 
-**One description, not two.** The frontmatter `description` serves the home card, the share page's meta description, and `og:description`. A separate short field for sharing was considered and rejected, because two descriptions of the same prompt would drift, and the tighter one is the better card text anyway. In v1.46.0 the three descriptions over the target were rewritten to fit and a fourth was reworded, and all five then ran 140 to 149 characters. Brand Identity, added in v1.48.0, was written to fit at 146, and iPhone and iPad Simulator, added in v1.54.0, at 144.
+**One description, not two.** The frontmatter `description` serves the home card, the share page's meta description, and `og:description`. A separate short field for sharing was considered and rejected, because two descriptions of the same prompt would drift, and the tighter one is the better card text anyway. In v1.46.0 the three descriptions over the target were rewritten to fit and a fourth was reworded, and all five then ran 140 to 149 characters. Brand Identity, added in v1.48.0, was written to fit at 146, and iOS Simulator, added in v1.54.0 as iPhone and iPad Simulator, at 144.
 
 **Budgets**, enforced by the mirror check:
 
@@ -1563,6 +1566,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.56.0 | 2026-09-23 | Renamed the iPhone and iPad Simulator prompt to iOS Simulator, at the author's request for a two-word title: Apple's own name for the tool it runs, covering both devices. `prompts/iphone-ipad-simulator.md` became `prompts/ios-simulator.md`, and its share page, public since v1.54.0, is retired as a forwarding page, the first retirement since share pages were introduced. Retired items table in section 32, file counts in sections 13 and 30, and the README updated. |
 | 1.55.0 | 2026-09-23 | iPhone and iPad Simulator prompt: Step 1 now confirms it is running on a Mac first. On Windows or Linux it installs nothing and explains the alternatives that fit the project: a rented cloud Mac, a cloud simulator build streamed to a browser, or Expo Go on a real iPhone for Expo and React Native apps. |
 | 1.54.0 | 2026-09-23 | Added the iPhone and iPad Simulator prompt (`prompts/iphone-ipad-simulator.md`), the seventh. It sets up Xcode and the iOS Simulator, builds and launches the reader's app on three iPhone sizes, screenshots each screen in light and dark mode and at the largest text size, and reports each layout problem with a proposed fix. It asks once whether to add iPad (sizes, orientations, multitasking, keyboard and pointer) and iPhone Duo (the Xcode 27.1 beta, both displays, fold poses). Written from a supplied social media post about the iPhone Duo simulator, which the author asked to be broadened to regular iPhone development with iPad and iPhone Duo as options; the Xcode 27.1 beta and iPhone Duo details were confirmed by web search on 2026-09-23. Audited against section 11 with nothing to remove. Updated the prompt and file counts in sections 13, 16, 23, 30, and 32a, and the focus-stop count in section 23. |
 | 1.53.0 | 2026-09-23 | Brand Identity prompt: a new Phase 5, Brand kit, adds social images, `tokens.css` and `tokens.json`, a contrast table, an email signature logo, and `site.webmanifest`. Phase 4 adds a dark-mode favicon and 192 icons, and the presentation, now Phase 6, is also saved as a PDF. The author has marked this the prompt's final revision. README bullet updated. |
