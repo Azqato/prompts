@@ -4,7 +4,7 @@ description: Build a complete logo system for a project: a brand brief, three SV
 meta: Claude Code Prompt
 ---
 
-Runs a full brand identity project in five phases, the way a branding agency would. It reads the project first (the README, `CLAUDE.md`, `package.json`, landing page copy, and any existing brand or style files) and fills in a brand brief, asking once for anything it cannot work out. It then studies five to eight competitors in the project's industry and lists the visual clichés the logo must avoid, draws three concept directions as hand-written SVG (luxury minimalism, typography first, and a symbolic mark), and stops for you to pick one or combine them.
+Runs a full brand identity project in five phases, the way a branding agency would. It reads the project first (the README, `CLAUDE.md`, `PRD.md`, `DESIGN.md`, `package.json`, landing page copy, and any existing brand or style files) and fills in a brand brief, asking once for anything it cannot work out. It then studies five to eight competitors in the project's industry and lists the visual clichés the logo must avoid, draws three concept directions as hand-written SVG (luxury minimalism, typography first, and a symbolic mark), and stops for you to pick one or combine them.
 
 The chosen concept becomes a full logo system in `brand/logo/`: horizontal and stacked lockups, the symbol and the wordmark on their own, black, white, and full-color versions, a favicon, app icons, and a single-color version for print, embroidery, and stickers. Each is checked for legibility at 16px, in grayscale, and on light and dark backgrounds. It finishes with `brand/presentation.html`, a self-contained page that reveals the logo and shows it on business cards, packaging, a website, a billboard, an app icon, and merchandise, with the color palette, a type specimen, and the design rationale.
 
@@ -37,7 +37,7 @@ Must look equally strong at small and large sizes.
 Stand out while still feeling credible in the industry. Avoid clichés used by competitors.
 
 Phase 1: Brand foundation
-Gather context before asking anything: read README, CLAUDE.md, package.json, landing page copy, and any existing brand or style files.
+Gather context before asking anything: read README, CLAUDE.md, PRD.md, DESIGN.md, package.json, landing page copy, and any existing brand or style files.
 Fill in this brief:
 [brand name]
 [core value] the logo must communicate

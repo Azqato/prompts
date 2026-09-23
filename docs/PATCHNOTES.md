@@ -4,6 +4,15 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.49.0 - 2026-09-23
+
+### Changed
+
+- `prompts/brand-identity.md`: Phase 1 now reads `PRD.md` and `DESIGN.md` as well as the README, `CLAUDE.md`, `package.json`, landing page copy, and existing brand or style files before filling in the brief. A project with a product document usually already states its audience, its purpose, and any color or font constraints, which are four of the brief's six fields. The page description lists the two new files. Written as `DESIGN.md` rather than `Design.md`, matching the rest of the prompt since v1.48.0.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.48.0 - 2026-09-23
 
 ### Added
