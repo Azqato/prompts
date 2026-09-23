@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.47.0
+**Version:** 1.48.0
 **Status:** Active
 **Author:** Azqato
 
@@ -251,7 +251,7 @@ The `hidden: true` flag remains supported for retiring a prompt from navigation 
 
 ## 13. Repository Structure
 
-The whole project is 20 files in six folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+The whole project is 22 files in six folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 `.gitattributes` is the one piece of git configuration the repository carries, added in v1.36.0. It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
 
@@ -267,8 +267,8 @@ The whole project is 20 files in six folders. There is no build output, no vendo
 ├── js/
 │   ├── prompts-data.js Hand-maintained mirror of prompts/*.md. Largest file by far.
 │   └── script.js       All client logic: parse, render, route, copy.
-├── prompts/            Five .md files, one per prompt. The readable source.
-├── p/                  Five generated share pages, one per visible prompt.
+├── prompts/            Six .md files, one per prompt. The readable source.
+├── p/                  Six generated share pages, one per visible prompt.
 │                       Public addresses: retired, never deleted. Section 32a.
 ├── tools/
 │   └── prompts-mirror.py  Maintenance only. Checks or resyncs the mirror
@@ -351,7 +351,7 @@ Every explicit rule found in the documentation, collected in one place. Sources 
 - Em dashes are prohibited in all three forms in all copy, including markdown docs and inline comments. CSS custom properties such as `--color-bg` are exempt (PRD 11). See section 18 for where the docs currently break this.
 - No marketing language, no filler phrases, plain declarative sentences (PRD 11).
 - A prompt page contains exactly three things: title, description, code block. No other sections (PRD 8).
-- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all five prompts, four on 2026-08-23 and `prompt-audit` on 2026-09-23.
+- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all six prompts, four on 2026-08-23, and `prompt-audit` and `brand-identity` on 2026-09-23.
 - Prompt text must not reference the author's specific services, accounts, or credentials (PRD 11).
 - The public surface is the deployed page, not the source that builds it. Files under `prompts/` are source, so renaming or removing a prompt is done bare, with no redirect, except for its share page, which is retired (PRD 12, 32a).
 - A genuine public address is retired behind a `REDIRECTS` entry, which is then permanent, never chains, and is never reused for different content (PRD 12).
@@ -626,7 +626,7 @@ Each of these was considered and rejected, with the reason. They are listed so t
 | Not built | Why |
 | --- | --- |
 | Search or filtering | The library is small enough to scan, and the sidebar shows everything at once. Search earns its complexity at a scale this project does not intend to reach |
-| Tags or categories | Same reason. Five prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
+| Tags or categories | Same reason. Six prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
 | Syntax highlighting | Would mean a library, which breaks the no-dependency rule. Prompt text is prose, not code, so highlighting would add noise rather than meaning |
 | A build step | The entire architecture exists to avoid one. See section 7 |
 | Automated `prompts-data.js` generation | Would require Node in the loop and a build convention. The resync is done with a throwaway script per change instead, which keeps the repository free of tooling. This is a real tradeoff and it is recorded as technical debt in section 30 |
@@ -641,7 +641,7 @@ Not committed and not scheduled. Recorded so the ideas are not lost.
 
 - A copy confirmation that survives a page change, so a copy made just before navigating is still visibly acknowledged.
 - A "last updated" date per prompt, derived from the patch notes rather than from file metadata, which would let a reader tell a revised prompt from an original one.
-- A skip-to-content link, so a keyboard user reaching a prompt page does not pass seven focus stops before the copy button. See the accessibility section of `docs/DESIGN.md`. This is now the largest known gap in the project.
+- A skip-to-content link, so a keyboard user reaching a prompt page does not pass nine focus stops before the copy button. See the accessibility section of `docs/DESIGN.md`. This is now the largest known gap in the project.
 - A live region for the copy button's result, which is currently announced only through an `aria-label` change.
 - Remembering the collapse state across a navigation, which is deliberately not built today because it would mean introducing browser storage. Recorded so the reason is visible if it is ever reconsidered rather than the idea simply reappearing.
 
@@ -1009,7 +1009,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 
 | Layer | Technology | Version |
 | --- | --- | --- |
-| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus five generated share pages of 21 lines each |
+| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus six generated share pages of 21 lines each |
 | Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 569 lines, no `@import` |
 | Logic | JavaScript, ES5-flavoured with `const` and `let` | No transpiler. Runs as written. 370 lines |
 | Maintenance tooling | Python 3, standard library only | `tools/prompts-mirror.py`. Never runs in a browser, never required to build or serve |
@@ -1038,6 +1038,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 │                           route, copy. No exports, no modules, all globals.
 ├── prompts/                One .md per prompt. The readable source of truth.
 │   ├── add-prompt.md
+│   ├── brand-identity.md
 │   ├── documentation.md
 │   ├── github-wiki.md
 │   ├── mobile-responsive-audit.md
@@ -1056,7 +1057,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
     └── PATCHNOTES.md       Changelog, reverse chronological.
 ```
 
-Twenty files, six folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+Twenty-two files, six folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 ### Data models
 
@@ -1325,7 +1326,7 @@ Six on every share page, and the same six on `index.html` describing the site.
 
 No image is declared, so `twitter:card` is `summary` and there is no `og:image`. The canonical address comes from section 17 and is written into `tools/prompts-mirror.py` and `js/script.js` as a constant, because `og:url` has to be absolute and nothing on a static site can derive it.
 
-**One description, not two.** The frontmatter `description` serves the home card, the share page's meta description, and `og:description`. A separate short field for sharing was considered and rejected, because two descriptions of the same prompt would drift, and the tighter one is the better card text anyway. In v1.46.0 the three descriptions over the target were rewritten to fit and a fourth was reworded, and all five now run 140 to 149 characters.
+**One description, not two.** The frontmatter `description` serves the home card, the share page's meta description, and `og:description`. A separate short field for sharing was considered and rejected, because two descriptions of the same prompt would drift, and the tighter one is the better card text anyway. In v1.46.0 the three descriptions over the target were rewritten to fit and a fourth was reworded, and all five then ran 140 to 149 characters. Brand Identity, added in v1.48.0, was written to fit at 146.
 
 **Budgets**, enforced by the mirror check:
 
@@ -1561,6 +1562,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.48.0 | 2026-09-23 | Added the Brand Identity prompt (`prompts/brand-identity.md`), the sixth: a five-phase brand identity project that writes a brief, analyses competitors, draws three SVG logo concepts for the reader to choose from, builds the full logo system in `brand/logo/`, and presents it in `brand/presentation.html`. Audited against section 11 with nothing to remove. Two edits to the supplied text: `docs/Design.md` became `docs/DESIGN.md` to match the Documentation prompt, and line breaks lost in pasting were restored. Updated the prompt and file counts in sections 13, 16, 23, 30, and 32a, and the focus-stop count in section 23. |
 | 1.47.0 | 2026-09-23 | Removed the Copy link button added in v1.46.0, which read as confusing beside Copy. The address bar rewrite stays, so the share address is still what a reader copies over https. The 400px media query that existed only to fit the third button went with it, and the copy code returned to its v1.45.0 form. Sections 8, 10, 10a, 13, 14, 15, 23, 27, 29, 30, 31, 32, and 32a updated. |
 | 1.46.0 | 2026-09-23 | Per-prompt social sharing cards, from the roadmap item scoped in v1.44.0. Each visible prompt now has a generated share page at `p/<slug>.html` carrying its own Open Graph and Twitter Card tags and forwarding to the prompt by meta refresh, and `index.html` carries the same tags for the site. `tools/prompts-mirror.py` writes the pages and checks them byte for byte, along with the title and description budgets and orphaned pages. A Copy link button copies a prompt's share address, and over http and https the address bar is rewritten to it. Prompt page titles gained the site name. The three descriptions over 150 characters were tightened and a fourth reworded, which changed the home cards. Added section 32a for the policy, answered open question 8, and closed self-audit findings 3 and 5. The header bar gained a 400px media query so its three buttons fit at 320px. |
 | 1.45.0 | 2026-09-23 | The Prompt Audit prompt now applies its fixes. The command became `/claude-api prompt-audit and apply the proposed changes`, the explicit request the skill's audit guide requires before it edits anything; without it the audit only reports and proposes. Tested first in another project, where it applied only high- and medium-confidence findings. The page description, the card description, and the README line were rewritten to match, and the page now says to run it on a committed working tree and review with `git diff`, and that dropping the added words gives the report alone. |
