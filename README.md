@@ -21,6 +21,7 @@ The library covers recurring maintenance work, the kind of task that is tedious 
 - **Documentation** rebuilds a project's entire documentation set in one pass. It reads the whole codebase first, then consolidates everything into four files and folds the full depth of a larger doc suite into a single detailed product document.
 - **Mobile Audit** checks every page of a site at seven screen widths for layout bugs and overflow, fixes the underlying cause rather than the symptom, and confirms the fix by measuring the real page instead of trusting a screenshot.
 - **GitHub Wiki** builds a project's GitHub wiki from its existing documentation, or diffs an existing wiki against the current docs and tells you what has gone stale before changing anything.
+- **Prompt Audit** is a single command rather than a block of text. It runs the built-in `claude-api` skill across a project's skills, instruction files, and prompts, and reports the prompting patterns that were written for an older model and now hold a current one back.
 - **Add Prompt** is the one that maintains this site. Hand it a raw prompt and it writes the title and description and files everything in the right places.
 
 Each page is deliberately the same shape, so once you have read one you know exactly where to look on all the others.

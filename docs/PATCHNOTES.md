@@ -4,6 +4,31 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.42.0 - 2026-09-23
+
+### Added
+
+- `prompts/prompt-audit.md`: the **Prompt Audit** prompt, the fifth in the library and the first whose prompt is a single command rather than a block of text. `/claude-api prompt-audit` runs the built-in skill's audit over a project's skills, its `CLAUDE.md` and `AGENTS.md` instruction files, its tool descriptions, and any standalone prompts, and reports the patterns written for an earlier generation of model that now hold a current one back.
+- `js/prompts-data.js`: the mirrored entry, appended, so the prompt sorts last in the sidebar and the home list.
+- `README.md`: a line for it under "What You Will Find Here", written for a general reader like the four beside it.
+
+### Changed
+
+- Four counts in `docs/PRD.md` that a fifth prompt made stale: the project is 15 files rather than 14 in section 13, `prompts/` holds five `.md` files rather than four in the section 13 tree, the section 23 note that a taxonomy is unnecessary now says five prompts, and section 30 says fifteen files. The section 30 tree lists the new file. All corrected in place under the mechanical-fact exception in section 33, since a count carries no intent.
+- The section 16 line recording that no prompt instructs its reader to push now covers five prompts, with the new one verified on 2026-09-23 and the original four left at their 2026-08-23 date, since that verification happened then and the record says when.
+
+### Fixed
+
+- Section 12 of `docs/PRD.md`, step 5 of Adding Prompts, said to "add a row to the Files table and the file structure tree in `README.md`". The README has carried neither since v1.26.0 rewrote it for a general reader and moved all structure into the PRD. The instruction had outlived the thing it described for sixteen releases and was only caught because adding the fifth prompt exercised the step for the first time since the rewrite. Logged as discrepancy 17 and corrected rather than left flagged, because the intent, keeping the README's prompt list in step with the data file, survived intact and only the mechanism changed.
+
+### Notes
+
+The description was written from the pasted tip but does not repeat two things in it. The tip named a specific model version as the reason to run the audit, which is left out: a version number in a published prompt description ages with that version, and the reason to run this is that instruction files accumulate, which is true regardless of what shipped. The tip also said the command "removes" anti-patterns; the description says it reports them and proposes changes, which is what the skill actually does.
+
+`prompt-audit` was verified as a real subcommand before the page was written rather than taken on faith from the tip, since publishing a command that does not exist is the one failure a prompt library cannot recover from. It is non-interactive, establishes its own scope and target model, states its assumptions rather than stopping to ask, and produces a report.
+
+---
+
 ## v1.41.0 - 2026-09-18
 
 ### Added

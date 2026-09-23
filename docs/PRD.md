@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.41.0
+**Version:** 1.42.0
 **Status:** Active
 **Author:** Azqato
 
@@ -194,7 +194,7 @@ This is the canonical process for adding a new prompt, and how additions should 
 2. Fill in the frontmatter (`title`, `description`, `meta`), the description body, and the prompt inside a fenced code block under a `## Prompt` heading
 3. Audit the prompt text against the Prompt Content Rules in section 11 before publishing. Remove any GitHub push or commit instructions and any account-specific actions. The `.md` file is the readable source of truth
 4. Mirror the file's content verbatim into `js/prompts-data.js` as a `{ slug, raw }` entry, appended to the end of the `window.PROMPTS_DATA` array. The array order is the display order, so appending places the new prompt last in the sidebar and home list. Both update automatically with no HTML editing
-5. Add a row to the Files table and the file structure tree in `README.md`
+5. Add the prompt to the list under "What You Will Find Here" in `README.md`, in one sentence written for a general reader. The README carried a Files table and a file structure tree until v1.26.0 rewrote it for a general audience, and this step named both until v1.42.0 found the instruction had outlived them. See discrepancy 17 in section 18
 6. Add a version entry to `docs/PATCHNOTES.md` using the next semantic version, dated `YYYY-MM-DD`
 
 When publishing the new prompt to GitHub Pages, that push is the author's decision and an action taken on the repository, not an instruction embedded in any prompt. The embedded prompt text must never tell its own reader to push or publish (section 11).
@@ -242,7 +242,7 @@ The `hidden: true` flag remains supported for retiring a prompt from navigation 
 
 ## 13. Repository Structure
 
-The whole project is 14 files in five folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+The whole project is 15 files in five folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 `.gitattributes` is the one piece of git configuration the repository carries, added in v1.36.0. It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
 
@@ -258,7 +258,7 @@ The whole project is 14 files in five folders. There is no build output, no vend
 ├── js/
 │   ├── prompts-data.js Hand-maintained mirror of prompts/*.md. Largest file by far.
 │   └── script.js       All client logic: parse, render, route, copy.
-├── prompts/            Four .md files, one per prompt. The readable source.
+├── prompts/            Five .md files, one per prompt. The readable source.
 ├── tools/
 │   └── prompts-mirror.py  Maintenance only. Checks or resyncs the mirror.
 │                       Not served, not loaded, not a build step.
@@ -337,7 +337,7 @@ Every explicit rule found in the documentation, collected in one place. Sources 
 - Em dashes are prohibited in all three forms in all copy, including markdown docs and inline comments. CSS custom properties such as `--color-bg` are exempt (PRD 11). See section 18 for where the docs currently break this.
 - No marketing language, no filler phrases, plain declarative sentences (PRD 11).
 - A prompt page contains exactly three things: title, description, code block. No other sections (PRD 8).
-- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all four prompts on 2026-08-23.
+- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all five prompts, four on 2026-08-23 and `prompt-audit` on 2026-09-23.
 - Prompt text must not reference the author's specific services, accounts, or credentials (PRD 11).
 - The public surface is the deployed page, not the source that builds it. Files under `prompts/` are source, so renaming or removing a prompt is done bare, with no redirect (PRD 12).
 - A genuine public address is retired behind a `REDIRECTS` entry, which is then permanent, never chains, and is never reused for different content (PRD 12).
@@ -387,6 +387,7 @@ Observed on 2026-08-23 by reading the code against the docs. Items 2, 5, and 6 w
 | 14 | `docs/DESIGN.md` section 9 responsive table lists what changes below 1024px | It omits `height: auto` on `.sidebar-sticky` and `flex-basis: 100%` on `.sidebar-nav`, both of which are the load-bearing v1.11.0 bug fixes | Trust the stylesheet. Documented in DESIGN section 9 in v1.27.0, because a future edit that removes either one silently reintroduces a shipped bug |
 | 15 | Nothing documented it, because nothing had noticed | `core.autocrlf` is true system-wide and there is no `.gitattributes`, so a fresh Windows clone gets CRLF `prompts/*.md` while the `raw` values in `js/prompts-data.js` stay LF. The two would never compare equal | **Found in v1.28.0** while testing `tools/prompts-mirror.py`, which failed on a file git had just checked out. The script now normalizes line endings on both sides, since they are a property of the checkout rather than of the content. **Resolved in v1.36.0** by adding a `.gitattributes` that pins `* text=auto eol=lf`, so a checkout can no longer produce the mismatch at all. The script still normalizes, which is now redundant on purpose |
 | 16 | Section 24 of this document, Assumptions: "`escapeHtml()` does not escape quotes, and `renderInline()` writes a markdown link target directly into an `href` attribute" | Both quote forms have been escaped since v1.28.0, and section 30 of this same document records the fix and strikes it from the debt table | **Corrected in v1.29.0.** The v1.28.0 pass updated sections 30 and 31 for the escaping change and missed this one, so the document contradicted itself for a release. Found by reading section 24 while checking whether the collapse work touched any stated assumption. Worth noting as a pattern: a fact repeated in more than one section will go stale in the copy nobody was editing |
+| 17 | Section 12 of this document, step 5 of Adding Prompts: "Add a row to the Files table and the file structure tree in `README.md`" | `README.md` has had neither since v1.26.0 rewrote it for a general reader and moved all structure into this document. A model following step 5 literally would look for a table that does not exist | **Corrected in v1.42.0**, when adding the fifth prompt exercised the step for the first time since the rewrite. The step now names the prose list the README actually carries. The intent was always to keep the README's prompt list in step with the data file, and only the mechanism changed, so this was corrected rather than left flagged |
 
 Confirmed accurate, checked rather than assumed:
 
@@ -605,7 +606,7 @@ Each of these was considered and rejected, with the reason. They are listed so t
 | Not built | Why |
 | --- | --- |
 | Search or filtering | The library is small enough to scan, and the sidebar shows everything at once. Search earns its complexity at a scale this project does not intend to reach |
-| Tags or categories | Same reason. Four prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
+| Tags or categories | Same reason. Five prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
 | Syntax highlighting | Would mean a library, which breaks the no-dependency rule. Prompt text is prose, not code, so highlighting would add noise rather than meaning |
 | A build step | The entire architecture exists to avoid one. See section 7 |
 | Automated `prompts-data.js` generation | Would require Node in the loop and a build convention. The resync is done with a throwaway script per change instead, which keeps the repository free of tooling. This is a real tradeoff and it is recorded as technical debt in section 30 |
@@ -978,7 +979,8 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 │   ├── add-prompt.md
 │   ├── documentation.md
 │   ├── github-wiki.md
-│   └── mobile-responsive-audit.md
+│   ├── mobile-responsive-audit.md
+│   └── prompt-audit.md
 ├── tools/
 │   └── prompts-mirror.py   Maintenance only, standard library only. Checks or
 │                           resyncs the mirror. Not served, not loaded by the
@@ -990,7 +992,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
     └── PATCHNOTES.md       Changelog, reverse chronological.
 ```
 
-Fourteen files, five folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+Fifteen files, five folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 ### Data models
 
@@ -1416,6 +1418,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.42.0 | 2026-09-23 | Added the Prompt Audit prompt (`prompts/prompt-audit.md`), the fifth, and the first that is a single command rather than a block of text: `/claude-api prompt-audit` runs the built-in skill's audit of a project's skills, instruction files, and prompts for patterns written for an older model. Updated the four file and prompt counts across sections 13, 16, 23, and 30. Corrected section 12 step 5, which had instructed adding a row to a README Files table that has not existed since v1.26.0, logged as discrepancy 17. |
 | 1.41.0 | 2026-09-18 | Added a Repository Hygiene default policy to the Documentation prompt, after Security, whose environment-variable sentence it enforces. States the default outright: an ignore file, a `.gitattributes`, a committed lockfile, no secret in history, and `main` as the default branch. Researched rather than written from memory, which caught that a blanket `eol=lf` breaks a Windows batch script and added the `.env*` plus `!.env.example` negation, the committed-lockfile rule, and the framing of an ignore file as prevention rather than protection. Added `.gitignore` and `.gitattributes` to the folder structure tree, with the note that a nested copy of either is legitimate rather than a misplacement. Commit and branch style stay with Conventions. Also corrected the stale "Thirteen files" in section 30, which has been 14 since v1.36.0. |
 | 1.40.0 | 2026-09-09 | Added a Page Titles default policy to the Documentation prompt, after Social Sharing Tags and sharing its serves-a-site condition. Sets `<unique page name> - <brand>` with two budgets that measure different things: the first 30 characters must identify the page alone, and the whole title stays at 60. Uniqueness is required of the first 30 characters rather than the whole title, since two titles differing only after character 30 are one title on a tab strip. A 30-character total was rejected because the brand suffix costs 19 characters here and the only way to reach 30 is to drop the brand from every page. Recorded as finding 5 in the section 27 self-audit: this site updates its titles per route already but ships them without the brand. |
 | 1.39.1 | 2026-09-08 | Named the two kinds in the sentence that introduces them, so the Documentation prompt reads "sort them into two kinds: Documentation Files and Project Files" rather than leaving the categories to be inferred from the sentences that follow. Capitalised the later uses so the terms read as defined labels. |
