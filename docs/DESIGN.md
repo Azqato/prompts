@@ -1,6 +1,6 @@
 # DESIGN.md - Prompts
 
-**Version:** 1.10
+**Version:** 1.11
 **Status:** Active
 **Author:** Azqato
 
@@ -178,12 +178,10 @@ Header bar (inside wrapper, above pre):
   border-bottom: 1px solid --color-border  (removed while collapsed)
   padding: 10px 16px
   display: flex, justify-content: space-between, align-items: center, gap: 12px
-  padding: 10px 12px below 400px
   cursor: pointer  (the whole bar is the collapse target)
   Left label: "Prompt" in --color-text-secondary, 0.8rem. Plain text, not a control
-  Right: .code-block-actions, a flex row with 8px gap (6px below 400px)
-         holding the collapse toggle, Copy link, then the Copy button, in
-         that order
+  Right: .code-block-actions, a flex row with 8px gap holding the
+         collapse toggle then the Copy button, in that order
 
 pre element:
   bg: --color-tag-bg
@@ -213,8 +211,8 @@ Positioned in the code block header bar, immediately left of the Copy button.
 
 ```
 Appearance: identical to the Copy button in every resting property.
-  All three header buttons share one rule (.copy-btn, .link-btn,
-  .code-toggle) rather than defining a second button treatment. Same border, radius, padding,
+  The two share one rule (.copy-btn, .code-toggle) rather than
+  defining a second button treatment. Same border, radius, padding,
   size, colour, and hover.
 
 Collapsed state (the default):
@@ -237,8 +235,8 @@ when expanded, matching the convention "Copy" already sets.
 **The whole header bar is the click target, not just the button.** The listener
 sits on `.code-block-header`, which carries `cursor: pointer`. A click on the
 toggle bubbles up to that same handler, so there is no second listener on the
-button and no chance of a double fire. Clicks originating inside `.copy-btn` or
-`.link-btn` are ignored, so copying never collapses the block. The button still exists because
+button and no chance of a double fire. Clicks originating inside `.copy-btn` are
+ignored, so copying never collapses the block. The button still exists because
 the bar is a `div`: it cannot be focused, cannot be reached by keyboard, and has
 no accessible name or state.
 
@@ -265,7 +263,7 @@ Default state:
   bg: transparent
   border: 1px solid --color-border
   border-radius: 6px
-  padding: 4px 12px  (4px 8px below 400px)
+  padding: 4px 12px
   font-size: 0.78rem
   white-space: nowrap
   color: --color-text-secondary
@@ -289,46 +287,14 @@ Failed state (2 seconds):
 Transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease
 ```
 
-The default and hover blocks above are shared with the collapse toggle and Copy
-link. The copied and failed states are shared with Copy link, which reports its
-result the same way.
+The default and hover blocks above are shared with the collapse toggle. Only the
+copied and failed states are the copy button's own.
 
 JavaScript behavior: on click, use `navigator.clipboard.writeText()` to copy the `<code>` element's text content. Set the button to "Copied!", then reset after 2000ms.
 
 Both outcomes are reported. If the Clipboard API is unavailable, or the write rejects, the button shows "Copy failed" for the same 2000ms and its `aria-label` becomes "Copy failed. Select the prompt text and copy it manually". Added in v1.28.0: before that a failed copy left the button reading "Copy" and said nothing, so the reader would paste whatever was on the clipboard already, believing it had worked. A silent failure on the site's only action was the worst failure mode it had.
 
 The two states share one code path and differ only in label, class, and `aria-label`, so they cannot drift apart in timing or reset behaviour.
-
----
-
-### Copy Link
-
-Added in v1.10. Positioned in the code block header bar, between the collapse
-toggle and the Copy button.
-
-```
-Default state:
-  text: "Copy link"
-  aria-label: "Copy link to this prompt"
-  every other property shared with Copy (.copy-btn, .link-btn, .code-toggle)
-
-Copied state (2 seconds):
-  text: "Copied!", class .copied, as Copy
-
-Failed state (2 seconds):
-  text: "Copy failed", class .copy-failed, as Copy
-  aria-label: "Copy failed. The link is <address>"
-```
-
-It copies the prompt's published share address,
-`https://azqato.github.io/prompts/p/<slug>.html`, whatever the page was opened
-from. The failed `aria-label` reads the address out, because unlike the prompt
-text it is not on screen for the reader to select by hand.
-
-It sits left of Copy so the primary action stays flush right, where it has always
-been. `white-space: nowrap` on the shared rule keeps "Copy link" on one line; at
-320px it otherwise wrapped to two and doubled the height of the bar. The policy
-behind the button is `docs/PRD.md` section 32a.
 
 ---
 
@@ -474,13 +440,12 @@ content: "Built by Azqato." where "Azqato" is a link to azqato.github.io
 
 ## 9. Responsive Behavior
 
-There are three breakpoints, all `max-width`, all at the bottom of the stylesheet. The design is desktop-first: the base rules describe the desktop layout and each query overrides downward.
+There are exactly two breakpoints, both `max-width`, both at the bottom of the stylesheet. The design is desktop-first: the base rules describe the desktop layout and each query overrides downward.
 
 | Breakpoint | Changes |
 | --- | --- |
 | `< 1024px` | Sidebar becomes top nav bar, backdrop blur, bottom-border active state |
 | `< 768px` | h1 reduces to 1.5rem, h2 reduces to 1.2rem, padding reduces to 20px/16px, code block font-size reduces to 0.8rem |
-| `< 400px` | Code block header padding to 10px/12px, action gap to 6px, header button padding to 4px/8px |
 
 ### Below 1024px, in full
 
@@ -504,10 +469,6 @@ The collapse is more than a grid change, and two of these declarations are load-
 ### Below 768px
 
 Type and padding only. No layout change: the structure established at 1024px carries down unchanged. The site is verified at seven widths from 375px to 1920px; see `docs/PATCHNOTES.md` v1.11.0.
-
-### Below 400px
-
-Added in v1.10 for one component. The code block header carries a label and three buttons, and at 320px they did not fit one line: "Copy link" wrapped until `nowrap` was added, and then the row pushed the page 17px wide. Trimming the bar's padding, the action gap, and the buttons' horizontal padding fits it with room to spare. Measured in the DOM at 320, 375, 414, 768, 1024, 1280, and 1920px: one line and no horizontal overflow at every width.
 
 ---
 
@@ -548,7 +509,7 @@ Rule: never place `--color-text-secondary` on anything lighter than `--color-sur
 Expected behaviour, and what is actually there.
 
 - All interactive elements are native `<a>` and `<button>` elements, so they are in the tab order by default. There is no `tabindex` anywhere, positive or negative, and no custom key handler. Tab, Shift-Tab, Enter, and Space all behave natively.
-- Tab order follows the DOM: logo, then each nav link in order, then the Support button, then into the content area, reaching the collapse toggle, Copy link, and then the copy button after the description. The toggle is before Copy in the DOM as well as visually, so tab order matches reading order.
+- Tab order follows the DOM: logo, then each nav link in order, then the Support button, then into the content area, reaching the collapse toggle and then the copy button after the description. The toggle is before Copy in the DOM as well as visually, so tab order matches reading order.
 - **Known gap: there is no skip-to-content link.** On a prompt page a keyboard user must tab past the logo, every nav link, and the Support button before reaching the copy button, which is the primary action. With four prompts that is seven stops. This is the most significant accessibility shortfall on the site and it grows with every prompt added. Adding one would mean a visually-hidden anchor as the first focusable element in `<body>`, targeting `#content`, which needs a `tabindex="-1"` to be focusable as a heading target.
 - **Known gap: the copy button's result is announced only via the `aria-label` change.** That is a reasonable signal but not a guaranteed one across screen readers; a live region would be more reliable. This applies to the failure state added in v1.28.0 as well as to success, and it matters more there, since a reader who does not notice the failure will paste the wrong thing.
 
@@ -579,11 +540,11 @@ css/style.css structure (in order):
   Prompt detail page (.prompt-header, .prompt-meta, .prompt-description)
   Code block (.code-block-wrapper, header bar, .code-block-actions,
     collapsed states, pre, code)
-  Copy button, Copy link, and collapse toggle (shared default and
-    hover, plus copied and copy-failed on the two copy buttons)
+  Copy button and collapse toggle (shared default and hover,
+    plus copied and copy-failed on the copy button alone)
   Status / error message (.status-message)
   Focus styles (:focus-visible)
-  Media queries (tablet < 1024px, mobile < 768px, narrow < 400px)
+  Media queries (tablet < 1024px, mobile < 768px)
   Reduced motion (prefers-reduced-motion)
 ```
 
@@ -714,7 +675,7 @@ Every interactive element follows the same progression, and the accent hover is 
 | Default | `--color-text-secondary` text, `--color-border` border, transparent or surface background |
 | Hover | Text to `--color-accent` (or `--color-text-primary` for nav links), border to `rgba(0, 212, 160, 0.5)`, background to `--color-accent-light` |
 | Active / current | `--color-accent` text, weight 600, a 3px accent bar (left border on desktop, bottom border on mobile), `--color-accent-light` background |
-| Success | `--color-positive` text, `rgba(63, 185, 80, 0.4)` border. Used only by the two copy buttons |
+| Success | `--color-positive` text, `rgba(63, 185, 80, 0.4)` border. Used only by the copy button |
 | Focus | Global `:focus-visible` outline. Never overridden per component |
 | Disabled | No pattern exists. Nothing on the site can be disabled |
 
@@ -722,14 +683,13 @@ Note the two hardcoded `rgba()` values. They are the only colour literals outsid
 
 ### Buttons
 
-Four exist, and they are the template for any fifth.
+Three exist, and they are the template for any fourth.
 
 - **Copy button** (`.copy-btn`): a real `<button>`, 4px/12px padding, 6px radius, 0.78rem, transparent background. Carries an `aria-label` that updates with its state.
-- **Copy link** (`.link-btn`): a real `<button>` sharing the copy button's rule and its copied and failed states. Copies the prompt's share address.
 - **Collapse toggle** (`.code-toggle`): a real `<button>` sharing the copy button's rule outright rather than restating it. Its label names the action it performs. Carries `aria-expanded` and `aria-controls`.
 - **Support button** (`.support-btn`): an `<a>` styled as a button. `display: block`, centred text, 8px/12px padding, 6px radius, 0.8125rem, weight 500.
 
-When a new control is a peer of an existing one, sitting beside it and doing the same kind of job, add it to that selector rather than writing a second rule. The toggle, Copy link, and Copy are pixel-identical at rest because they are literally the same declarations, which is a property that cannot drift.
+When a new control is a peer of an existing one, sitting beside it and doing the same kind of job, add it to that selector rather than writing a second rule. The toggle and Copy are pixel-identical at rest because they are literally the same declarations, which is a property that cannot drift.
 
 Rules: use a real `<button>` for an action and an `<a>` for a navigation, never the reverse. Always set `font-family: var(--font-sans)` on a `<button>`, since it does not inherit. Always transition `color`, `border-color`, and `background` together at 0.15s ease. Never use a filled accent background: the accent is for text and borders, and a solid teal button would be louder than anything else on the page.
 
@@ -770,7 +730,6 @@ Everything that moves. If it is not on this list, it should not move.
 | Sidebar nav link | `color`, `border-color`, `background` | Hover, active |
 | Support button | `color`, `border-color`, `background` | Hover |
 | Copy button | `color`, `border-color`, `background` | Hover, copied, copy failed |
-| Copy link | `color`, `border-color`, `background` | Hover, copied, copy failed |
 | Collapse toggle | `color`, `border-color`, `background` | Hover |
 | Prompt card | `background`, `border-color` | Hover |
 | Prompt card `::before` gradient bar | `opacity` 0 to 1 | Hover |
@@ -806,7 +765,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 **The CSS structure list in section 11 and the shell template in section 12 were both wrong until v1.28.0** and are now read from the files. They are the two blocks most likely to go stale again, because nothing checks them, so verify against `index.html` and `css/style.css` before relying on either.
 
-**Where to change what.** A colour, font, or width: the `:root` block in `css/style.css`, and check the token is documented in section 2 of this file. A component: find its `/* Section */` banner in the stylesheet; the file is ordered by component and has no imports. Responsive behaviour: the three media queries at the bottom, and read section 9 first. Anything structural: `index.html`, all 51 lines of it.
+**Where to change what.** A colour, font, or width: the `:root` block in `css/style.css`, and check the token is documented in section 2 of this file. A component: find its `/* Section */` banner in the stylesheet; the file is ordered by component and has no imports. Responsive behaviour: the two media queries at the bottom, and read section 9 first. Anything structural: `index.html`, all 51 lines of it.
 
 **Verification.** There is no test, no linter, and no visual regression check. The only way to confirm a change is to open `index.html` from disk and look at it: the home list, one prompt page, the copy button, and both breakpoints. `docs/PRD.md` section 20 makes this mandatory rather than advisory.
 
@@ -830,6 +789,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.11 | 2026-09-23 | Removed Copy link, and its spec in section 5, after one release: two buttons labelled Copy read as confusing. The 400px breakpoint that existed only to fit it went too, so section 9 is back to two breakpoints; the prompt header's two buttons fit one line at 320px without it, measured at all seven widths. The 12px gap between the header label and its buttons and `white-space: nowrap` on the shared button rule stay. |
 | 1.10 | 2026-09-23 | Specced Copy link, the fourth button, which joins the shared button rule and both copy states. The code block header now lists three actions, gains a 12px gap between label and actions, and has a third breakpoint below 400px so the row fits one line at 320px; the shared button rule gains `white-space: nowrap`. Sections 5, 9, 10, 11, 12, 12a, 12b, and 12c updated. Section 12 now distinguishes the generated share pages in `p/` from views. Also corrected the `index.html` line count in 12c from 42 to 51 under the mechanical-fact exception. |
 | 1.9.1 | 2026-08-24 | Corrected the `index.html` line count in section 12c, which had said 31 since before the Content Security Policy was added in v1.28.0. A line count carries no intent, so it is fixed in place under the mechanical-fact exception rather than flagged. |
 | 1.9 | 2026-08-24 | Specced the collapse toggle, which is the first new component since v1.0 and the third button on the site. Section 5 gains a Collapse Toggle spec and the code block header now documents the action group, the pointer cursor on the bar, and the collapsed default. Section 12a records the rule the toggle follows: a peer control joins the existing selector rather than getting a second treatment. Section 12b adds the show-and-hide rule, which is what the no-transform and no-height rules imply for a collapse. Section 12c reconciles the collapsed default with the tenet that the code block is the product. Sections 10 and 11 updated for the new control. |

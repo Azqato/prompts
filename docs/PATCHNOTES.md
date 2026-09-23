@@ -4,6 +4,27 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.47.0 - 2026-09-23
+
+### Removed
+
+- `js/script.js`: the Copy link button added in v1.46.0. Beside Copy it was confusing: two buttons both labelled Copy, one copying the prompt and one a link, made the page's main action less obvious. The copy code returned to its v1.45.0 form, and the `SITE_URL` constant, used only by Copy link, went with it.
+- `css/style.css`: `.link-btn`, and the `max-width: 400px` media query that existed only to fit a third button in the header bar at 320px.
+
+### Changed
+
+- `README.md`: the sharing sentence now says to copy the address from the browser.
+- `docs/PRD.md`: sections 8, 10, 10a, 13, 14, 15, 23, 27, 29, 30, 31, 32, and 32a updated. Section 32a records why the button was removed.
+- `docs/DESIGN.md` 1.11: the Copy link spec and the 400px breakpoint removed.
+
+### Notes
+
+Sharing still works as it did in v1.46.0. The share pages and their tags are unchanged, and over https the address bar still shows `p/<slug>.html`, which is the link that gets copied and previews as the prompt. Opening the site from disk shows the `#/` address instead, as before.
+
+Verified locally before pushing. Over `python -m http.server` the header bar shows Expand and Copy, the address bar is rewritten, the title carries the site name, and a click on Copy does not toggle the block. The bar was measured in the DOM at 320, 375, 414, 768, 1024, 1280, and 1920px without the removed media query: one line and no horizontal overflow at each. From `file://` a prompt page renders with the same two buttons.
+
+---
+
 ## v1.46.0 - 2026-09-23
 
 ### Added

@@ -403,11 +403,10 @@ code {
   padding: 0;
 }
 
-/* Copy button, Copy link, and the collapse toggle beside them. They are peers in
+/* Copy button, and the collapse toggle that sits beside it. They are peers in
    the same action group, so they share one appearance rather than inventing a
    second button treatment. */
 .copy-btn,
-.link-btn,
 .code-toggle {
   font-family: var(--font-sans);
   background: transparent;
@@ -425,21 +424,18 @@ code {
    pointer cursor already says so, and lighting the toggle from a hover several
    hundred pixels away reads as a glitch rather than as feedback. */
 .copy-btn:hover,
-.link-btn:hover,
 .code-toggle:hover {
   border-color: rgba(0, 212, 160, 0.5);
   color: var(--color-accent);
   background: var(--color-accent-light);
 }
 
-.copy-btn.copied,
-.link-btn.copied {
+.copy-btn.copied {
   color: var(--color-positive);
   border-color: rgba(63, 185, 80, 0.4);
 }
 
-.copy-btn.copy-failed,
-.link-btn.copy-failed {
+.copy-btn.copy-failed {
   color: var(--color-negative);
   border-color: rgba(248, 81, 73, 0.4);
 }
@@ -555,25 +551,6 @@ code {
 
   .code-block-wrapper pre code {
     font-size: 0.8rem;
-  }
-}
-
-/* Three buttons and the label have to share one line at 320px. Below 400px
-   the bar and the buttons give up some padding so they do, rather than
-   wrapping a label or pushing the page sideways. */
-@media (max-width: 400px) {
-  .code-block-header {
-    padding: 10px 12px;
-  }
-
-  .code-block-actions {
-    gap: 6px;
-  }
-
-  .copy-btn,
-  .link-btn,
-  .code-toggle {
-    padding: 4px 8px;
   }
 }
 

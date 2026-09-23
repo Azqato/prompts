@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.46.0
+**Version:** 1.47.0
 **Status:** Active
 **Author:** Azqato
 
@@ -85,7 +85,7 @@ Rendered from the matching markdown file in `prompts/`. Each prompt view contain
 
 1. **Title**: the name of the prompt as an `h1`, from the markdown frontmatter
 2. **Description**: one or more paragraphs explaining what the prompt does, when to use it, and any important behavior the user should know before running it
-3. **Code Block**: the full prompt text in a `<pre><code>` block, behind a header bar carrying a collapse toggle, a Copy link button, and a one-click copy button. The block is collapsed when the page opens; see section 10a
+3. **Code Block**: the full prompt text in a `<pre><code>` block, behind a header bar carrying a collapse toggle and a one-click copy button. The block is collapsed when the page opens; see section 10a
 
 No other sections. No decorative content. No padding between the prompt and the rest of the page beyond standard spacing.
 
@@ -123,7 +123,7 @@ Not rendered as navigable pages on the site. These are documentation files for c
 
 ## 10. Copy Button Behavior
 
-- Each prompt page has exactly one button that copies the prompt, positioned above the code block. A second, Copy link, copies the prompt's share address instead, and is specified in section 32a
+- Each prompt page has exactly one copy button, positioned above the code block
 - On click: copies the full code block contents to clipboard
 - Visual feedback: button text changes to "Copied!" for 2 seconds, then resets
 - Requires no external library; uses the native Clipboard API
@@ -137,7 +137,7 @@ Added in v1.29.0. Numbered `10a` rather than inserted as a new section 11, becau
 
 - **The prompt block is collapsed when a prompt page opens.** Every page load and every navigation starts collapsed. The prompts run to several hundred lines, and an expanded default pushed the description, which explains what the reader is about to copy, off the top of a screen.
 - The header bar carries a toggle labelled **Expand** when hidden and **Hide** when shown. The label names the action the button performs, not the state it is in, which is the convention the copy button already sets.
-- **The entire header bar is clickable**, not only the toggle. A click anywhere on the bar toggles the block, except on the two copy buttons, so copying never collapses what was just copied.
+- **The entire header bar is clickable**, not only the toggle. A click anywhere on the bar toggles the block, except on the copy button, so copying never collapses what was just copied.
 - Copy works in both states. The prompt text stays in the DOM while hidden; only its display is suppressed. This is what keeps the primary action one click from arrival despite the collapsed default.
 - **The state is not persisted.** No browser storage API is used anywhere in the project, and section 31 states that as a privacy property. Remembering a reader's preference here would cost that for a small convenience, so it is deliberately not done.
 - There is no animation on the collapse. It is a display change, not a transition. `docs/DESIGN.md` section 12b forbids transitioning height or transform, which rules out both an animated open and a rotating chevron.
@@ -263,7 +263,7 @@ The whole project is 20 files in six folders. There is no build output, no vendo
 ├── .gitattributes      Pins LF line endings on checkout. Six lines of comment and
 │                       one rule. Not part of the deployed site.
 ├── css/
-│   └── style.css       Entire stylesheet, 592 lines, no imports.
+│   └── style.css       Entire stylesheet, 569 lines, no imports.
 ├── js/
 │   ├── prompts-data.js Hand-maintained mirror of prompts/*.md. Largest file by far.
 │   └── script.js       All client logic: parse, render, route, copy.
@@ -293,12 +293,12 @@ Traced from the code rather than from the docs.
 3. `js/script.js` runs `init()` on `DOMContentLoaded`, or immediately if the document is already parsed. `init()` validates that `PROMPTS_DATA` is a non-empty array, maps each entry through `parsePrompt()`, builds the sidebar, binds `hashchange` and `popstate`, and calls `route()`.
 4. `parsePrompt()` splits frontmatter with a single regex, reads `title`, `description`, `meta`, and `hidden`, takes the first fenced code block in the body as the prompt text, and treats everything before that fence (minus a trailing `## Prompt` heading) as the description.
 5. `renderMarkdown()` is a hand-rolled markdown subset applied only to the description: it splits on blank lines and handles headings, all-bullet blocks as `<ul>`, and paragraphs. `renderInline()` handles inline code, bold, and links on HTML-escaped text.
-6. `route()` reads the slug from the hash, or from a `p/<slug>.html` path when there is no hash, resolves any entry in the `REDIRECTS` map (guarded on the target existing, and empty as of v1.24.0), finds the prompt, and calls `renderHome()` or `renderDetail()`. An unknown slug silently falls through to the home view. `renderDetail()` also sets `document.title` to the prompt name followed by the site name, wires both copy buttons, and wires the collapse toggle. Over http and https, `route()` then rewrites the address bar to the view's share address with `history.replaceState()`, which replaces the history entry rather than adding one. See section 32a.
+6. `route()` reads the slug from the hash, or from a `p/<slug>.html` path when there is no hash, resolves any entry in the `REDIRECTS` map (guarded on the target existing, and empty as of v1.24.0), finds the prompt, and calls `renderHome()` or `renderDetail()`. An unknown slug silently falls through to the home view. `renderDetail()` also sets `document.title` to the prompt name followed by the site name, wires the copy button, and wires the collapse toggle. Over http and https, `route()` then rewrites the address bar to the view's share address with `history.replaceState()`, which replaces the history entry rather than adding one. See section 32a.
 7. If `PROMPTS_DATA` is missing or `parsePrompt()` throws, `renderError()` paints a `.status-message` panel telling the reader to check that `prompts-data.js` is present and loaded first. This view exists in both `js/script.js` and `css/style.css` but is not described in section 8 or in `docs/DESIGN.md`.
 
 A share page is not part of this flow. It holds no script, and forwards to `index.html#/<slug>` with a meta refresh, after which the steps above run as normal.
 
-`js/script.js` is the only file with logic. `js/prompts-data.js` is the only data source. There is no state beyond the module-level `PROMPTS` array, the URL, and a record of the last address routed, nothing is persisted, and there are no network calls, storage APIs, or external services at runtime. The browser APIs it depends on are `navigator.clipboard.writeText()` in the two copy buttons and, over http and https only, `history.replaceState()`. The collapse state added in v1.29.0 is held entirely in a CSS class on one element, which is why it does not count as state and does not survive a navigation.
+`js/script.js` is the only file with logic. `js/prompts-data.js` is the only data source. There is no state beyond the module-level `PROMPTS` array, the URL, and a record of the last address routed, nothing is persisted, and there are no network calls, storage APIs, or external services at runtime. The browser APIs it depends on are `navigator.clipboard.writeText()` in the copy button and, over http and https only, `history.replaceState()`. The collapse state added in v1.29.0 is held entirely in a CSS class on one element, which is why it does not count as state and does not survive a navigation.
 
 ---
 
@@ -310,7 +310,7 @@ Derived from the existing files. These describe what is there, not what is aspir
 
 - Two-space indent, single quotes, semicolons always, `const` and `let` only.
 - Plain function declarations in `camelCase`. No arrow functions, no classes, no template literals, no `async`. Callbacks are written `function () {}` even inside `forEach`. This is deliberate ES5-flavoured code, not accident: match it.
-- Module-level constants in `SCREAMING_SNAKE_CASE` (`SITE_INTRO`, `SITE_NAME`, `SITE_URL`, `PROMPTS`, `REDIRECTS`).
+- Module-level constants in `SCREAMING_SNAKE_CASE` (`SITE_INTRO`, `SITE_NAME`, `PROMPTS`, `REDIRECTS`).
 - No exports and no module system. Everything is a global in one script.
 - HTML is built by string concatenation into `innerHTML`, with `escapeHtml()` applied to every interpolated value.
 - The file is divided by banner comments in the form `/* ---------- Section ---------- */`, preceded by one boxed header comment at the top. Comments explain why rather than what, and are used sparingly on non-obvious decisions (the redirect guard, the hidden flag, the fence heuristic).
@@ -321,7 +321,7 @@ Derived from the existing files. These describe what is there, not what is aspir
 - Two-space indent, one boxed header comment, `/* Section */` comments in the order listed in `docs/DESIGN.md` section 11.
 - All colors, fonts, and sizes come from `:root` custom properties. No hex value appears outside `:root`, only `rgba()` accent variants in hover and copied states.
 - Class names are lowercase kebab-case, BEM-ish but not strict (`.code-block-wrapper`, `.prompt-list-title`).
-- Three media queries, `max-width: 1023px`, `max-width: 767px`, and `max-width: 400px`, all at the bottom of the file, plus `prefers-reduced-motion`. The third was added in v1.46.0 so the three-button header bar fits one line at 320px.
+- Two media queries only, `max-width: 1023px` and `max-width: 767px`, both at the bottom of the file, plus `prefers-reduced-motion`. A third, at 400px, existed in v1.46.0 only to fit the Copy link button at 320px, and went with it in v1.47.0.
 
 ### Markdown
 
@@ -618,7 +618,6 @@ These are live and are the product as it exists today.
 | Reduced-motion support | All transitions disabled under `prefers-reduced-motion` |
 | Per-view document title | Home shows the site name, a prompt page shows the prompt name followed by the site name. The suffix was added in v1.46.0 |
 | Share pages and link previews | One generated page per visible prompt at `p/<slug>.html`, with Open Graph and Twitter Card tags, forwarding to the prompt. `index.html` carries the same tags for the site. See section 32a |
-| Copy link | A button beside Copy that puts the prompt's public share address on the clipboard, whatever the page was opened from |
 
 ### Deliberately not built
 
@@ -786,7 +785,7 @@ A partial read-only pass was run on 2026-09-07 and stopped before any file was w
 
 **Resolves** open question 8, and finding 3 of the self-audit above.
 
-**Shipped in v1.46.0.** The scope above is kept as the record of how it was planned. The decisions went: `p/<slug>.html` for the path; the existing descriptions tightened to fit, all five now 140 to 149 characters, so the home cards changed with them; and both ways of reaching the share address, a Copy link button and the address bar rewrite. The policy it produced is section 32a.
+**Shipped in v1.46.0.** The scope above is kept as the record of how it was planned. The decisions went: `p/<slug>.html` for the path; the existing descriptions tightened to fit, all five now 140 to 149 characters, so the home cards changed with them; and both ways of reaching the share address, a Copy link button and the address bar rewrite. The policy it produced is section 32a. The Copy link button was removed in v1.47.0 as confusing beside Copy, leaving the address bar rewrite.
 
 ### Deferred
 
@@ -966,7 +965,7 @@ There is no development mode, no feature flag, and no configuration file. The on
 | The wrong text is copied | A fenced code block appears in the prompt's description, before the `## Prompt` heading. `parsePrompt()` takes the first fence in the body | Move the example fence below the prompt block, or reword the description. Recorded in section 19 |
 | Everything after the first line of a description is missing | The frontmatter `description` was wrapped across lines. The parser is line-based | Put the whole value on one line |
 | `tools/prompts-mirror.py` reports a share page with no visible prompt | A prompt was removed, renamed, or hidden, and its page in `p/` is still the generated one | Rewrite it as a retired page (section 32a). Never delete it |
-| A pasted prompt link previews as the site, not the prompt | The link is a hash route, `index.html#/<slug>`, which a link renderer reads as the home page | Share the `p/<slug>.html` address, from Copy link or from the address bar over https |
+| A pasted prompt link previews as the site, not the prompt | The link is a hash route, `index.html#/<slug>`, which a link renderer reads as the home page | Share the `p/<slug>.html` address, which the address bar shows over https |
 | Mobile header fills the whole screen | A regression of the v1.11.0 bug: `.sidebar-sticky` keeping `height: 100vh` below 1024px | Confirm `height: auto` is still set in the `max-width: 1023px` block |
 
 ### Monitoring
@@ -1011,8 +1010,8 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 | Layer | Technology | Version |
 | --- | --- | --- |
 | Markup | HTML5 | Living standard. `index.html`, 51 lines, plus five generated share pages of 21 lines each |
-| Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 592 lines, no `@import` |
-| Logic | JavaScript, ES5-flavoured with `const` and `let` | No transpiler. Runs as written. 397 lines |
+| Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 569 lines, no `@import` |
+| Logic | JavaScript, ES5-flavoured with `const` and `let` | No transpiler. Runs as written. 370 lines |
 | Maintenance tooling | Python 3, standard library only | `tools/prompts-mirror.py`. Never runs in a browser, never required to build or serve |
 | Content format | Markdown, a hand-parsed subset | No markdown library |
 | Hosting | GitHub Pages | `main` at repository root |
@@ -1030,12 +1029,12 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 │                           Ships an empty #sidebar-nav and #content.
 ├── README.md               Public front door, written for a general reader.
 ├── css/
-│   └── style.css           592 lines. Whole design system. Tokens in :root,
-│                           three media queries plus reduced-motion at the bottom.
+│   └── style.css           569 lines. Whole design system. Tokens in :root,
+│                           two media queries plus reduced-motion at the bottom.
 ├── js/
 │   ├── prompts-data.js     window.PROMPTS_DATA: [{slug, raw}]. Verbatim mirror
 │   │                       of prompts/*.md. Largest file. Hand-maintained.
-│   └── script.js           397 lines. The only file with logic: parse, render,
+│   └── script.js           370 lines. The only file with logic: parse, render,
 │                           route, copy. No exports, no modules, all globals.
 ├── prompts/                One .md per prompt. The readable source of truth.
 │   ├── add-prompt.md
@@ -1098,16 +1097,14 @@ There is no API. There are no endpoints, no requests, and no serialization bound
 | `findPrompt(slug)` | Slug | `Prompt` or `null` | Linear scan. `null` for an unknown slug |
 | `buildSidebar()` | `PROMPTS` | Writes `#sidebar-nav` | Skips entries where `hidden` is true |
 | `renderHome()` | `PROMPTS` | Writes `#content`, sets the document title to the site name | Skips hidden entries |
-| `renderDetail(p)` | A `Prompt` | Writes `#content`, sets the title to the prompt name followed by the site name, wires both copy buttons and the collapse toggle | None |
+| `renderDetail(p)` | A `Prompt` | Writes `#content`, sets the title to the prompt name followed by the site name, wires the copy button and the collapse toggle | None |
 | `renderError(err)` | An `Error` | Writes the status panel into `#content` | Terminal. The sidebar may be unbuilt at this point |
 | `route()` | `window.location` | Renders home or a detail view, sets the active link, rewrites the address bar through `syncAddress()`, scrolls to top | An unknown slug falls through to home, silently and by design. Returns at once when the address is the one it last routed, because `hashchange` and `popstate` can both fire for one navigation |
 | `currentSlug()` | The hash, or the path when there is no hash | The trimmed slug from the hash; failing a hash, the `<slug>` of a `p/<slug>.html` path; otherwise empty, for the home view | None. The path form is matched, never decoded |
 | `appBase()` | The path | The folder the site is served from, whether the path names `index.html`, a share page, or the folder itself | None |
 | `syncAddress(p)` | A `Prompt` or `null` | Replaces the address with the site root, `p/<slug>.html`, or for a hidden prompt `#/<slug>` | Does nothing on `file://`, where the browser forbids it, or when the address is already right |
-| `wireCollapseToggle()` | The rendered DOM | Binds one click handler on `.code-block-header` | Returns early if the wrapper, header, or button is absent. The listener is on the header rather than the button, so a click on the button reaches it by bubbling and there is no second handler. A click inside `.copy-btn` or `.link-btn` returns early, so copying does not collapse the block |
-| `wireCopyButton(p)` | The rendered DOM and the current prompt | Wires Copy to the prompt text and Copy link to `shareUrl(p)`, both through `wireCopy()` | Skips either button if it is absent |
-| `wireCopy(btn, ...)` | A button, its labels, and a function returning the text | Binds one click handler | Since v1.28.0 a missing Clipboard API or a rejected write shows "Copy failed" for 2000ms with a matching `aria-label`, sharing one code path with the success state so the two cannot drift. Since v1.46.0 both buttons share it, so they cannot drift from each other either |
-| `shareUrl(p)` | A `Prompt` | The published https share address, from `SITE_URL`, whatever the page was opened from. A hidden prompt has no share page and gets its hash route | None |
+| `wireCollapseToggle()` | The rendered DOM | Binds one click handler on `.code-block-header` | Returns early if the wrapper, header, or button is absent. The listener is on the header rather than the button, so a click on the button reaches it by bubbling and there is no second handler. A click inside `.copy-btn` returns early, so copying does not collapse the block |
+| `wireCopyButton()` | The rendered DOM | Binds one click handler | Returns early if the button is absent. Since v1.28.0 a missing Clipboard API or a rejected write shows "Copy failed" for 2000ms with a matching `aria-label`, sharing one code path with the success state so the two cannot drift |
 
 ### State management
 
@@ -1173,7 +1170,7 @@ The security posture of a static site with no server, no accounts, and no data i
 
 Specifically: no cookies are set. No `localStorage`, `sessionStorage`, or IndexedDB is written; those APIs appear nowhere in the codebase. No form exists, so nothing is submitted. No analytics or telemetry runs. No IP logging is available to the author, since GitHub Pages does not expose logs to the repository owner. No network request is made after the page loads.
 
-The one interaction with the reader's machine is `navigator.clipboard.writeText()`, which is a write to the clipboard, initiated by an explicit click, of text already visible on screen, or, for Copy link, the prompt's public share address. Nothing is read from the clipboard.
+The one interaction with the reader's machine is `navigator.clipboard.writeText()`, which is a write to the clipboard, initiated by an explicit click, of text already visible on screen. Nothing is read from the clipboard.
 
 ### Environment variables and secrets
 
@@ -1205,7 +1202,7 @@ Small, but not empty, and the honest accounting matters more than the reassuranc
 | Remote or inline script injection | Any script reaching the page would run with full access | The Content Security Policy blocks both, verified enforced. This is defence in depth rather than the primary control, since there is no injection path |
 | Hash-driven routing | The URL fragment is attacker-controllable in a shared link | The hash is only ever compared against known slugs and never interpolated into the DOM. An unknown value renders the home view. No injection path. Since v1.46.0 the slug can also come from a `p/<slug>.html` path, and is treated the same way: compared, never interpolated, never decoded |
 | `target="_blank"` on the Support link | Reverse tabnabbing, in principle | `rel="noopener noreferrer"` is set. Modern browsers imply it regardless |
-| Clipboard write | A page could in principle copy something other than what is shown | The handler reads `textContent` from the rendered `<code>` element, which is exactly what the reader sees. It never copies from a hidden source. Copy link writes an address built from a constant and a known slug, never from the current URL |
+| Clipboard write | A page could in principle copy something other than what is shown | The handler reads `textContent` from the rendered `<code>` element, which is exactly what the reader sees. It never copies from a hidden source |
 | Repository compromise | Someone with push access could serve anything | GitHub account security. Nothing in the repository can mitigate this, and it is the realistic worst case for a static site |
 
 ### Content Security Policy
@@ -1254,7 +1251,7 @@ Section 12 states the removal policy. This section is the list that policy is ap
 | `css/style.css` | Yes. A path the deployed page requests | Renaming it means editing `index.html` in the same commit. No external party links it, but the page does |
 | `js/prompts-data.js` | Yes, same reasoning | Same |
 | `js/script.js` | Yes, same reasoning | Same |
-| `p/<slug>.html` | **Yes**, since v1.46.0. The address Copy link gives out and the address bar shows over https, so it ends up pasted into chats and posts, held by people outside the project | Never delete. Retire it as section 32a describes, forwarding in one hop to the prompt's new address or to the site root |
+| `p/<slug>.html` | **Yes**, since v1.46.0. The address the address bar shows over https, so it ends up pasted into chats and posts, held by people outside the project | Never delete. Retire it as section 32a describes, forwarding in one hop to the prompt's new address or to the site root |
 | `index.html#/<slug>` | **No.** A fragment, resolved entirely client-side against data derived from source filenames. Not a served address | Prune outright. The router renders home for an unrecognized slug |
 | `prompts/*.md` | **No.** Source. Never requested by the deployed page, and reachable on GitHub Pages only as a raw file nothing links to | Plain delete |
 | `docs/*.md` | **No.** Source. Not rendered by the site | Plain delete, though these are the project's own documentation and are not casually removed |
@@ -1345,12 +1342,11 @@ The description is written as complete sentences stating what the prompt does, i
 
 ### Getting the share address to the person sharing
 
-A share page is only useful if it is the address that gets pasted. Two routes lead there, and both were built.
-
-- **Copy link**, a button beside Copy in the prompt's header bar, puts the share address on the clipboard. It always copies the published https address, whatever the page was opened from, because a `file://` or `localhost` address is useless to anyone else. For a hidden prompt it copies the hash route instead.
-- **The address bar.** Over http and https, after rendering, the router replaces the address with the view's share address using `history.replaceState()`: the site root for home, `p/<slug>.html` for a prompt, `#/<slug>` for a hidden prompt, and the site root for an unknown slug. It replaces rather than pushes, so the back button behaves exactly as before. On `file://` the browser forbids the rewrite, and the hash route stays.
+A share page is only useful if it is the address that gets pasted, and people paste what is in the address bar. So over http and https, after rendering, the router replaces the address with the view's share address using `history.replaceState()`: the site root for home, `p/<slug>.html` for a prompt, `#/<slug>` for a hidden prompt, and the site root for an unknown slug. It replaces rather than pushes, so the back button behaves exactly as before. On `file://` the browser forbids the rewrite, and the hash route stays, which costs nothing, since a `file://` address is useless to anyone else anyway.
 
 Reloading a rewritten address loads the share page, which forwards to the prompt, so every address the bar can show is one that works. Hash links inside the site keep working from a rewritten address, because a click on `#/<slug>` changes only the fragment and the router reads the hash first.
+
+v1.46.0 also shipped a Copy link button beside Copy, which put the share address on the clipboard. It was removed in v1.47.0: two buttons both labelled Copy, one copying the prompt and one a link, made the primary action less obvious, and the address bar already carries the same link. Recorded so the idea is weighed against that if it comes back.
 
 ### Retiring a share page
 
@@ -1565,6 +1561,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.47.0 | 2026-09-23 | Removed the Copy link button added in v1.46.0, which read as confusing beside Copy. The address bar rewrite stays, so the share address is still what a reader copies over https. The 400px media query that existed only to fit the third button went with it, and the copy code returned to its v1.45.0 form. Sections 8, 10, 10a, 13, 14, 15, 23, 27, 29, 30, 31, 32, and 32a updated. |
 | 1.46.0 | 2026-09-23 | Per-prompt social sharing cards, from the roadmap item scoped in v1.44.0. Each visible prompt now has a generated share page at `p/<slug>.html` carrying its own Open Graph and Twitter Card tags and forwarding to the prompt by meta refresh, and `index.html` carries the same tags for the site. `tools/prompts-mirror.py` writes the pages and checks them byte for byte, along with the title and description budgets and orphaned pages. A Copy link button copies a prompt's share address, and over http and https the address bar is rewritten to it. Prompt page titles gained the site name. The three descriptions over 150 characters were tightened and a fourth reworded, which changed the home cards. Added section 32a for the policy, answered open question 8, and closed self-audit findings 3 and 5. The header bar gained a 400px media query so its three buttons fit at 320px. |
 | 1.45.0 | 2026-09-23 | The Prompt Audit prompt now applies its fixes. The command became `/claude-api prompt-audit and apply the proposed changes`, the explicit request the skill's audit guide requires before it edits anything; without it the audit only reports and proposes. Tested first in another project, where it applied only high- and medium-confidence findings. The page description, the card description, and the README line were rewritten to match, and the page now says to run it on a committed working tree and review with `git diff`, and that dropping the added words gives the report alone. |
 | 1.44.0 | 2026-09-23 | Added per-prompt social sharing cards to the roadmap in section 27, scoped from a Discord card observed that day that showed the site's generic title and description for a prompt link. The scope records why tags on `index.html` cannot fix it (a link renderer never sees the hash route), applies the Documentation prompt's Social Sharing Tags default in the absence of a policy here, proposes generated static share pages per prompt, and lists the three decisions needed first. Added a correction beside finding 3 of the self-audit: the tone conflict it described does not exist. |

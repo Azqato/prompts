@@ -12,11 +12,9 @@ const SITE_INTRO =
   'markdown file: a plain description of what it does and a copyable block with the full ' +
   'prompt text. Pick one, copy it, drop it into Claude Code.';
 
-// The brand, suffixed to every prompt's page title, and the published
-// address of the share pages. Both match what tools/prompts-mirror.py writes
-// into p/*.html; the address is the one recorded in docs/PRD.md section 17.
+// The brand, suffixed to every prompt's page title. It matches the one
+// tools/prompts-mirror.py writes into the share pages in p/.
 const SITE_NAME = "Azqato's Prompts";
-const SITE_URL = 'https://azqato.github.io/prompts/';
 
 let PROMPTS = [];
 
@@ -175,7 +173,6 @@ function renderDetail(p) {
   // Before Copy in the DOM as well as visually, so tab order matches reading
   // order. Its click bubbles to the header handler like any other.
   html += '<button class="code-toggle" aria-expanded="false" aria-controls="prompt-body">Expand</button>';
-  html += '<button class="link-btn" aria-label="Copy link to this prompt">Copy link</button>';
   html += '<button class="copy-btn" aria-label="Copy prompt to clipboard">Copy</button>';
   html += '</div>';
   html += '</div>';
@@ -183,7 +180,7 @@ function renderDetail(p) {
   html += '</div>';
   document.getElementById('content').innerHTML = html;
   document.title = p.title + ' - ' + SITE_NAME;
-  wireCopyButton(p);
+  wireCopyButton();
   wireCollapseToggle();
 }
 
@@ -210,7 +207,7 @@ function wireCollapseToggle() {
   // div and cannot be focused or announced; a click on it bubbles up to here,
   // which is why there is no second listener on the button itself.
   header.addEventListener('click', function (e) {
-    if (e.target.closest('.copy-btn, .link-btn')) return;
+    if (e.target.closest('.copy-btn')) return;
     const collapsed = wrapper.classList.toggle('collapsed');
     btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
     // The label names the action the button performs, not the current state,
@@ -219,65 +216,41 @@ function wireCollapseToggle() {
   });
 }
 
-/* ---------- Copy buttons ---------- */
+/* ---------- Copy button ---------- */
 
-/* The address to share for a prompt. Always the published https address,
-   whatever the page was opened from, because a file:// or localhost URL is
-   useless to anyone else. A visible prompt gets its share page, which link
-   previews can read; a hidden one has no share page and gets its hash route. */
-function shareUrl(p) {
-  return p.hidden ? SITE_URL + '#/' + p.slug : SITE_URL + 'p/' + p.slug + '.html';
-}
+function wireCopyButton() {
+  const btn = document.querySelector('.copy-btn');
+  if (!btn) return;
 
-/* Wires one copy button. text() supplies what to copy at click time. */
-function wireCopy(btn, label, ariaLabel, failLabel, text) {
-  function flash(shown, cls, aria) {
-    btn.textContent = shown;
+  function flash(label, cls, ariaLabel) {
+    btn.textContent = label;
     btn.classList.add(cls);
-    btn.setAttribute('aria-label', aria);
+    btn.setAttribute('aria-label', ariaLabel);
     setTimeout(function () {
-      btn.textContent = label;
+      btn.textContent = 'Copy';
       btn.classList.remove(cls);
-      btn.setAttribute('aria-label', ariaLabel);
+      btn.setAttribute('aria-label', 'Copy prompt to clipboard');
     }, 2000);
   }
 
   btn.addEventListener('click', function () {
-    const value = text();
-    if (value === null) return;
+    const code = document.querySelector('.code-block-wrapper pre code');
+    if (!code) return;
     // The Clipboard API needs a secure context. https:// and file:// both
     // qualify, but a local server on a bare IP does not, and there the
     // property is missing outright rather than returning a rejection.
     // Either way the reader must be told, because the failure is otherwise
     // silent and they will paste whatever was on the clipboard before.
     if (!navigator.clipboard || !navigator.clipboard.writeText) {
-      flash('Copy failed', 'copy-failed', failLabel);
+      flash('Copy failed', 'copy-failed', 'Copy failed. Select the prompt text and copy it manually');
       return;
     }
-    navigator.clipboard.writeText(value).then(function () {
+    navigator.clipboard.writeText(code.textContent).then(function () {
       flash('Copied!', 'copied', 'Copied!');
     }).catch(function () {
-      flash('Copy failed', 'copy-failed', failLabel);
+      flash('Copy failed', 'copy-failed', 'Copy failed. Select the prompt text and copy it manually');
     });
   });
-}
-
-function wireCopyButton(p) {
-  const btn = document.querySelector('.copy-btn');
-  if (btn) {
-    wireCopy(btn, 'Copy', 'Copy prompt to clipboard',
-      'Copy failed. Select the prompt text and copy it manually', function () {
-        const code = document.querySelector('.code-block-wrapper pre code');
-        return code ? code.textContent : null;
-      });
-  }
-  const link = document.querySelector('.link-btn');
-  if (link) {
-    wireCopy(link, 'Copy link', 'Copy link to this prompt',
-      'Copy failed. The link is ' + shareUrl(p), function () {
-        return shareUrl(p);
-      });
-  }
 }
 
 /* ---------- Redirects ---------- */
@@ -316,8 +289,8 @@ function appBase() {
 
 /* Rewrites the address bar to the address worth sharing: the site root for
    home, the share page for a visible prompt, and the hash route for a hidden
-   one, which has no share page. Copying from the address bar then gives the
-   same link as the Copy link button. Only over http(s): file:// does not
+   one, which has no share page. Copying from the address bar then gives a
+   link whose preview names the prompt. Only over http(s): file:// does not
    allow a path change, and there the hash URL simply stays. */
 function syncAddress(p) {
   if (!/^https?:$/.test(window.location.protocol) || !window.history.replaceState) return;
