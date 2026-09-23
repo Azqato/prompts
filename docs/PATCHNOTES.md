@@ -4,6 +4,16 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.50.0 - 2026-09-23
+
+### Removed
+
+- `prompts/brand-identity.md`: the `Input from the user: $ARGUMENTS` line. `$ARGUMENTS` is filled in only when a prompt is saved as a slash command; pasted from this site it arrived as literal text, which is why v1.48.0 had to tell the reader to replace it. Nothing is lost: Phase 1 already reads the project for the brand details and asks in one message for anything it cannot find.
+- `prompts/brand-identity.md`: the page's last paragraph, which explained the placeholder. Its other sentence, that the prompt pauses for gaps in the brief and for the concept choice, repeated the first paragraph.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.49.0 - 2026-09-23
 
 ### Changed

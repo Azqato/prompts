@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.49.0
+**Version:** 1.50.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1562,6 +1562,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.50.0 | 2026-09-23 | Brand Identity prompt: removed the `Input from the user: $ARGUMENTS` line, a slash-command placeholder that stays literal text when the prompt is pasted, and the page paragraph that explained it. Phase 1 already gathers the brand details from the project and asks for whatever is missing. |
 | 1.49.0 | 2026-09-23 | Brand Identity prompt: Phase 1 now reads the project's `PRD.md` and `DESIGN.md` along with the README and `CLAUDE.md` before filling in the brief, so an existing product document informs the brand rather than being written over by it. The page description names both. |
 | 1.48.0 | 2026-09-23 | Added the Brand Identity prompt (`prompts/brand-identity.md`), the sixth: a five-phase brand identity project that writes a brief, analyses competitors, draws three SVG logo concepts for the reader to choose from, builds the full logo system in `brand/logo/`, and presents it in `brand/presentation.html`. Audited against section 11 with nothing to remove. Two edits to the supplied text: `docs/Design.md` became `docs/DESIGN.md` to match the Documentation prompt, and line breaks lost in pasting were restored. Updated the prompt and file counts in sections 13, 16, 23, 30, and 32a, and the focus-stop count in section 23. |
 | 1.47.0 | 2026-09-23 | Removed the Copy link button added in v1.46.0, which read as confusing beside Copy. The address bar rewrite stays, so the share address is still what a reader copies over https. The 400px media query that existed only to fit the third button went with it, and the copy code returned to its v1.45.0 form. Sections 8, 10, 10a, 13, 14, 15, 23, 27, 29, 30, 31, 32, and 32a updated. |

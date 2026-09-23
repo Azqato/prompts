@@ -10,8 +10,6 @@ The chosen concept becomes a full logo system in `brand/logo/`: horizontal and s
 
 Written documentation goes into two files only. The brief, competitive analysis, and deliverables checklist go into a `## Brand Identity` section of `docs/PRD.md`, and the concepts, logo system specs, rationale, and usage guidelines into the same section of `docs/DESIGN.md`. Anything already in either file is left alone. The PNG favicon and app icon sizes are only produced if an image converter such as `sharp` or `rsvg-convert` is already installed.
 
-Before running, replace `$ARGUMENTS` on the Input line with the brand name and anything you already know about the brand, or leave it and the prompt will ask. It pauses twice: once if the brief has gaps, and once for you to choose a concept.
-
 ## Prompt
 
 ```
@@ -25,8 +23,6 @@ docs/PRD.md: the "why" (brand brief, audience, competitive analysis, requirement
 docs/DESIGN.md: the "how" (concepts, chosen direction, rationale, logo system specs, usage guidelines)
 
 If either file already exists, add or update a ## Brand Identity section instead of overwriting other content. Image and code assets still go in brand/.
-
-Input from the user: $ARGUMENTS
 
 Guiding principles (apply to every phase)
 Style should feel premium, timeless, and globally recognizable.
