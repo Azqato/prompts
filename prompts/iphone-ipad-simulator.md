@@ -4,7 +4,7 @@ description: Set up Xcode and the simulator, build and launch your iPhone or iPa
 meta: Claude Code Prompt
 ---
 
-Gets an iPhone or iPad app running in the iOS Simulator so you can see how it looks, then reviews it the way a tester would. It checks the Mac and the installed Xcode, installs whatever is missing, builds the app for the simulator, and launches it on three iPhone sizes: the smallest screen available, a standard one, and the largest. Each screen is screenshotted in light and dark mode and with the largest text size, and the screenshots are looked at rather than assumed to be fine. It works with native Xcode projects, Swift packages, and cross-platform apps built with Expo, React Native, Flutter, or Capacitor.
+Gets an iPhone or iPad app running in the iOS Simulator so you can see how it looks, then reviews it the way a tester would. It checks the Mac and the installed Xcode, installs whatever is missing, builds the app for the simulator, and launches it on three iPhone sizes: the smallest screen available, a standard one, and the largest. Each screen is screenshotted in light and dark mode and with the largest text size, and the screenshots are looked at rather than assumed to be fine. It works with native Xcode projects, Swift packages, and cross-platform apps built with Expo, React Native, Flutter, or Capacitor. It needs a Mac, because the Simulator is part of Xcode and Xcode runs only on macOS. Run on Windows or Linux, it installs nothing and instead explains the alternatives that fit your project: a rented cloud Mac, a cloud build viewed in a browser simulator, or, for Expo and React Native apps, Expo Go on your own iPhone.
 
 Before it starts, it asks once whether to include two more kinds of device. **iPad** is suggested when the app supports it: the smallest and largest iPads, in all four orientations, sharing the screen with another app in Split View, Slide Over, and Stage Manager, and with a keyboard and pointer. **iPhone Duo**, Apple's foldable, adds the Xcode 27.1 beta, installed alongside your current Xcode rather than replacing it, and checks both displays and each fold pose. It needs a Mac with Apple silicon on macOS 26.6 or later.
 
@@ -23,6 +23,10 @@ Ground rules
 - Do not upgrade the project's dependencies. Install them as locked.
 
 Step 1: Check the Mac and the project
+- First confirm this is a Mac (uname -s reports Darwin). The iOS Simulator is part of Xcode, which runs only on macOS, and there is no iOS emulator for Windows or Linux. If this is not a Mac, install nothing. Identify the project type (below), then stop and explain the options, marking which fit this project:
+  - A cloud Mac, rented by the hour or month, reached over SSH or remote desktop. Running this prompt there gives the full review.
+  - A cloud build of the simulator app (a CI service with macOS runners, or EAS Build for Expo), streamed to a browser simulator such as Appetize.io. I can click through the app from any computer, but the automated screenshots and checks in this prompt will not run.
+  - For Expo or React Native apps only: Expo Go on a real iPhone, run from this computer. It is quick, but shows only that one device.
 - Report the chip (uname -m), the macOS version (sw_vers), and the free disk space. Xcode, its download, and a simulator runtime together need tens of gigabytes, so warn me if less than 30 GB is free.
 - List the installed Xcode versions and which one is selected (xcode-select -p, xcodebuild -version).
 - Identify the project type: an .xcworkspace or .xcodeproj, a Swift package, or a cross-platform app (Expo or React Native, Flutter, Capacitor). For a native project, list its schemes with xcodebuild -list.

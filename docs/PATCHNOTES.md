@@ -4,6 +4,15 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.55.0 - 2026-09-23
+
+### Changed
+
+- `prompts/iphone-ipad-simulator.md`: Step 1 now checks for macOS before anything else. The iOS Simulator is part of Xcode, which runs only on macOS, and there is no iOS emulator for Windows or Linux, so before this the prompt would have failed on its first `xcodebuild`. On a non-Mac it now installs nothing, identifies the project type, and explains the three routes, marking which fit: a rented cloud Mac, where the full prompt runs; a cloud simulator build streamed to a browser simulator such as Appetize.io, which the reader can click through but which the prompt's automated checks cannot drive; and Expo Go on a real iPhone, for Expo and React Native apps only. Running macOS in a virtual machine on non-Apple hardware is left out, since Apple's license does not allow it. The page description says the prompt needs a Mac and what it does otherwise.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.54.0 - 2026-09-23
 
 ### Added

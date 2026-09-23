@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.54.0
+**Version:** 1.55.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1563,6 +1563,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.55.0 | 2026-09-23 | iPhone and iPad Simulator prompt: Step 1 now confirms it is running on a Mac first. On Windows or Linux it installs nothing and explains the alternatives that fit the project: a rented cloud Mac, a cloud simulator build streamed to a browser, or Expo Go on a real iPhone for Expo and React Native apps. |
 | 1.54.0 | 2026-09-23 | Added the iPhone and iPad Simulator prompt (`prompts/iphone-ipad-simulator.md`), the seventh. It sets up Xcode and the iOS Simulator, builds and launches the reader's app on three iPhone sizes, screenshots each screen in light and dark mode and at the largest text size, and reports each layout problem with a proposed fix. It asks once whether to add iPad (sizes, orientations, multitasking, keyboard and pointer) and iPhone Duo (the Xcode 27.1 beta, both displays, fold poses). Written from a supplied social media post about the iPhone Duo simulator, which the author asked to be broadened to regular iPhone development with iPad and iPhone Duo as options; the Xcode 27.1 beta and iPhone Duo details were confirmed by web search on 2026-09-23. Audited against section 11 with nothing to remove. Updated the prompt and file counts in sections 13, 16, 23, 30, and 32a, and the focus-stop count in section 23. |
 | 1.53.0 | 2026-09-23 | Brand Identity prompt: a new Phase 5, Brand kit, adds social images, `tokens.css` and `tokens.json`, a contrast table, an email signature logo, and `site.webmanifest`. Phase 4 adds a dark-mode favicon and 192 icons, and the presentation, now Phase 6, is also saved as a PDF. The author has marked this the prompt's final revision. README bullet updated. |
 | 1.52.0 | 2026-09-23 | Brand Identity prompt: presentation mockups use the reader's own photos from `brand/mockups/` when present, and otherwise are built in CSS and SVG with perspective, shadows, textures, and lighting so they read as physical objects. Downloading images is ruled out. Logo files stay SVG only. |
