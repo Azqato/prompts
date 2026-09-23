@@ -4,6 +4,15 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.52.0 - 2026-09-23
+
+### Changed
+
+- `prompts/brand-identity.md`: Phase 5 mockups. If the reader has placed mockup photos in `brand/mockups/`, the logo is set onto them, matching each photo's perspective and lighting, and the presentation references them by relative path. Without photos, the mockups are built in CSS and SVG as before, but now with 3D perspective tilts, soft layered shadows, paper, card, and fabric textures, and lighting gradients, because flat vector mockups read as diagrams rather than objects. Downloading stock images was considered and ruled out: licensing is unclear, it needs the network, and it would bring in files the reader did not choose. The logo files themselves stay SVG only, since every other format is made from them. The page description explains both routes.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.51.0 - 2026-09-23
 
 ### Changed

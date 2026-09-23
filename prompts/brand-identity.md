@@ -6,7 +6,7 @@ meta: Claude Code Prompt
 
 Runs a full brand identity project in five phases, the way a branding agency would. It reads the project first (the README, `CLAUDE.md`, `PRD.md`, `DESIGN.md`, `package.json`, landing page copy, and any existing brand or style files) and fills in a brand brief, asking once for anything it cannot work out. It then studies five to eight competitors in the project's industry and lists the visual clichés the logo must avoid, draws three concept directions as hand-written SVG (luxury minimalism, typography first, and a symbolic mark), and stops for you to pick one or combine them. If the project already has a brand, a fourth concept evolves it, while the other three treat it only as a starting suggestion.
 
-The chosen concept becomes a full logo system in `brand/logo/`: horizontal and stacked lockups, the symbol and the wordmark on their own, black, white, and full-color versions, a favicon, app icons, and a single-color version for print, embroidery, and stickers. Every concept and every file is rendered in headless Microsoft Edge and checked by eye for legibility at 16px, in grayscale, and on light and dark backgrounds, rather than judged from the SVG code. It finishes with `brand/presentation.html`, a single page that reveals the logo and shows it on business cards, packaging, a website, a billboard, an app icon, and merchandise, with the color palette, a type specimen, and the design rationale.
+The chosen concept becomes a full logo system in `brand/logo/`: horizontal and stacked lockups, the symbol and the wordmark on their own, black, white, and full-color versions, a favicon, app icons, and a single-color version for print, embroidery, and stickers. Every concept and every file is rendered in headless Microsoft Edge and checked by eye for legibility at 16px, in grayscale, and on light and dark backgrounds, rather than judged from the SVG code. It finishes with `brand/presentation.html`, a single page that reveals the logo and shows it on business cards, packaging, a website, a billboard, an app icon, and merchandise, with the color palette, a type specimen, and the design rationale. The logo files themselves are always SVG, the master every other format is made from. For the mockups, put your own photos in `brand/mockups/` and it places the logo on them; without photos it builds the mockups in CSS and SVG, with perspective, shadows, and textures so they read as physical objects.
 
 Nothing in the project itself is changed: no favicon is linked and no header logo is swapped. Everything stays in `brand/` for you to use however you decide. Written documentation goes into a `## Brand Identity` section of `docs/PRD.md` (the brief, competitive analysis, and deliverables checklist) and of `docs/DESIGN.md` (the concepts, logo system specs, rationale, and usage guidelines), and anything already in either file is left alone.
 
@@ -91,10 +91,10 @@ Verify: run the render check on every file and confirm each is legible at 16px, 
 
 Phase 5: Presentation (the secret)
 
-Present the logo like a $500,000 brand project. Create brand/presentation.html (a single file of CSS and SVG, whose only external link is the brand typeface loaded from Google Fonts):
+Present the logo like a $500,000 brand project. Create brand/presentation.html (a single file of CSS and SVG; its only external link is the brand typeface loaded from Google Fonts, and its only images are my photos in brand/mockups/, referenced by relative path):
 
 Hero reveal of the logo
-Show it on mockups built in SVG/CSS: business cards, packaging, website, billboard (plus app icon and merchandise)
+Show it on mockups: business cards, packaging, website, billboard (plus app icon and merchandise). If I have placed mockup photos in brand/mockups/, set the logo onto them, matching each photo's perspective and lighting. Otherwise build the mockups in SVG/CSS and make them feel physical, not flat: 3D perspective tilts, soft layered shadows, paper, card, and fabric textures, and lighting gradients. Do not download images from anywhere else.
 Color palette with hex values and a type specimen
 A short rationale explaining design choices and brand positioning, including how it communicates [core value] and stands apart from competitors
 
