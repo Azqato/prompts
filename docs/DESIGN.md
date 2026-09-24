@@ -1,6 +1,6 @@
 # DESIGN.md - Prompts
 
-**Version:** 1.11.2
+**Version:** 1.11.3
 **Status:** Active
 **Author:** Azqato
 
@@ -510,7 +510,7 @@ Expected behaviour, and what is actually there.
 
 - All interactive elements are native `<a>` and `<button>` elements, so they are in the tab order by default. There is no `tabindex` anywhere, positive or negative, and no custom key handler. Tab, Shift-Tab, Enter, and Space all behave natively.
 - Tab order follows the DOM: logo, then each nav link in order, then the Support button, then into the content area, reaching the collapse toggle and then the copy button after the description. The toggle is before Copy in the DOM as well as visually, so tab order matches reading order.
-- **Known gap: there is no skip-to-content link.** On a prompt page a keyboard user must tab past the logo, every nav link, and the Support button before reaching the copy button, which is the primary action. With seven prompts that is ten stops. This is the most significant accessibility shortfall on the site and it grows with every prompt added. Adding one would mean a visually-hidden anchor as the first focusable element in `<body>`, targeting `#content`, which needs a `tabindex="-1"` to be focusable as a heading target.
+- **Known gap: there is no skip-to-content link.** On a prompt page a keyboard user must tab past the logo, every nav link, and the Support button before reaching the copy button, which is the primary action. With eight prompts that is eleven stops. This is the most significant accessibility shortfall on the site and it grows with every prompt added. Adding one would mean a visually-hidden anchor as the first focusable element in `<body>`, targeting `#content`, which needs a `tabindex="-1"` to be focusable as a heading target.
 - **Known gap: the copy button's result is announced only via the `aria-label` change.** That is a reasonable signal but not a guaranteed one across screen readers; a live region would be more reliable. This applies to the failure state added in v1.28.0 as well as to success, and it matters more there, since a reader who does not notice the failure will paste the wrong thing.
 
 ### Deliberately not addressed
@@ -789,6 +789,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.11.3 | 2026-09-24 | Updated the focus-stop count in section 10 for eight prompts: eleven stops before the content area. |
 | 1.11.2 | 2026-09-23 | Updated the focus-stop count in section 10 for seven prompts: ten stops before the content area. |
 | 1.11.1 | 2026-09-23 | Corrected the focus-stop count in section 10 for six prompts: nine stops before the content area, not seven. It had said seven since four prompts, so it was already one out of date. A count carries no intent, so it is fixed in place under the mechanical-fact exception. |
 | 1.11 | 2026-09-23 | Removed Copy link, and its spec in section 5, after one release: two buttons labelled Copy read as confusing. The 400px breakpoint that existed only to fit it went too, so section 9 is back to two breakpoints; the prompt header's two buttons fit one line at 320px without it, measured at all seven widths. The 12px gap between the header label and its buttons and `white-space: nowrap` on the shared button rule stay. |
