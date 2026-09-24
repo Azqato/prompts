@@ -4,6 +4,20 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.58.0 - 2026-09-24
+
+### Changed
+
+- `prompts/game-setup.md`: the prompt now asks rather than guesses when it lacks information.
+  - Phase 1's one message adds a Documentation item: what the existing docs are missing, out of date on, or contradict about the game, and the details only the reader can supply, such as the game's name, audience, or story.
+  - If the answers leave the core loop, the controls, or the win and lose conditions unclear, it asks a short follow-up instead of inventing them, and Phase 2 does not start until the game is clear enough to build.
+  - The closing docs update asks for any missing information before writing, and never fills a gap with invented details.
+  - Before this, Phase 1 already asked once and waited, but vague answers could be filled in by the model, and the docs were written at the end without a check.
+  - The page description says so.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.57.0 - 2026-09-24
 
 ### Added

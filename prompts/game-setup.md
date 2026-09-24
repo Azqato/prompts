@@ -4,7 +4,7 @@ description: Set up a three.js game with Vite and TypeScript, a fixed-step game 
 meta: Claude Code Prompt
 ---
 
-Sets up a browser game on three.js the way it should start, then builds a small, complete, playable slice on top so you can judge how the game feels. It reads the project first, then asks once about the game itself: genre, camera, core loop, desktop or mobile, which renderer, whether to use React Three Fiber, whether it needs physics, and the art direction. Each question comes with a recommended default.
+Sets up a browser game on three.js the way it should start, then builds a small, complete, playable slice on top so you can judge how the game feels. It reads the project first, then asks once about the game itself: genre, camera, core loop, desktop or mobile, which renderer, whether to use React Three Fiber, whether it needs physics, and the art direction. Each question comes with a recommended default. It also names anything missing or out of date in the project's docs. If your answers leave the core loop, the controls, or how to win and lose unclear, it asks a short follow-up instead of inventing them, and it asks again before writing anything to the docs that only you can supply.
 
 The setup is Vite and strict TypeScript, with the renderer, game loop, input, audio, assets, and game logic in separate modules. Game logic runs at a fixed step, so the game plays the same on a 60Hz and a 144Hz screen. The game pauses when its tab is hidden, cleans up GPU memory when a level unloads, and recovers if the graphics context is lost. Controls are named actions that can be remapped across keyboard, mouse, gamepad, and touch. Models are compressed glTF, and a debug mode behind `?debug` shows the frame rate, draw calls, and live tuning controls. Because three.js changes its API often, it checks the installed version's documentation instead of relying on memory, and it never uses removed APIs.
 
@@ -31,6 +31,8 @@ Then ask me in ONE message, with your recommended default for each, and wait:
 - Structure: plain three.js (recommended for games, for frame-level control) or React Three Fiber (if the game is mostly UI or the project already uses React).
 - Physics: none, simple custom collision, or a physics engine (Rapier, @dimforge/rapier3d-compat, by default).
 - Art direction: low-poly, stylized, realistic, or placeholder shapes for now.
+- Documentation: anything the existing docs are missing, out of date on, or contradict about this game, and the details only I can supply (such as the game's name, audience, or story) that the docs will need.
+If my answers still leave the core loop, the controls, or the win and lose conditions unclear, ask a short follow-up rather than inventing them. Do not start Phase 2 until the game is clear enough to build.
 
 Phase 2: Scaffold
 - Vite plus TypeScript in strict mode. Scripts for dev, build, preview, typecheck, and test.
@@ -77,5 +79,5 @@ Report
 - How to run it (dev, build, debug mode), the folder structure, and where to add a new entity, level, or input action.
 - The decisions made and why, the budget and the measured numbers, and the screenshots.
 - A short, prioritized list of what to build next, and anything you skipped or could not verify.
-Record the architecture and decisions in the project's docs (docs/PRD.md and docs/DESIGN.md if the project uses them, otherwise the README).
+Record the architecture and decisions in the project's docs (docs/PRD.md and docs/DESIGN.md if the project uses them, otherwise the README). If an update needs information you do not have, ask me for it before writing, and never fill a gap with invented details.
 ```

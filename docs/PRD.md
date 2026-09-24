@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.57.0
+**Version:** 1.58.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1567,6 +1567,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.58.0 | 2026-09-24 | Game Setup prompt: Phase 1's single question now also covers gaps and contradictions in the project's docs and the details only the reader can supply, and a short follow-up is required when the answers leave the core loop, controls, or win and lose conditions unclear. Phase 2 cannot start until the game is clear enough to build, and the closing docs update asks before filling any gap. |
 | 1.57.0 | 2026-09-24 | Added the Game Setup prompt (`prompts/game-setup.md`), the eighth: it scaffolds a three.js game with Vite and strict TypeScript, a fixed-step loop, action-based input, audio, compressed glTF assets, a debug mode, and a Playwright smoke test with screenshots, then builds a small playable vertical slice after one checkpoint. Brainstormed with the author and named by them. The three.js details most likely to have drifted from training data (the `three/webgpu` entry point and its WebGL2 fallback, TSL and the materials it replaces, and SwiftShader in headless browsers) were confirmed by web search on 2026-09-24. Audited against section 11 with nothing to remove. Updated the prompt and file counts in sections 13, 16, 23, 30, and 32a, and the focus-stop count in section 23. |
 | 1.56.0 | 2026-09-23 | Renamed the iPhone and iPad Simulator prompt to iOS Simulator, at the author's request for a two-word title: Apple's own name for the tool it runs, covering both devices. `prompts/iphone-ipad-simulator.md` became `prompts/ios-simulator.md`, and its share page, public since v1.54.0, is retired as a forwarding page, the first retirement since share pages were introduced. Retired items table in section 32, file counts in sections 13 and 30, and the README updated. |
 | 1.55.0 | 2026-09-23 | iPhone and iPad Simulator prompt: Step 1 now confirms it is running on a Mac first. On Windows or Linux it installs nothing and explains the alternatives that fit the project: a rented cloud Mac, a cloud simulator build streamed to a browser, or Expo Go on a real iPhone for Expo and React Native apps. |
