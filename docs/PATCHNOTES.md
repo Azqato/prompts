@@ -4,6 +4,23 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.59.0 - 2026-09-24
+
+### Changed
+
+- `prompts/game-setup.md`: Phase 1 now checks the project's docs for rules the prompt would break, and says so before anything else.
+  - The rules it looks for: no build step, no npm dependencies, running from `file://` with no server, and a strict Content Security Policy.
+  - The reasons it gives for each: browsers block JavaScript modules and asset loading from `file://`, so a three.js game needs at least a local server. A game also needs `connect-src 'self'` to load assets, `'wasm-unsafe-eval'` for Rapier and the model decoders, and `worker-src blob:` for the decoder workers.
+  - Each conflict is quoted with its file and line, at the top of the Phase 1 message. The reader chooses to update the docs (confirming the wording first), adapt within the rule at a stated cost (no build step means no TypeScript, no model compression, and no test tooling), or stop.
+  - Nothing is changed or built until the reader answers. The page description says so.
+- `js/prompts-data.js`: resynced.
+
+### Notes
+
+This came from the author asking whether a game made with this prompt could live within this site's own constraints. The answer was partly: a built game can be hosted on GitHub Pages with no server, but it cannot run from `file://`, without dependencies, or without a build step, which are exactly the rules a project like this one writes into its docs.
+
+---
+
 ## v1.58.0 - 2026-09-24
 
 ### Changed

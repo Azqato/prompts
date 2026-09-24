@@ -4,7 +4,7 @@ description: Set up a three.js game with Vite and TypeScript, a fixed-step game 
 meta: Claude Code Prompt
 ---
 
-Sets up a browser game on three.js the way it should start, then builds a small, complete, playable slice on top so you can judge how the game feels. It reads the project first, then asks once about the game itself: genre, camera, core loop, desktop or mobile, which renderer, whether to use React Three Fiber, whether it needs physics, and the art direction. Each question comes with a recommended default. It also names anything missing or out of date in the project's docs. If your answers leave the core loop, the controls, or how to win and lose unclear, it asks a short follow-up instead of inventing them, and it asks again before writing anything to the docs that only you can supply.
+Sets up a browser game on three.js the way it should start, then builds a small, complete, playable slice on top so you can judge how the game feels. It reads the project first, then asks once about the game itself: genre, camera, core loop, desktop or mobile, which renderer, whether to use React Three Fiber, whether it needs physics, and the art direction. Each question comes with a recommended default. It also names anything missing or out of date in the project's docs. If your docs set rules this kind of game cannot follow, such as no build step, no dependencies, running without a server, or a strict Content Security Policy, it quotes each one, explains what the game needs instead, and asks whether to update the docs, work within the rule at a stated cost, or stop. If your answers leave the core loop, the controls, or how to win and lose unclear, it asks a short follow-up instead of inventing them, and it asks again before writing anything to the docs that only you can supply.
 
 The setup is Vite and strict TypeScript, with the renderer, game loop, input, audio, assets, and game logic in separate modules. Game logic runs at a fixed step, so the game plays the same on a 60Hz and a 144Hz screen. The game pauses when its tab is hidden, cleans up GPU memory when a level unloads, and recovers if the graphics context is lost. Controls are named actions that can be remapped across keyboard, mouse, gamepad, and touch. Models are compressed glTF, and a debug mode behind `?debug` shows the frame rate, draw calls, and live tuning controls. Because three.js changes its API often, it checks the installed version's documentation instead of relying on memory, and it never uses removed APIs.
 
@@ -24,6 +24,11 @@ Ground rules
 
 Phase 1: Understand the project
 Read the README, CLAUDE.md, docs/, and package.json if they exist. If this is an existing project, map its structure and keep its conventions; if it already uses three.js, note the version and anything outdated.
+Check those docs for rules this prompt would break, such as: no build step, no npm dependencies, running from file:// with no server (browsers block JavaScript modules and asset loading there, so a three.js game needs at least a local server), or a strict Content Security Policy (a three.js game needs connect-src 'self' to load assets, 'wasm-unsafe-eval' for WebAssembly such as Rapier and the model decoders, and worker-src blob: for decoder workers). For each conflict, quote the rule with its file and line, and explain what this prompt needs instead and why. Put these at the top of the Phase 1 message, and ask whether to:
+- update the docs so the project allows what this game needs (I confirm the wording first),
+- adapt the setup to stay within the rule where that is possible, saying what it costs (for example, no build step means no TypeScript, no model compression, and no test tooling), or
+- stop.
+Do not change the docs or start building until I answer.
 Then ask me in ONE message, with your recommended default for each, and wait:
 - The game: genre, camera (first person, third person, top-down, side view, fixed), and the one-sentence core loop (what the player does over and over).
 - Targets: desktop only, or mobile too (this decides touch controls and the performance budget).
