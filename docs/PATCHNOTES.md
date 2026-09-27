@@ -4,6 +4,24 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.61.0 - 2026-09-27
+
+### Added
+
+- `docs/TODO.md`: the author's list of ideas for future updates. It began as `PROMPTS.md` at the root, created in the GitHub editor, and was moved here with `git mv` and put in the new template. Of its two items, the request to change the Documentation prompt is done in this release and removed; the request to analyze six posts for prompts stays until the author decides whether it goes in the Roadmap.
+
+### Changed
+
+- `prompts/documentation.md`: two additions.
+  - **`docs/TODO.md`.** The prompt creates it from a fixed template if it is missing, adds it to the folder tree, and exempts it from the consolidation sweep, so it is never merged, moved, or deleted. A list found under another name, such as `PROMPTS.md`, is moved to it with its ideas. The file belongs to the author, so Claude adds nothing to it and puts its own suggestions in the Roadmap. Its ideas are never built directly: the audit asks whether to move them into a "Future updates" part of the PRD Roadmap, removes each one moved and logs where it went, then asks whether to work on any now. A Working Practice rule carries this to every later session: check the list only when about to push (or when a major update is finished, where nothing is pushed), fetch first so an edit made on GitHub is never overwritten, and ask every time. The summary reports what happened to it.
+  - **Testing Cadence**, a new default beside Browser Testing and Verification Environment. It runs the browser test in headless Edge once, right before a major update ships, and never between edits. A major update changes behavior, layout, scripts, styles, routing, the build, or dependencies; wording, docs, and data are minor and need only cheap non-browser checks. Unlike the other defaults, it replaces an existing rule requiring a browser test after every change, where that rule gives no project-specific reason, because an earlier version of this prompt may have written it. The old wording is quoted in the patch notes, and a rule with a real reason is kept and flagged instead.
+  - The page description covers both.
+- `docs/PRD.md` section 20: adopts the new cadence. A browser test from disk in headless Edge now runs only before a major update, meaning a change to `index.html`, the stylesheet, the script, the mirror tool, or the page template. Prompt text and docs ship on the mirror check alone. This replaces the every-change browser check in force from v1.0 to v1.60.0, whose wording was: "Then open `index.html` from disk, not from a server, and check the home list, one prompt page, the copy button, and a direct hash link. The script catches mirror drift and malformed prompt files; it cannot catch a rendering or layout problem, so it replaces none of this. Loading the page is still the only real test this project has." A new subsection sets the ideas-list check before every push.
+- `docs/PRD.md` section 30: the four-file rule now names `docs/TODO.md` as its one exception, and the folder trees and file counts in sections 13 and 30 include it. The count is 30.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.60.0 - 2026-09-25
 
 ### Added

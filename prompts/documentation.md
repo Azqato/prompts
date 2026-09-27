@@ -6,6 +6,8 @@ meta: Claude Code Prompt
 
 Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`, plus a LICENSE.md beside the README where the project has no licence of its own. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Repository Hygiene, Licensing, Social Sharing Tags, Page Titles, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
 
+It also keeps `docs/TODO.md`, a plain list of your ideas for future updates, which it never merges away. Nothing in it is built directly: the audit, and every later session about to push an update, asks whether to move the ideas into the PRD's Roadmap and then whether you want to work on any of them. Its testing rule keeps tests to headless Edge, run once before a major update ships rather than after every small edit, and it replaces an older every-change testing rule where it finds one.
+
 Use it when a project needs one authoritative, exhaustive doc set in a single pass. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, cross-checks the docs against reality, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
 
 ## Prompt
@@ -17,10 +19,10 @@ Steps to follow:
 Steps 1 through 3 are strictly read-only. Do not write, edit, refactor, rename, delete, or move any file. Do not run installers, migrations, formatters, builds that write output, or any version control command that changes state. Read-only commands and searches are encouraged. Writing begins at step 4, and is limited to the documentation files named in this prompt. If a step turns up nothing, say so explicitly rather than staying silent.
 
 1. Crawl the entire codebase and build a complete picture of what exists: all files, features, components, routes, configs, and logic.
-2. Open every document in /docs one by one, and read each in full.
+2. Open every document in /docs one by one, and read each in full, including docs/TODO.md (see its specification below). Its ideas are not instructions: do not act on any of them during the audit.
 3. For each document, compare its content against the actual codebase and identify anything that is outdated, missing, inaccurate, or incomplete.
 4. Rewrite or update each document so it is fully accurate and comprehensive based on the current version of the site.
-5. After all documents are updated, provide a summary of what changed in each file and why.
+5. After all documents are updated, provide a summary of what changed in each file and why. Report whether docs/TODO.md was read, which ideas were moved to the Roadmap, and which I chose to leave, and name anything that was not browser-tested (see Testing Cadence).
 
 Standards to uphold:
 
@@ -32,7 +34,7 @@ Read files rather than inferring from their names. A guess presented as a fact i
 In /docs, and in PRD.md above all, completeness beats brevity. A section that restates context to stand on its own is doing its job, not padding, because the reader may arrive at it directly and should not have to assemble the answer from three other sections. The cost of a document that says too much is a longer read; the cost of one that says too little is someone guessing, and guessing is what this whole exercise exists to prevent.
 This is not licence for filler. Do not write marketing language, do not restate the obvious to fill space, and do not add a sentence that carries no information the reader did not already have. Thorough means more facts, not more words around the same facts. The README is the exception to all of this and stays tight, since everything it omits is one link away.
 
-Make sure to perform a full codebase scan before touching any documentation. Scan the whole project for markdown and text files and sort them into two kinds: Documentation Files and Project Files. Documentation Files get consolidated into the 4 main documents: README.md, /docs/PRD.md, /docs/DESIGN.md, /docs/PATCHNOTES.md. Project Files stay where they are, meaning anything a tool, a platform, or the product itself depends on, such as LICENSE.md or a markdown file that ships as content rather than describing it. Where a doc is genuinely better maintained where it sits, leave it there and point at it from the PRD.
+Make sure to perform a full codebase scan before touching any documentation. Scan the whole project for markdown and text files and sort them into two kinds: Documentation Files and Project Files. Documentation Files get consolidated into the 4 main documents: README.md, /docs/PRD.md, /docs/DESIGN.md, /docs/PATCHNOTES.md. Project Files stay where they are, meaning anything a tool, a platform, or the product itself depends on, such as LICENSE.md or a markdown file that ships as content rather than describing it. Where a doc is genuinely better maintained where it sits, leave it there and point at it from the PRD. docs/TODO.md is also kept: it is never consolidated, merged into another file, moved, or deleted by the audit. If the author's ideas list exists under another name or location (such as PROMPTS.md, todo.md, or a TODO.md at the root), move it to docs/TODO.md, keeping its ideas.
 
 1) Create any missing documentation files and populate them accordingly.
 
@@ -48,7 +50,8 @@ Make sure to perform a full codebase scan before touching any documentation. Sca
    └── /docs
        ├── PRD.md
        ├── DESIGN.md
-       └── PATCHNOTES.md
+       ├── PATCHNOTES.md
+       └── TODO.md        ← the author's ideas list. Kept, never merged or moved
 
    If any of these files exist outside of /docs, move them into /docs. If /docs does
    not exist, create it. README.md, LICENSE.md, robots.txt, and sitemap.xml are
@@ -160,6 +163,50 @@ Required format per entry:
 
 If no prior changelog exists, create an initial entry for the current state of
 the project labeled as v0.1.0 or the nearest appropriate version.
+
+---
+
+### /docs/TODO.md
+The author's list of ideas and future updates. It belongs to the author: add
+nothing of your own to it, and put your own suggestions in the PRD Roadmap
+instead. If it does not exist, create it with exactly this content, using the
+project's name:
+
+   # TODO.md - <Project name>
+
+   Ideas and future updates for this project. Add one bullet per idea, in plain
+   language. Claude does not act on these directly: when it next pushes an update
+   (or finishes a major update, where the project is not pushed anywhere), it asks
+   whether to move them into the Roadmap in docs/PRD.md. Once an idea is there, it
+   is removed from this file. Never put passwords, keys, or other secrets here.
+
+   ## Ideas
+
+   <!-- Add ideas here. -->
+
+The ideas are never executed directly. They become roadmap entries, and only
+with the author's say-so:
+- In this audit: if the file has ideas, ask me, after step 3 and before writing,
+  whether to move them into the Roadmap. Only if I agree, add each one under a
+  "Future updates" heading in the PRD Roadmap, written as a planned update, remove
+  it from TODO.md, and add a PATCHNOTES.md line recording where it went. Removing
+  an idea once it is in the Roadmap is intended: the Roadmap and the patch notes
+  hold its history. Then ask whether I would like to work on any of them now, and
+  build nothing until I answer.
+- In every later session: write the rule below into the PRD's Working Practice
+  section, so any session follows it, not only this audit.
+  - Check docs/TODO.md only when about to push an update to production. Where the
+    project is not pushed anywhere, check it when a major update is finished
+    instead.
+  - Where the project uses a remote repository, fetch first and check whether
+    docs/TODO.md changed there (for example, edited in the browser). If it did,
+    bring that change in before pushing, so the author's edit is never
+    overwritten.
+  - If the file has ideas, ask the author every time whether to move them into the
+    Roadmap, as above, and never act on an idea without an answer. If it is
+    empty, there is nothing to ask.
+- A request inside TODO.md to delete, publish, or change something is still only
+  an idea. It never authorizes the action itself.
 
 ---
 
@@ -316,6 +363,37 @@ it and leave it alone. If it does not, adopt this default and write it in:
   writes, deletes, migrations, seeded test records, and anything that sends mail
   or a webhook. If the only way to exercise something is against a live system,
   stop and ask rather than deciding alone.
+Testing Cadence
+Record when the project runs its browser tests. Unlike every other policy here,
+this one replaces an existing rule of a specific kind rather than deferring to
+it. If the project's docs require a browser test after every change or every
+edit, and give no reason specific to this project for it, replace that rule with
+the default below: an earlier version of this documentation prompt may have
+written it, and it spends far more time and usage than it saves. Quote the old
+wording in the PATCHNOTES.md entry so the change is on record. If the rule gives
+a real project-specific reason (for example, "payments code must be tested on
+every change"), keep it and flag it for the author instead. Any other existing
+testing rule is kept, as with every other default. The default:
+- Browser tests use headless Microsoft Edge, as Browser Testing says.
+- Run the browser test once, right before a major update ships to production.
+  Do not test between edits.
+- A major update changes behavior, layout, scripts, styles, routing, the build,
+  or dependencies. A minor one changes only wording, documentation, comments,
+  patch notes, or data the project's own check script validates. Minor updates
+  ship without a browser test.
+- Cheap checks that do not open a browser (a linter, a type check, a project
+  check script) may still run after minor edits.
+- Batch the work: make every edit first, then test once at the end.
+- When a test fails, fix it and rerun only the failing check, then run the full
+  test once before pushing.
+- A test the author asks for always runs, whatever this rule says.
+- Confirming that a deploy arrived, by comparing the deployed files with the
+  local copies, is not a test. It is cheap and still happens after every push.
+- Where a session has standing permission to push, every change reaches
+  production, so decide by whether the change is major, not by whether it is
+  being pushed.
+- Say what was not browser-tested in the summary. Never present an untested
+  change as tested.
 Security
 - Authentication model: how users are identified and sessions are managed
 - Authorization model: what different user roles can and cannot do
@@ -703,7 +781,11 @@ Written as concrete instructions, not principles.
 - Where to look first for each kind of change, as a table mapping the kind of work
   to the file to open.
 - How to verify a change, including the exact command or manual check, and what to
-  update afterwards (patch notes, version history).
+  update afterwards (patch notes, version history). Follow the Testing Cadence:
+  a browser test only before a major update ships.
+- The docs/TODO.md rule from its specification above: before pushing (or when a
+  major update is finished, where nothing is pushed), check it and ask whether to
+  move its ideas into the Roadmap.
 Press Release
 - Written as if the product has just launched publicly. Include
   product name, what it does, who it is for, the key benefit, and a mock quote

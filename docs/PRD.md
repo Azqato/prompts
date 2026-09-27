@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.60.0
+**Version:** 1.61.0
 **Status:** Active
 **Author:** Azqato
 
@@ -251,7 +251,7 @@ The `hidden: true` flag remains supported for retiring a prompt from navigation 
 
 ## 13. Repository Structure
 
-The whole project is 29 files in six folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+The whole project is 30 files in six folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 `.gitattributes` is the one piece of git configuration the repository carries, added in v1.36.0. It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
 
@@ -277,7 +277,8 @@ The whole project is 29 files in six folders. There is no build output, no vendo
 └── docs/
     ├── PRD.md          This file.
     ├── DESIGN.md       Design specification.
-    └── PATCHNOTES.md   Changelog, reverse chronological.
+    ├── PATCHNOTES.md   Changelog, reverse chronological.
+    └── TODO.md         The author's ideas list. See section 20.
 ```
 
 The tree is two levels deep at most. `js/prompts-data.js` is large only because each prompt is stored as one long JSON string on a single line; it is generated content in spirit but is committed and edited by hand.
@@ -495,7 +496,7 @@ The approach to take on future tasks here.
 - Never edit `js/prompts-data.js` and the source `.md` separately in a way that could leave them different. Run `tools/prompts-mirror.py` rather than trusting that you did it right.
 - Never weaken the Content Security Policy in `index.html` to make something work. If a change needs `script-src` relaxed, the change is adding a dependency, which is the thing the policy exists to catch.
 - Never add a `REDIRECTS` entry for a source file. The map is for public addresses only, and any entry in it becomes permanent.
-- Never push a change that has not passed the checks above. Standing authorization to publish is not authorization to skip verification; it makes verification the only thing standing between an edit and the live site.
+- Never push a change that has not passed the checks above: the mirror check always, and a browser test as well for a major update. Standing authorization to publish is not authorization to skip verification; it makes verification the only thing standing between an edit and the live site.
 
 ### Where to look first
 
@@ -514,7 +515,9 @@ The approach to take on future tasks here.
 
 Run `python tools/prompts-mirror.py`. It must print OK. If anything under `prompts/` changed, run `python tools/prompts-mirror.py --sync` first, then the check.
 
-Then open `index.html` from disk, not from a server, and check the home list, one prompt page, the copy button, and a direct hash link. The script catches mirror drift and malformed prompt files; it cannot catch a rendering or layout problem, so it replaces none of this. Loading the page is still the only real test this project has.
+**Browser tests only before a major update ships** (since v1.61.0). A major update changes `index.html`, `css/style.css`, `js/script.js`, `tools/prompts-mirror.py`, or the page template: anything that affects how the site renders or behaves. For those, open `index.html` from disk in headless Edge, not from a server, and check the home list, one prompt page, the copy button, and a direct hash link, once, after all the edits and just before pushing. The mirror script catches drift and malformed prompt files; it cannot catch a rendering or layout problem, so for a major update it replaces none of this.
+
+Everything else is minor: prompt text, a new prompt, docs, README, patch notes. A minor update ships on the mirror check alone, with no browser test, since the prompt pages are rendered by code the update did not touch. This replaces the rule, in force from v1.0 to v1.60.0, that every change was opened in a browser before pushing, which spent usage on edits that could not affect rendering. A browser test the author asks for always runs.
 
 **Verify locally, never against the live site.** This project has stated that rule since v1.0 by describing the check as opening the file from disk, and v1.31.0 makes it explicit because the Documentation prompt now requires the rule to be written down rather than implied. Verifying against `azqato.github.io/prompts` would mean the change had already shipped, so a failure would be something to roll back rather than something to fix before pushing.
 
@@ -534,11 +537,21 @@ This is safe for reasons specific to this project rather than because pushing is
 
 What did not change is everything before the push:
 
-- The full check above still runs first, every time. The mirror script must print OK and the page must be opened from disk and looked at. Standing authorization removes the pause for approval, not the verification, and with the pause gone the verification is the only thing left between an edit and the live site.
+- The checks above still run first, every time. The mirror script must print OK, and for a major update the page must be opened from disk and looked at. Standing authorization removes the pause for approval, not the verification, and with the pause gone the verification is the only thing left between an edit and the live site.
 - Patch notes and the version history row are written before the push, not after. A release that is live and undocumented is the state this project's whole documentation practice exists to prevent.
 - Confirm the deploy arrived afterwards, by comparing the deployed files against the local copies that were verified. That is the comparison described above, and it is still a comparison rather than a test.
 
-Two things this authorization does not cover. It does not extend to any other repository, since it was given about this one. And it does not license pushing something unverified because it looks trivial; a one-line CSS change is exactly the kind of edit that ships broken, and it is now one command from being live.
+Two things this authorization does not cover. It does not extend to any other repository, since it was given about this one. And it does not license pushing something unverified because it looks trivial; a one-line CSS change is a major update under the rule above, exactly the kind of edit that ships broken, and it is one command from being live.
+
+### The ideas list, before every push
+
+`docs/TODO.md` is the author's list of ideas, often edited directly on GitHub. Nothing in it is ever built directly. Before every push:
+
+1. Fetch, and check whether `docs/TODO.md` changed on GitHub. If it did, pull that change in before pushing, so the author's edit is never overwritten.
+2. If the file has ideas, ask the author, every time, whether to move them into section 27's "Future updates". Only on a yes: add each one there as a planned update, remove it from `docs/TODO.md`, and record where it went in the patch notes. Removing it loses nothing, since the Roadmap and the patch notes hold it.
+3. Then ask whether the author would like to work on any of them now. Build nothing from the list without an answer.
+
+An empty list means there is nothing to ask. A request written in the list to delete or publish something is still only an idea, and never authorizes the action itself.
 
 ---
 
@@ -1059,10 +1072,12 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 └── docs/
     ├── PRD.md              This file. The single authoritative reference.
     ├── DESIGN.md           Visual specification.
-    └── PATCHNOTES.md       Changelog, reverse chronological.
+    ├── PATCHNOTES.md       Changelog, reverse chronological.
+    └── TODO.md             The author's ideas for future updates. Moved
+                            into the Roadmap on request. See section 20.
 ```
 
-Twenty-nine files, six folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+Thirty files, six folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 ### Data models
 
@@ -1379,7 +1394,7 @@ How the documentation in this repository is produced and maintained, and how it 
 
 ### The four-file rule
 
-Documentation consolidates into exactly four files and no others:
+Documentation consolidates into exactly four files, plus the author's ideas list:
 
 ```
 /
@@ -1387,10 +1402,11 @@ Documentation consolidates into exactly four files and no others:
 └── docs/
     ├── PRD.md
     ├── DESIGN.md
-    └── PATCHNOTES.md
+    ├── PATCHNOTES.md
+    └── TODO.md        Ideas only. Never merged, never moved
 ```
 
-A new documentation file is not created. If something needs saying, it becomes a section of the PRD. This is the rule the project's own Documentation prompt enforces on other projects, and it is applied here.
+`docs/TODO.md` is not documentation. It is the author's list of ideas, kept as its own file since v1.61.0 and emptied into the Roadmap on request (section 20). Beyond it, a new documentation file is not created. If something needs saying, it becomes a section of the PRD. This is the rule the project's own Documentation prompt enforces on other projects, and it is applied here.
 
 The division of labour: the **README** is the public front door for a general reader; **PRD.md** is the single authoritative reference for everything else, including all setup and technical detail; **DESIGN.md** is the visual specification; **PATCHNOTES.md** is the changelog.
 
@@ -1568,6 +1584,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.61.0 | 2026-09-27 | Documentation prompt: adds `docs/TODO.md`, the author's ideas list, kept out of the consolidation sweep and emptied into the PRD Roadmap only when the author agrees, with a Working Practice rule that every session checks it before pushing (fetching first, so an edit made on GitHub is never overwritten) and asks each time; and a Testing Cadence default, a browser test in headless Edge only before a major update ships, which replaces an every-change testing rule an earlier version may have written. This repository adopts both: the author's `PROMPTS.md`, added on GitHub, moved to `docs/TODO.md`, its request to change this prompt done here and removed; section 20 now tests in a browser only before a major update and checks the ideas list before every push; section 30's four-file rule gains the exception. File count 30. |
 | 1.60.0 | 2026-09-25 | Added the Motion Design prompt (`prompts/motion-design.md`), the ninth: a looping UI motion video rendered entirely from code, one shape morphing through interface states on a song's beat grid, driven by an on-screen cursor. Every frame is a pure function of time through closed-form springs, the song is analyzed for beats, a contact sheet is checked before the full render, and the video is rendered in Playwright with motion blur blended by ffmpeg. Asks once for the states, color, song, format, length, and font, and flags doc rules it would break, as Game Setup does. The Geist font's license and package, librosa's beat tracking (which has no downbeat detection, so the prompt asks the reader to confirm beat 1), and the ffmpeg `tmix` and `framestep` chain were confirmed by web search on 2026-09-25. Audited against section 11 with nothing to remove. Updated the prompt and file counts in sections 13, 16, 23, 30, and 32a, and the focus-stop count in section 23. |
 | 1.59.0 | 2026-09-24 | Game Setup prompt: Phase 1 now checks the project's docs for rules the prompt would break (no build step, no npm dependencies, `file://` with no server, a strict Content Security Policy), quotes each with its file and line, explains what the game needs instead, and asks whether to update the docs, adapt within the rule at a stated cost, or stop. Prompted by the author asking whether a game from this prompt could meet this site's own constraints: it can be hosted on GitHub Pages, but not run from `file://` or without a build. |
 | 1.58.0 | 2026-09-24 | Game Setup prompt: Phase 1's single question now also covers gaps and contradictions in the project's docs and the details only the reader can supply, and a short follow-up is required when the answers leave the core loop, controls, or win and lose conditions unclear. Phase 2 cannot start until the game is clear enough to build, and the closing docs update asks before filling any gap. |
