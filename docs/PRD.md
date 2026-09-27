@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.84.0
+**Version:** 1.85.0
 **Status:** Active
 **Author:** Azqato
 
@@ -785,6 +785,7 @@ Since v1.61.0 new work can also arrive through the author's ideas list, `docs/TO
 | Ideas list and its Roadmap process | September 2026 | Complete (v1.61.0 to v1.62.0) |
 | First ideas-list batch: five updates, two new prompts | September 2026 | Complete (v1.64.0 to v1.66.0) |
 | Skip-to-content link and copy-result live region | Unscheduled | Planned |
+| Search | When the library passes roughly twenty prompts | Planned (moved from Deferred in v1.85.0) |
 | Next prompt added | On demand | Ongoing |
 
 ### Scoped: self-audit against the v1.37.0 documentation standard
@@ -985,7 +986,6 @@ Based on: the author's ideas list, 2026-09-27, and the `latent-spaces/brag` READ
 
 ### Deferred
 
-- **Search.** Deferred until the library exceeds roughly twenty prompts. Below that the sidebar is faster than any search box.
 - **Automated mirror generation.** Deferred indefinitely. It would need Node in the loop, which is the dependency the project exists to avoid. A by-hand verification script is the compromise, and it is planned rather than deferred.
 - **Continuous integration.** Deferred. There is nothing to build and no test to run, so a workflow would exist only to check the mirror, and that check can be a script the author runs.
 - **Tags for release versions.** Deferred. The patch notes and the version history table already serve the purpose, and tags would be a second place to keep in sync.
@@ -1842,6 +1842,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.85.0 | 2026-09-27 | Search moved from Deferred to a planned milestone in section 27, at the author's request. The trigger is unchanged: it is built when the library passes roughly twenty prompts, so the promises in sections 21, 23, and the FAQ still hold. |
 | 1.84.0 | 2026-09-27 | Added the Launch Video prompt (`prompts/launch-video.md`), Future update 7: it installs the `/brag` plugin once at user scope and runs its full workflow with `--full`. Motion Design's introduction points to it. Twelve prompts, 40 files; sections 13, 16, 18, 23, 30, and the verification checklist updated. |
 | 1.83.0 | 2026-09-27 | Turned the ideas-list entry about the `latent-spaces/brag` repository into Future update 7, a Launch Video prompt that installs and runs `/brag-slim` directly. Recorded that the site never used the repository directly: update 2 only took the launch copy idea from its README. |
 | 1.82.0 | 2026-09-27 | Progress Dashboard prompt: the final update, with every step done and the summary, is written before the project is published, and publishing or confirming a deploy is never a step on the page, since the live copy could never show it done. Found on this site, where the page was left showing its last step in progress. |

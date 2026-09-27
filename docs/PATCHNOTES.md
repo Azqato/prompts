@@ -4,6 +4,14 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.85.0 - 2026-09-27
+
+### Changed
+
+- Roadmap: Search moved from Deferred to a planned milestone. The trigger stays the same: it will be built when the library passes roughly twenty prompts (twelve today).
+
+---
+
 ## v1.84.0 - 2026-09-27
 
 Builds Future update 7 from the ideas list: a prompt that uses the `latent-spaces/brag` repository directly instead of any version of it written here.
