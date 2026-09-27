@@ -4,6 +4,14 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.72.0 - 2026-09-27
+
+### Changed
+
+- Documentation prompt: the one-pass paragraph now says to do the whole audit in the session, without spawning subagents, parallel agents, or background tasks, however large the codebase. The introduction says the same in a phrase. Mirror and share page resynced.
+
+---
+
 ## v1.71.0 - 2026-09-27
 
 Answers the questions from the v1.70.0 audit, and adopts the progress dashboard to test it here.

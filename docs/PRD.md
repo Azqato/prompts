@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.71.0
+**Version:** 1.72.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1767,6 +1767,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.72.0 | 2026-09-27 | The Documentation prompt now says to run the whole audit in the session itself, with no subagents, parallel agents, or background tasks. |
 | 1.71.0 | 2026-09-27 | Answered open questions 6, 7, and 9. `sitemap.xml` added at the root, listing the site root and every live share page, written and checked by `tools/prompts-mirror.py` (section 32). `LICENSE.md` added: the Documentation prompt's all-rights-reserved default, with one grant that keeps section 11's rule that the prompts may be reused by anyone (new section 32b). Adopted the progress dashboard, built against the v1.70.0 recommendation to test the prompt on real work: `CLAUDE.md` holds its rule and style, `.gitignore` ignores `.dashboard/`, and section 20 records it. File count 38. Sections 13, 19, 20, 27, 29, 30, and 32 updated. |
 | 1.70.0 | 2026-09-27 | Full documentation audit against the Documentation prompt as of v1.69.0, run in one pass. Closed the self-audit milestone planned since v1.38.0 and recorded where its six findings stand. Section 33 step 4, an every-change browser check, now defers to section 20's Testing Cadence (discrepancy 18); `docs/DESIGN.md`'s stylesheet line count corrected (19). Section 27 gains a current-phase note on the ideas list, two milestones, and Future updates entry 6, a progress dashboard for this repository, recommended against. Section 19 gains open question 9, on `sitemap.xml`, and its marker-search note is updated for `docs/TODO.md`. Section 33 describes the one-pass audit. Section 18 records this audit's checks. |
 | 1.69.1 | 2026-09-27 | Corrected the file count in sections 13 and 30 from 32 to 34. v1.66.0 added four files, the two new prompts and their two share pages, and counted only the prompts. A count carries no intent, so it is fixed in place under the mechanical-fact exception. |
