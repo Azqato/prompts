@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.69.1
+**Version:** 1.70.0
 **Status:** Active
 **Author:** Azqato
 
@@ -405,6 +405,8 @@ Observed on 2026-08-23 by reading the code against the docs. Items 2, 5, and 6 w
 | 15 | Nothing documented it, because nothing had noticed | `core.autocrlf` is true system-wide and there is no `.gitattributes`, so a fresh Windows clone gets CRLF `prompts/*.md` while the `raw` values in `js/prompts-data.js` stay LF. The two would never compare equal | **Found in v1.28.0** while testing `tools/prompts-mirror.py`, which failed on a file git had just checked out. The script now normalizes line endings on both sides, since they are a property of the checkout rather than of the content. **Resolved in v1.36.0** by adding a `.gitattributes` that pins `* text=auto eol=lf`, so a checkout can no longer produce the mismatch at all. The script still normalizes, which is now redundant on purpose |
 | 16 | Section 24 of this document, Assumptions: "`escapeHtml()` does not escape quotes, and `renderInline()` writes a markdown link target directly into an `href` attribute" | Both quote forms have been escaped since v1.28.0, and section 30 of this same document records the fix and strikes it from the debt table | **Corrected in v1.29.0.** The v1.28.0 pass updated sections 30 and 31 for the escaping change and missed this one, so the document contradicted itself for a release. Found by reading section 24 while checking whether the collapse work touched any stated assumption. Worth noting as a pattern: a fact repeated in more than one section will go stale in the copy nobody was editing |
 | 17 | Section 12 of this document, step 5 of Adding Prompts: "Add a row to the Files table and the file structure tree in `README.md`" | `README.md` has had neither since v1.26.0 rewrote it for a general reader and moved all structure into this document. A model following step 5 literally would look for a table that does not exist | **Corrected in v1.42.0**, when adding the fifth prompt exercised the step for the first time since the rewrite. The step now names the prose list the README actually carries. The intent was always to keep the README's prompt list in step with the data file, and only the mechanism changed, so this was corrected rather than left flagged. The v1.42.0 correction reached one of four places. The same instruction survived in Renaming step 3, Removing step 3, the binding rules list in section 16, and the Add Prompt page description, and a prompt audit found all four the same day. **Fully corrected in v1.43.0** |
+| 18 | Section 33, step 4 of After any documentation change: "Load `index.html` from disk and confirm the site still works, if anything outside `/docs` was touched." | Section 20, since v1.61.0, runs a browser test only right before a major update, and a prompt edit touches `prompts/` and `js/prompts-data.js`, outside `/docs`, without being one | **Resolved in v1.70.0** under the Documentation prompt's Testing Cadence, which replaces an every-change browser rule that gives no project-specific reason. Step 4 now points at section 20. Trusted section 20: it is the later, deliberate rule |
+| 19 | `docs/DESIGN.md` section 4a: "a single 536-line stylesheet" | `css/style.css` is 569 lines, as sections 13 and 30 of this document already say | **Resolved in v1.70.0.** A line count carries no intent, so it was corrected in place under the mechanical-fact exception |
 
 Confirmed accurate, checked rather than assumed:
 
@@ -415,6 +417,16 @@ Confirmed accurate, checked rather than assumed:
 - The `--content-max` formula, `max(820px, calc(75vw - 56px))`, matches the section 4 description in `docs/DESIGN.md`.
 
 Implemented but undocumented at the time of the v1.18.0 pass: the error view (`renderError()` and `.status-message`); the fact that `renderMarkdown()` also handles headings, which the DESIGN subset list omits; the scroll to top on every route change. All three were documented in v1.27.0, the error view in `docs/DESIGN.md` section 5 and the other two in section 30 of this document.
+
+Checked and confirmed clean on 2026-09-27 during the v1.70.0 audit:
+
+- All eleven `prompts/*.md` files are mirrored in `js/prompts-data.js` with no orphans, and every share page is current, by `tools/prompts-mirror.py`.
+- All eleven live share pages carry the six sharing tags with an absolute, unique https `og:url`, descriptions of 135 to 149 characters, and titles of 29 to 37 characters with no collision in the first 30. The one retired page forwards as section 32a describes.
+- `js/script.js` sets the title per route: the site name on home, "<prompt> - Azqato's Prompts" on a prompt page.
+- The section banners of `css/style.css` are in the order `docs/DESIGN.md` section 11 lists, with the two `max-width` breakpoints at 1023px and 767px and the reduced-motion block last.
+- Line counts: `index.html` 51, `css/style.css` 569, `js/script.js` 370, share pages 21, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
+- The em dash sweep found no violation: one literal and five entities in four files, all the known instances that name the forms they prohibit. No double dash is used as punctuation.
+- No `CLAUDE.md`, no `.dashboard/`, and no `.gitignore` exist.
 
 Checked and confirmed clean on 2026-08-23 during the v1.27.0 audit:
 
@@ -441,7 +453,7 @@ Checked and confirmed clean on 2026-08-23 during the v1.27.0 audit:
 
 None outstanding. The working tree is clean and `main` matches `origin/main`. There is one branch, no other branch local or remote, and no tags.
 
-No real TODO, FIXME, or HACK marker exists in the codebase. A literal search does match in three files, but every match is prose naming the markers rather than marking anything: the sentence you are reading, the Documentation prompt's instruction to search for them, and that prompt's mirror in `js/prompts-data.js`. The same exemption applies here that section 11 gives to text naming a prohibited character.
+No real TODO, FIXME, or HACK marker exists in the codebase. A literal search does match, but every match is prose naming the markers rather than marking anything: the sentence you are reading, the Documentation prompt's instruction to search for them, and that prompt's mirror in `js/prompts-data.js`. Since v1.61.0 it also matches the ideas list's own name, `docs/TODO.md`, wherever it is mentioned: in that file, in this document, in the patch notes, and in the Documentation prompt and its mirror. Re-checked in the v1.70.0 audit: five files match, none of them a marker in code. The same exemption applies here that section 11 gives to text naming a prohibited character.
 
 The standing verification gap recorded here in v1.27.0 is closed. The card hover built in v1.18.0 had been specified, styled, and documented without the page ever being opened. In v1.28.0 the site was rendered in headless Chrome from `file://` at three routes (home, a prompt page, and an unknown slug) and confirmed working: four cards, five nav links, the copy button present on a detail page, the correct `h1` on each, and an unknown slug falling through to the home view as designed.
 
@@ -462,6 +474,8 @@ Numbered so they can be answered by reference. An answered question is folded in
 7. This repository has no `LICENSE.md`, and as of v1.33.0 the Documentation prompt says that a project without one falls to a default of all rights reserved, source-available, with a standing carve-out for search and AI citation. The prompt would have this project ship that LICENSE and a `robots.txt` marked deliberately open. It was not done in v1.33.0, because a licence is a legal assertion published under the author's name rather than a documentation change, and because the four prompts are written to be copied and used, which is a posture worth stating deliberately rather than inheriting from a default. Should the default be applied here, adjusted, or explicitly declined and recorded as declined? Declining and saying why is a valid answer; leaving no licence and no note is the only outcome that carries a real cost, because it leaves a reader guessing.
 
 8. This site now falls under a policy it does not meet. As of v1.37.0 the Documentation prompt says a project that serves a site records a social sharing policy and carries `og:title`, `og:description`, `og:url`, `og:type`, `og:site_name`, and `twitter:card` on every shareable page. `index.html` carries a `<meta name="description">` and nothing else, so a pasted link renders from the title tag alone and, on a client that requires `og:title`, may not render an embed at all. Two things have to be decided before it can be fixed rather than one. First, the canonical domain: this repository has no `sitemap.xml` and no `CNAME`, so the Pages address is recorded nowhere the audit can read, and `og:url` cannot be guessed. Second, the architecture: every route is a hash on one `index.html`, and a link renderer never sees the fragment, so one static set of tags is the only thing achievable without a build step. That is a real limit worth stating rather than working around, since the prompt's own rule is that `og:url` is unique per page. Should the tags be added for the site as a whole, with the per-page requirement noted as not applicable to a hash-routed single page, or declined and recorded as declined? Tracked on the roadmap in section 27 as of v1.38.0, along with the rest of the self-audit against the current standard. As of v1.44.0 the per-prompt cards the author wants are scoped as their own roadmap item in section 27, which answers the canonical domain half of this question and proposes generated share pages for the architecture half. **Answered in v1.46.0**, by building them. The canonical domain is the one in section 17, and the architecture half was answered with generated share pages rather than by declaring the per-page rule not applicable. The policy is section 32a.
+
+9. **Should this site carry a `sitemap.xml`?** Raised by the v1.70.0 audit. The standard puts one at the root of a project that serves a site, and finding 2 of the self-audit in section 27 argued it would list a single URL. Since v1.46.0 there are eleven share pages, real addresses a sitemap at `/prompts/sitemap.xml` could list, all under its own path. Default applied meanwhile: none created, since adding one is a decision about how the site is indexed. Recommendation: add it, listing the site root and every live share page, and have `tools/prompts-mirror.py --sync` write it so it cannot drift.
 
 Answered on 2026-08-24:
 
@@ -730,6 +744,8 @@ Twelve files, one of which has logic. The library stays small, the feature set s
 
 **Maintenance and consolidation.** The product is feature-complete against its goals and has been since v1.8.0. Work since then has been almost entirely about the prompts themselves and about the documentation standard: five prompts retired, two of them absorbed into the Documentation prompt, and the PRD grown from a product brief into the single authoritative reference the project's own tooling now expects. No new site feature is planned. Per-prompt social sharing, shipped in v1.46.0, was the exception, and came from an observed failure rather than from a plan.
 
+Since v1.61.0 new work can also arrive through the author's ideas list, `docs/TODO.md`: each idea is researched and turned into a proposed update under "Future updates" below, and built only on the author's say-so. The first batch, six posts on X, became five updates in v1.64.0, all built in v1.66.0, which brought the library to eleven prompts. No site feature is planned; the work remains the prompts and the documentation standard.
+
 ### Milestones
 
 | Milestone | Timeframe | Status |
@@ -744,8 +760,10 @@ Twelve files, one of which has logic. The library stays small, the feature set s
 | Documentation standard settled and applied to this project | August 2026 | Complete (v1.25.0 to v1.27.0) |
 | Mirror verification script | August 2026 | Complete (v1.28.0) |
 | Runtime enforcement of the no-dependency rule | August 2026 | Complete (v1.28.0) |
-| Self-audit against the v1.37.0 documentation standard | Unscheduled | Planned |
+| Self-audit against the v1.37.0 documentation standard | September 2026 | Complete (v1.70.0, against the standard as of v1.69.0) |
 | Per-prompt social sharing cards | September 2026 | Complete (v1.46.0) |
+| Ideas list and its Roadmap process | September 2026 | Complete (v1.61.0 to v1.62.0) |
+| First ideas-list batch: five updates, two new prompts | September 2026 | Complete (v1.64.0 to v1.66.0) |
 | Skip-to-content link and copy-result live region | Unscheduled | Planned |
 | Next prompt added | On demand | Ongoing |
 
@@ -766,6 +784,15 @@ A partial read-only pass was run on 2026-09-07 and stopped before any file was w
 **5. Page titles are half right, and the half that is missing is the brand.** Recorded when the Page Titles section was written in v1.40.0. `js/script.js` sets `document.title` on every route, so this site already avoids the failure that section calls the most common one: the title genuinely changes as the reader navigates. What it produces is a bare page name, so a detail tab reads "Documentation" and a bookmark saved from it reads "Documentation" too, which is unusable out of context months later. Under the default the titles would be "Documentation - Azqato's Prompts" at 32 characters and "Azqato's Prompts" or a descriptor form on the home view, all inside both budgets, with the distinct part inside the first 30 in every case. This is the cheapest of the five findings to act on and the only one that needs no decision first. *Done in v1.46.0:* prompt pages are titled "<prompt> - Azqato's Prompts" and the home view "Azqato's Prompts", shipped with the sharing work.
 
 **6. Repository hygiene is the one default this project already met.** Recorded when the Repository Hygiene section was written in v1.41.0, and noted because it is the first time an addition to the prompt has found nothing to fix here. There is no `.gitignore`, and section 13 already states why, which is what the default asks of a project that generates nothing. `.gitattributes` pins `* text=auto eol=lf`, and the reasoning the section generalises was this project's own from v1.36.0. There is no lockfile because there are no dependencies, no environment file because nothing reads an environment variable, and section 17 already records the canonical remote, the single branch, and the published address. `js/prompts-data.js` is the generated-output-committed-on-purpose case, and section 13 names both what regenerates it and what keeps it in step with its source. Nothing to act on.
+
+**Closed in v1.70.0.** The audit was finally run on 2026-09-27, against the Documentation prompt as of v1.69.0, which by then had grown well past v1.37.0. Where each finding above stands:
+
+1. `robots.txt`: still not created, for the reason given. The site is a subdirectory of `azqato.github.io`, and the file that governs it belongs to the domain.
+2. `sitemap.xml`: still absent. The single-URL argument is weaker since v1.46.0, because the eleven share pages are real addresses a sitemap could list. Left as an open question rather than created (section 19, question 9).
+3. Social sharing tags: shipped in v1.46.0. All eleven share pages were re-checked in this audit and carry all six tags, an absolute unique `og:url`, and descriptions of 135 to 149 characters.
+4. `LICENSE.md`: still open question 7, unchanged.
+5. Page titles: shipped in v1.46.0. Every title runs 29 to 37 characters, with no collision in the first 30 and the brand suffix on every prompt page.
+6. Repository hygiene: still met. No `.dashboard/` folder exists, so the v1.67.0 rule has nothing to act on.
 
 ### Scoped: per-prompt social sharing cards
 
@@ -889,6 +916,22 @@ Based on: a post by @Voxyz_ai on X describing a dashboard-building subagent.
 **Recommendation.** Do it, as a standalone prompt.
 
 Based on: a post by @kloss_xyz on X sharing an assumptions prompt.
+
+#### 6. A progress dashboard for long tasks in this repository
+
+**What.** A standing rule, in a `CLAUDE.md` this repository does not yet have, that Claude keeps `.dashboard/index.html` during any long task here, as the Progress Dashboard prompt sets up: the steps and their status, anything stuck, questions waiting with the default it will take, and the latest results. Proposed by the v1.70.0 audit because the Documentation prompt proposes it for any project without a Progress dashboard section; the author did not ask for it.
+
+**Why.** It would make a long unattended session readable at a glance, and it is this site's own prompt, so using it here would test it.
+
+**How.** Run the Progress Dashboard prompt once here and answer yes to the standing rule. `.dashboard/` would be added to a new `.gitignore`, the first ignore file this repository would carry, and section 16 would record why.
+
+**Size.** Small.
+
+**Open questions.** Would it be used? Most work here is a few prompt or documentation edits that finish in minutes, below the rule's threshold of five steps or thirty minutes.
+
+**Recommendation.** Do not do it for now, and defer it with that reason: the tasks here are too short to reach the threshold, and the ignore file it needs would be a second piece of repository configuration kept for a page that is rarely built. Revisit if longer tasks become common.
+
+Based on: the Documentation prompt's rule for projects with no Progress dashboard section (v1.68.0), applied in the v1.70.0 audit.
 
 ### Deferred
 
@@ -1504,7 +1547,9 @@ The division of labour: the **README** is the public front door for a general re
 
 ### Running an audit
 
-An audit is run by pasting the Documentation prompt from this site into Claude Code against this repository. It is the project's own tooling turned on itself, and it is the intended way to keep these documents current.
+An audit is run by pasting the Documentation prompt from this site into Claude Code against this repository. It is the project's own tooling turned on itself, and it is the intended way to keep these documents current. The last full run was v1.70.0, on 2026-09-27.
+
+**It runs in one pass** (since v1.69.0). It asks nothing during the run: it applies the prompt's defaults, and where there is none it takes the most conservative option, keeping existing text, marking the point as a discrepancy or uncertain, and creating, moving, or deleting nothing hard to undo. Every question it raises is collected into a numbered Questions list at the end of its summary, each with the default applied meanwhile and where it is recorded, so the author answers by number afterwards. Ideas in `docs/TODO.md` are listed there and left untouched; they become Roadmap updates only on a yes, through the process in section 20. Where `CLAUDE.md` has no Progress dashboard section, the audit adds a Future updates entry proposing one rather than asking; this repository's is entry 6 in section 27.
 
 The prompt's own process, in short: crawl the entire codebase first, read every existing document in full, compare each against the code, and only then write. Steps 1 through 3 are strictly read-only. Writing begins at step 4 and touches only the four files above.
 
@@ -1533,7 +1578,7 @@ Where new material genuinely belongs beside an existing section rather than at t
 1. Update `docs/PATCHNOTES.md` with the next semantic version and today's date, in `YYYY-MM-DD`.
 2. Add a row to the version history table at the end of this document.
 3. Update the `**Version:**` field in this document's header. `docs/DESIGN.md` carries its own independent document version, which moves only when that document changes.
-4. Load `index.html` from disk and confirm the site still works, if anything outside `/docs` was touched.
+4. Verify as section 20 says: the mirror check always, and an assumption check and a browser test from disk only right before a major update ships. A change confined to `/docs`, the README, or prompt text is minor and needs neither.
 
 ---
 
@@ -1676,6 +1721,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.70.0 | 2026-09-27 | Full documentation audit against the Documentation prompt as of v1.69.0, run in one pass. Closed the self-audit milestone planned since v1.38.0 and recorded where its six findings stand. Section 33 step 4, an every-change browser check, now defers to section 20's Testing Cadence (discrepancy 18); `docs/DESIGN.md`'s stylesheet line count corrected (19). Section 27 gains a current-phase note on the ideas list, two milestones, and Future updates entry 6, a progress dashboard for this repository, recommended against. Section 19 gains open question 9, on `sitemap.xml`, and its marker-search note is updated for `docs/TODO.md`. Section 33 describes the one-pass audit. Section 18 records this audit's checks. |
 | 1.69.1 | 2026-09-27 | Corrected the file count in sections 13 and 30 from 32 to 34. v1.66.0 added four files, the two new prompts and their two share pages, and counted only the prompts. A count carries no intent, so it is fixed in place under the mechanical-fact exception. |
 | 1.69.0 | 2026-09-27 | Documentation prompt: the audit runs in one pass without asking questions. It applies the prompt's defaults, takes the most conservative option where there is none, and collects every question (including the `docs/TODO.md` ideas, which it no longer asks about mid-run) into a numbered Questions list at the end of its summary, each with the default applied meanwhile. The push-time TODO question for later sessions is unchanged. |
 | 1.68.0 | 2026-09-27 | Documentation prompt: where `CLAUDE.md` has no Progress dashboard section, the audit no longer asks about one. It adds a Roadmap "Future updates" entry proposing it, decided in a later session like any other entry, and a declined one moves to the deferred items so it is not proposed again. Replaces the ask-once behavior added in v1.67.0. |

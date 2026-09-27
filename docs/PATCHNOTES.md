@@ -4,6 +4,28 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.70.0 - 2026-09-27
+
+A full documentation audit, run with the site's own Documentation prompt as of v1.69.0, in one pass.
+
+### Changed
+
+- `docs/PRD.md` section 33: step 4 of After any documentation change now defers to section 20's Testing Cadence. The Documentation prompt replaces a browser rule that runs after every change and gives no project-specific reason. The old wording was: "Load `index.html` from disk and confirm the site still works, if anything outside `/docs` was touched." A prompt edit touches files outside `/docs` and is still minor under section 20, so the two rules disagreed. Recorded as discrepancy 18.
+- `docs/PRD.md` section 33: Running an audit describes the one-pass run, the closing Questions list, and how `docs/TODO.md` ideas and the progress dashboard proposal are handled, and records this run as the last.
+- `docs/PRD.md` section 27: the self-audit milestone, planned since v1.38.0, is complete, with a note on where each of its six findings stands. Two milestones added for the ideas list and its first batch. The current phase mentions the ideas list and the eleven prompts. Future updates entry 6 proposes a progress dashboard for this repository, as the prompt requires for a project without one, and recommends against it for now, since tasks here rarely reach its threshold.
+- `docs/PRD.md` section 19: open question 9, whether to add a `sitemap.xml` now that eleven share pages exist, with none created meanwhile. The marker-search note now accounts for `docs/TODO.md`, whose name matches a literal search for TODO.
+- `docs/PRD.md` section 18: discrepancies 18 and 19, both resolved, and the list of what this audit checked and found accurate.
+
+### Fixed
+
+- `docs/DESIGN.md` 1.11.6: section 4a called the stylesheet 536 lines; it is 569. Discrepancy 19.
+
+### Notes
+
+Checked and found accurate: the prompt mirror, all eleven share pages' tags and titles, the per-route title logic, the stylesheet's section order and breakpoints, the file and line counts, and the README's required sections. The writing style sweep across all 34 tracked files found no violation: the one literal em dash and five HTML entity forms are the known instances that name the forms they prohibit, and no double dash is used as punctuation. Nothing outside `/docs` changed, so no browser test or assumption check was needed.
+
+---
+
 ## v1.69.1 - 2026-09-27
 
 ### Fixed

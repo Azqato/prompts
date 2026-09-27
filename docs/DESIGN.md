@@ -1,6 +1,6 @@
 # DESIGN.md - Prompts
 
-**Version:** 1.11.5
+**Version:** 1.11.6
 **Status:** Active
 **Author:** Azqato
 
@@ -114,7 +114,7 @@ The content block is capped at `--content-max` plus its 56px of horizontal paddi
 
 **Base unit: 2px. Preferred rhythm: 4px.**
 
-There is no spacing token in `:root`. Every value is written literally in the rule that uses it, which is a deliberate consequence of the project's size: a token indirection for spacing would cost more in lookup than it saves in consistency across a single 536-line stylesheet. The scale below is therefore descriptive, derived from the values actually in use, not a set of variables to reference.
+There is no spacing token in `:root`. Every value is written literally in the rule that uses it, which is a deliberate consequence of the project's size: a token indirection for spacing would cost more in lookup than it saves in consistency across a single 569-line stylesheet. The scale below is therefore descriptive, derived from the values actually in use, not a set of variables to reference.
 
 | Step | Value | Used for |
 | --- | --- | --- |
@@ -789,6 +789,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.11.6 | 2026-09-27 | Corrected the stylesheet line count in section 4a from 536 to 569, found in the v1.70.0 audit. A line count carries no intent, so it is fixed in place under the mechanical-fact exception. The rest of the document was checked against the stylesheet and matches. |
 | 1.11.5 | 2026-09-27 | Updated the focus-stop count in section 10 for eleven prompts: fourteen stops before the content area. |
 | 1.11.4 | 2026-09-25 | Updated the focus-stop count in section 10 for nine prompts: twelve stops before the content area. |
 | 1.11.3 | 2026-09-24 | Updated the focus-stop count in section 10 for eight prompts: eleven stops before the content area. |
