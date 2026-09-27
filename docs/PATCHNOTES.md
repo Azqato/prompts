@@ -4,6 +4,20 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.79.0 - 2026-09-27
+
+### Added
+
+- `dashboard/index.html`: a Roadmap section, read from PRD section 27 each time the page is built, so it cannot drift from the PRD. It lists the milestones not yet complete, every Future updates entry marked built (with its version) or proposed (with the first clause of its recommendation), and the deferred items, above a card with the verification checklist meter (2 of 32 sections verified) and the count of ideas in `docs/TODO.md`. The sidebar links to it, with a count of open milestones and proposed updates.
+
+### Changed
+
+- PRD section 27: Future updates 1 to 5 each gained a `**Built in v1.66.0.**` line, matching entry 6. Until now only the paragraph above them said they had shipped, which a reader landing on one entry, or the dashboard, could not see. Section 20 records that a built entry always gets that line.
+- `CLAUDE.md`: the recorded layout includes the Roadmap section.
+- Status pills no longer capitalise their text automatically, which had turned version numbers into "V1.66.0".
+
+---
+
 ## v1.78.0 - 2026-09-27
 
 ### Changed

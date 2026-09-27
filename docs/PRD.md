@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.78.0
+**Version:** 1.79.0
 **Status:** Active
 **Author:** Azqato
 
@@ -584,7 +584,7 @@ Adopted in v1.71.0, at the author's request, to test the Progress Dashboard prom
 - For any task with more than five steps, or likely to take longer than thirty minutes, Claude keeps `dashboard/index.html`: the steps and their status, anything stuck, questions waiting with the default it will take, and the latest results. It is created before the work starts and updated after every step, by Claude itself in the session, with no agent or plugin.
 - The style, chosen after the look of 1000xstocks.com, is recorded in `CLAUDE.md`: dark, medium density, gold `#FFB800` with a gold-to-amber gradient, spaced uppercase labels, system fonts. It is the dashboard's style only and has nothing to do with this site's design in `docs/DESIGN.md`.
 - Since v1.74.0 the page is public: `dashboard/` is tracked and goes live with the site at `https://azqato.github.io/prompts/dashboard/`, so progress can be watched from anywhere. It shows the state as of the last push, not live, and carries `noindex` and nothing private. It was `.dashboard/`, ignored, from v1.71.0; GitHub Pages does not serve folders whose names start with a dot, so the rename was required, not cosmetic. It is not listed in `sitemap.xml`.
-- Since v1.78.0 the page uses the layout of the author's admin-dashboard template (sidebar, top bar, four summary figures, progress card, tables), rebuilt inline in the recorded palette rather than the template's own colors. `CLAUDE.md` records the layout.
+- Since v1.78.0 the page uses the layout of the author's admin-dashboard template (sidebar, top bar, four summary figures, progress card, tables), rebuilt inline in the recorded palette rather than the template's own colors. `CLAUDE.md` records the layout. Since v1.79.0 the page also carries a Roadmap section, read from this section 27 whenever the page is built: open milestones, each Future updates entry as built (from its `**Built in vX**` line) or proposed, deferred items, and the verification checklist count. An entry counts as built only if it carries that line, so a built entry must always get one.
 - If the prompt feels wrong in use, that is a finding for `prompts/progress-dashboard.md`, which is the point of running it here.
 
 ---
@@ -871,6 +871,8 @@ Proposed updates turned from the author's ideas list (section 20). Each is a pro
 
 **Recommendation.** Do it, keeping the no-download rule.
 
+**Built in v1.66.0.**
+
 Based on: a post by @twoclipping on X sharing a launch-film prompt, pasted by the author into `docs/TODO.md`.
 
 #### 2. Motion Design: launch copy and a story drawn from the project
@@ -886,6 +888,8 @@ Based on: a post by @twoclipping on X sharing a launch-film prompt, pasted by th
 **Open questions.** Should the copy be written for a specific platform, or kept neutral?
 
 **Recommendation.** Do it, together with update 1.
+
+**Built in v1.66.0.**
 
 Based on: a post by @shiri_shh on X, and the README of the `latent-spaces/brag` repository on GitHub (MIT licence), read on 2026-09-27.
 
@@ -903,6 +907,8 @@ Based on: a post by @shiri_shh on X, and the README of the `latent-spaces/brag` 
 
 **Recommendation.** Do it, optional, with no link directory on the site.
 
+**Built in v1.66.0.**
+
 Based on: posts by @himanshubuildss and @vullnetademaj on X, each listing design reference and component sites.
 
 #### 4. New prompt: Progress Dashboard
@@ -919,6 +925,8 @@ Based on: posts by @himanshubuildss and @vullnetademaj on X, each listing design
 
 **Recommendation.** Do it, project-level by default with global as an option.
 
+**Built in v1.66.0.**
+
 Based on: a post by @Voxyz_ai on X describing a dashboard-building subagent.
 
 #### 5. New prompt: Assumption Check
@@ -934,6 +942,8 @@ Based on: a post by @Voxyz_ai on X describing a dashboard-building subagent.
 **Open questions.** The name. Whether other prompts should run it at their start.
 
 **Recommendation.** Do it, as a standalone prompt.
+
+**Built in v1.66.0.**
 
 Based on: a post by @kloss_xyz on X sharing an assumptions prompt.
 
@@ -1813,6 +1823,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.79.0 | 2026-09-27 | The progress dashboard gained a Roadmap section read from section 27. Future updates 1 to 5 each gained the `**Built in v1.66.0.**` line entry 6 already had, so every entry states its own status. Section 20 records the rule that a built entry always gets that line. |
 | 1.78.0 | 2026-09-27 | This site's progress dashboard rebuilt on the author's admin-dashboard template layout, in the palette `CLAUDE.md` already records. `CLAUDE.md` records the layout; section 20 notes it. |
 | 1.77.0 | 2026-09-27 | Removed the last `.dashboard/` and `.gitignore` wording tied to the dashboard from both prompts. The Documentation prompt's enforced folder tree now shows `/dashboard`, and its Repository Hygiene bullet simply says the folder is public project content, never ignored. Its general ignore-file rules are unchanged. |
 | 1.76.0 | 2026-09-27 | Progress Dashboard prompt: finished the v1.74.0 change to a public page. Description says public; the intro and a rule say the published copy updates only when the project is published, while the copy on disk is live; results use project-relative paths; Claude names the public address; the standing-rule line carries the nothing-private rule. |
