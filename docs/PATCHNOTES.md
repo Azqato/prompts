@@ -4,6 +4,15 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.83.0 - 2026-09-27
+
+### Changed
+
+- Ideas list: the entry about using the `latent-spaces/brag` repository directly became PRD section 27, Future update 7, "Launch Video: run the /brag skill directly", and was removed from `docs/TODO.md`, which is back to its placeholder. Nothing is built yet; the update waits for the author's decision.
+- Finding recorded with it: nothing was lost. The site never used the repository directly. Future update 2 (v1.66.0) took only the launch copy and alt text idea from its README into the Motion Design prompt, and kept that prompt's own renderer by choice. Motion Design is a different kind of video, not a version of `/brag`.
+
+---
+
 ## v1.82.0 - 2026-09-27
 
 ### Fixed

@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.82.0
+**Version:** 1.83.0
 **Status:** Active
 **Author:** Azqato
 
@@ -965,6 +965,22 @@ Based on: the Documentation prompt's rule for projects with no Progress dashboar
 
 **Built in v1.71.0, against the recommendation above**, because the author wanted it to test the prompt on real work, a reason the recommendation had not weighed. The first task to use it was v1.71.0 itself. See section 20.
 
+#### 7. Launch Video: run the /brag skill directly
+
+**What.** A short new prompt that makes a launch video by installing and running the `/brag-slim` skill from the `latent-spaces/brag` repository, instead of anything this site writes itself. The prompt would say what the skill does, give its one install command (`npx skills add https://github.com/latent-spaces/brag --skill brag-slim`, project-level unless the reader wants it everywhere), ask before installing, and then run it (`let's /brag about this`), with its tone, format, and length options explained. Its output goes to `brag-output/`: the plan, the share copy, and the rendered video.
+
+**Why.** The author wants to use the repository as it is rather than keep an in-house imitation. Checking what happened so far: nothing was lost. The site never used `/brag` directly. Update 2 above took one idea from its README, launch copy and alt text, into the Motion Design prompt, and chose on purpose to keep that prompt's own renderer. Motion Design is a different product (one shape morphing through interface states in time with a song), not a copy of `/brag`, which tells the story of a whole project. So this is an addition, not a correction. Running the maintained skill also means its fixes and new versions reach the reader without this site copying them.
+
+**How.** A new prompt through the section 12 process, with its share page and the usual count updates. `/brag-slim` suits it best: one file, no bundled assets, no Hyperframes framework, built for Opus 5.5, MIT licensed. The full `/brag` needs Node 22, ffmpeg, and the Hyperframes command line, and would be mentioned only as the heavier option. Motion Design gains one line pointing to the new prompt for a story-style launch video, and keeps its launch copy for its own videos. The prompt names the repository because using it is the point; that stays within section 11, since it is a public tool and takes no action on the author's accounts.
+
+**Size.** Small: a short prompt, its share page, and one line in Motion Design.
+
+**Open questions.** Should the prompt offer only `/brag-slim`, or both it and the full `/brag`? Should installing be project-level (the default) or global? Is "Launch Video" the right name?
+
+**Recommendation.** Do it, with `/brag-slim` as the default, the full `/brag` named as the heavier option, and a project-level install. A prompt this thin is worth having because it records the right skill, the right install command, and the options in one place, and it keeps the site from growing its own version of a maintained tool.
+
+Based on: the author's ideas list, 2026-09-27, and the `latent-spaces/brag` README and `skills/brag-slim/SKILL.md`, read on 2026-09-27.
+
 ### Deferred
 
 - **Search.** Deferred until the library exceeds roughly twenty prompts. Below that the sidebar is faster than any search box.
@@ -1823,6 +1839,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.83.0 | 2026-09-27 | Turned the ideas-list entry about the `latent-spaces/brag` repository into Future update 7, a Launch Video prompt that installs and runs `/brag-slim` directly. Recorded that the site never used the repository directly: update 2 only took the launch copy idea from its README. |
 | 1.82.0 | 2026-09-27 | Progress Dashboard prompt: the final update, with every step done and the summary, is written before the project is published, and publishing or confirming a deploy is never a step on the page, since the live copy could never show it done. Found on this site, where the page was left showing its last step in progress. |
 | 1.81.0 | 2026-09-27 | Documentation prompt: its Roadmap entry for a progress dashboard now links to the Progress Dashboard prompt's share page and restates none of its layout, branding, or rules, so the dashboard is defined in one place. The folder tree line and the Repository Hygiene rule that `/dashboard` is public and never ignored stay, as rules the Documentation prompt owns. |
 | 1.80.0 | 2026-09-27 | Progress Dashboard prompt: every dashboard now follows one fixed layout, the one this site's dashboard uses, written out in the prompt and linked as a working example. Colors and fonts come from the project's existing branding (design doc, CSS custom properties, brand files), never invented and never copied from the example; the reader is asked for colors only where the project has none. The layout gains a Roadmap section wherever the project's docs keep a roadmap. |

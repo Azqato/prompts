@@ -10,5 +10,5 @@ removed from this file. Never put passwords, keys, or other secrets here.
 
 ## Ideas
 
-- did we ingest this website as a prompt? i want to use this repo directly rather than create our own version of it. can you please check to see if we lost using it directly and did something indirect for the prompt we created and update it accordingly?
-  - https://github.com/latent-spaces/brag
+- <Your idea, in plain language>
+  - <A link, file, or note it refers to>
