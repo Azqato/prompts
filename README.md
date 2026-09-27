@@ -59,3 +59,5 @@ Everything technical lives in [`/docs`](docs/): how the site is built, how to ru
 ## Author
 
 **Azqato**, [azqato.github.io](https://azqato.github.io)
+
+The prompts are free to copy, adapt, and run on your own projects. Everything else is all rights reserved: see [`LICENSE.md`](LICENSE.md).

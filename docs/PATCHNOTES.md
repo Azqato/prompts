@@ -4,6 +4,30 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.71.0 - 2026-09-27
+
+Answers the questions from the v1.70.0 audit, and adopts the progress dashboard to test it here.
+
+### Added
+
+- `sitemap.xml` at the root: the site root and all eleven live share pages, twelve URLs, with no `lastmod` so a sync does not change it needlessly. Answers open question 9.
+- `LICENSE.md` at the root, answering open question 7. The Documentation prompt's default (all rights reserved, source-available, AI and search referencing permitted, training by request, no waiver, permission requests on the GitHub issue tracker, platform and third-party notes, no warranty), adjusted by one grant: anyone may copy, adapt, and run the prompts on their own projects. The default grants nothing, but PRD section 11 already said the prompts "may be reused by anyone", and an existing rule wins over a default. Republishing the prompts as a library, product, course, or dataset is not granted.
+- `CLAUDE.md` at the root: the progress dashboard rule for long tasks and its style (dark, medium density, gold `#FFB800` with a gold-to-amber gradient, taken from the look of 1000xstocks.com), recorded at the author's request to test the Progress Dashboard prompt on real work. This release was its first task.
+- `.gitignore`: the repository's first ignore file, with one entry, `.dashboard/`.
+- `docs/PRD.md` section 32b, Licensing, and a section 20 subsection on the progress dashboard.
+
+### Changed
+
+- `tools/prompts-mirror.py`: `--sync` now writes `sitemap.xml` and the check fails if it is missing or stale. Its closing reminder now says to browser-test only a major update, matching section 20, instead of after every sync. The sitemap's comment avoids a double hyphen, which XML forbids inside comments; the first version wrote `--sync` there and failed to parse.
+- `docs/PRD.md`: open questions 6 (the copy button, confirmed working by the author), 7, and 9 answered. Sections 13 and 30 describe the new root files and the ignore file, with the file count at 38. Section 27 entry 6 records the dashboard as built against its recommendation, and why. Section 29 notes that `--sync` writes the sitemap. Section 32 lists `sitemap.xml`, `LICENSE.md`, and the configuration files in the public surface table.
+- `README.md`: one line under Author on what the licence allows.
+
+### Notes
+
+`tools/prompts-mirror.py` changed, so this is a major update under PRD section 20. An assumption check and a browser test from disk ran once before pushing.
+
+---
+
 ## v1.70.0 - 2026-09-27
 
 A full documentation audit, run with the site's own Documentation prompt as of v1.69.0, in one pass.

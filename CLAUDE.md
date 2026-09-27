@@ -1,0 +1,15 @@
+# CLAUDE.md - Azqato's Prompts
+
+Read `docs/PRD.md` first, section 20 above all: it is the working practice for this repository.
+
+## Progress dashboard
+
+For any task with more than 5 steps, or likely to take longer than 30 minutes, create and maintain `.dashboard/index.html` as the Progress Dashboard prompt describes: one self-contained HTML file that opens by double-click and reloads every 10 seconds, showing the steps and their status, anything stuck, questions waiting for the author with the default you will take, and the latest results. Create it before starting, update it after every step, and keep working on the default when a question waits. Maintain it yourself in the session; do not install any agents, subagents, or plugins. `.dashboard/` is ignored and never part of the project.
+
+Style, chosen 2026-09-27 after the look of 1000xstocks.com:
+
+- Dark: near-black background `#0a0a0a`, panels `#141414`, borders `#2a2a2a`.
+- Medium density: between compact and airy.
+- Accent gold `#FFB800`, with a gold-to-amber gradient (`#FFB800` to `#f89e22`) on the progress bar and the in-progress badge.
+- Panel labels in small uppercase with wide letter spacing, and pill-shaped status badges.
+- System fonts only, since the page loads nothing from the network.
