@@ -4,6 +4,14 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.69.1 - 2026-09-27
+
+### Fixed
+
+- `docs/PRD.md` sections 13 and 30: the file count is 34, not 32. v1.66.0 added the Progress Dashboard and Assumption Check prompts and their share pages, four files, but the count rose by only the two prompts. Found by comparing the stated count with `git ls-files` during a documentation check.
+
+---
+
 ## v1.69.0 - 2026-09-27
 
 ### Changed

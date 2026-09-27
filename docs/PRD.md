@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.69.0
+**Version:** 1.69.1
 **Status:** Active
 **Author:** Azqato
 
@@ -251,7 +251,7 @@ The `hidden: true` flag remains supported for retiring a prompt from navigation 
 
 ## 13. Repository Structure
 
-The whole project is 32 files in six folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+The whole project is 34 files in six folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 `.gitattributes` is the one piece of git configuration the repository carries, added in v1.36.0. It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
 
@@ -1169,7 +1169,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
                             into the Roadmap on request. See section 20.
 ```
 
-Thirty-two files, six folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+Thirty-four files, six folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 ### Data models
 
@@ -1676,6 +1676,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.69.1 | 2026-09-27 | Corrected the file count in sections 13 and 30 from 32 to 34. v1.66.0 added four files, the two new prompts and their two share pages, and counted only the prompts. A count carries no intent, so it is fixed in place under the mechanical-fact exception. |
 | 1.69.0 | 2026-09-27 | Documentation prompt: the audit runs in one pass without asking questions. It applies the prompt's defaults, takes the most conservative option where there is none, and collects every question (including the `docs/TODO.md` ideas, which it no longer asks about mid-run) into a numbered Questions list at the end of its summary, each with the default applied meanwhile. The push-time TODO question for later sessions is unchanged. |
 | 1.68.0 | 2026-09-27 | Documentation prompt: where `CLAUDE.md` has no Progress dashboard section, the audit no longer asks about one. It adds a Roadmap "Future updates" entry proposing it, decided in a later session like any other entry, and a declined one moves to the deferred items so it is not proposed again. Replaces the ask-once behavior added in v1.67.0. |
 | 1.67.0 | 2026-09-27 | Documentation prompt: the consolidation sweep keeps a Progress dashboard section the author chose in `CLAUDE.md` and records it in Working Practice, and, where there is none and none was declined, asks the author once whether to add one, writing nothing on a no except the recorded decision; Repository Hygiene lists `.dashboard/` as ignored when it exists and reports it as a discrepancy if it is not. This project uses no dashboard, so nothing else here changes. |
