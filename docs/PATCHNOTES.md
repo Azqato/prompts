@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.67.0 - 2026-09-27
+
+### Changed
+
+- `prompts/documentation.md`: two small additions for projects that use the Progress Dashboard prompt.
+  - The consolidation sweep keeps a "Progress dashboard" section in `CLAUDE.md` (a style, or a standing rule for long tasks) unchanged, and records it in the PRD's Working Practice, so a documentation run never removes a choice the author made. Where there is none, the audit asks once, with its other questions, whether the author wants one. On a yes it shows the `CLAUDE.md` lines and writes them once confirmed. On a no it creates nothing and records the decision, with the date, in Working Practice so later audits do not ask again. The dashboard stays opt-in, since a rule turned on by default would spend usage on every long task in every project.
+  - Repository Hygiene treats `.dashboard/` as a one-session working folder: listed as ignored when it exists, never described as project content, and reported as a discrepancy if it is not ignored or is already tracked.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.66.0 - 2026-09-27
 
 Builds all five Future updates proposed in v1.64.0.

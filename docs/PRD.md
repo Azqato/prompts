@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.66.0
+**Version:** 1.67.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1676,6 +1676,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.67.0 | 2026-09-27 | Documentation prompt: the consolidation sweep keeps a Progress dashboard section the author chose in `CLAUDE.md` and records it in Working Practice, and, where there is none and none was declined, asks the author once whether to add one, writing nothing on a no except the recorded decision; Repository Hygiene lists `.dashboard/` as ignored when it exists and reports it as a discrepancy if it is not. This project uses no dashboard, so nothing else here changes. |
 | 1.66.0 | 2026-09-27 | Built all five Future updates in section 27. Motion Design gains optional effects (liquid glass, goo, iris, flood, footage), four key stills before the full build, a single-frame pop scan, -14 LUFS loudness, downloaded sound effects with a credits file, four gotchas, and neutral launch copy with alt text. Brand Identity, Motion Design, and Game Setup ask for optional references. Added the Progress Dashboard prompt (the tenth: Claude keeps a self-refreshing HTML page for a long task, with no agents) and the Assumption Check prompt (the eleventh, read-only). The Documentation prompt's Testing Cadence adds an assumption check right before a major update ships, next to the browser test, defines shipping for projects never pushed anywhere, and its summary lists claims written from inference. Section 20 adopts the check. Audited both new prompts against section 11 with nothing to remove. Updated the prompt and file counts in sections 13, 16, 23, 30, and 32a, and the focus-stop count in section 23. |
 | 1.65.0 | 2026-09-27 | Documentation prompt: the `docs/TODO.md` template's empty comment replaced with a two-line placeholder, an idea bullet with an indented source bullet, which is never treated as an idea and is restored when the list empties. This repository's `docs/TODO.md` and section 20 updated to match. |
 | 1.64.0 | 2026-09-27 | Turned the author's first ideas-list item, six posts on X, into five proposed updates under section 27's new "Future updates": Motion Design techniques and checks, Motion Design launch copy, design references in the design prompts, a Progress Dashboard prompt, and an Assumption Check prompt. The item removed from `docs/TODO.md`. |
