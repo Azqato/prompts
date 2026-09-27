@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.76.0
+**Version:** 1.77.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1812,6 +1812,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.77.0 | 2026-09-27 | Removed the last `.dashboard/` and `.gitignore` wording tied to the dashboard from both prompts. The Documentation prompt's enforced folder tree now shows `/dashboard`, and its Repository Hygiene bullet simply says the folder is public project content, never ignored. Its general ignore-file rules are unchanged. |
 | 1.76.0 | 2026-09-27 | Progress Dashboard prompt: finished the v1.74.0 change to a public page. Description says public; the intro and a rule say the published copy updates only when the project is published, while the copy on disk is live; results use project-relative paths; Claude names the public address; the standing-rule line carries the nothing-private rule. |
 | 1.75.0 | 2026-09-27 | Added the section 27 verification checklist (32 sections: two verified today against `git ls-files`, the rest not yet) and its rule in section 20, as the v1.73.0 Documentation prompt requires. The licence's grant for using the prompts was confirmed by the author. |
 | 1.74.0 | 2026-09-27 | The progress dashboard became public: the Progress Dashboard and Documentation prompts now keep it at `dashboard/index.html`, tracked and published with the project, with `noindex` and nothing private on it, and clean up the old ignored `.dashboard/`. Here, the page moved to `dashboard/`, `.gitignore` was removed as empty, and sections 13, 20, 30, and 32 updated. Seven folders. |

@@ -4,6 +4,16 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.77.0 - 2026-09-27
+
+### Changed
+
+- Progress Dashboard prompt: removed the cleanup rule for projects set up under the old `.dashboard/` layout (moving the old folder and removing its `.gitignore` line). The prompt now names only `dashboard/`.
+- Documentation prompt: the enforced folder tree shows `/dashboard` at the root, marked public, for projects that keep one. The Repository Hygiene bullet says only that `/dashboard` is public project content, tracked, never ignored, and never consolidated; the discrepancy check for `.dashboard/` is gone. The two other mentions now read `/dashboard/index.html`, one calling it a public progress page instead of a live one.
+- Unchanged on purpose: the Documentation prompt's general `.gitignore` rules (secrets, build output, lockfiles), which have nothing to do with the dashboard.
+
+---
+
 ## v1.76.0 - 2026-09-27
 
 Finishes the v1.74.0 change that made the progress dashboard public, which left four places in the Progress Dashboard prompt still written for a private page.

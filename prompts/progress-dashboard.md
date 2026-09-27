@@ -27,7 +27,7 @@ Dashboard
   - Latest results: the files created or changed, and what each one is, with paths relative to the project root.
 - Take every time from the system clock when you write the update. Never estimate one.
 - The dashboard is part of the project, tracked like any other file and published wherever the project is published: on a static site it is served at /dashboard/, and otherwise anyone who can see the repository can read it. Put nothing on it you would not publish: no secrets, keys, personal details, private paths, or private matters. Keep a question that involves any of those in the conversation, and put only a neutral line on the page. Include <meta name="robots" content="noindex">, since it is a working page rather than content. The published copy changes only when the project is published, which is my decision; the copy on disk is the live one.
-- If dashboard/ already exists for something else, use progress-dashboard/ instead and tell me. If an earlier version of this prompt left a .dashboard/ folder, move its page to the new folder; if .gitignore lists dashboard/ or .dashboard/, tell me and remove that line, removing .gitignore itself if nothing else is left in it.
+- If dashboard/ already exists for something else, use progress-dashboard/ instead and tell me.
 
 Working
 - Create the dashboard before starting the task, and tell me its path, and its public address if the project is published somewhere you can name.
