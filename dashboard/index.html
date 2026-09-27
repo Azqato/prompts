@@ -1,32 +1,93 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta http-equiv="refresh" content="10"><meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Public progress dashboard (v1.74.0) - Progress</title>
+<title>Dashboard redesign from the admin-dashboard template - Progress</title>
 <style>
-:root{--bg:#0a0a0a;--panel:#141414;--line:#2a2a2a;--text:#f2f2f2;--muted:#a8a8a8;--gold:#FFB800;--amber:#f89e22;--ok:#3fb950;--bad:#f85149}
-*{box-sizing:border-box;margin:0}body{background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding:24px}
-header{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;margin-bottom:18px}
-h1{font-size:1.5rem}.meta{color:var(--muted);font-size:.85rem}
-.label{font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
-.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin:6px 0 18px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--amber))}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
-section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
-ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:8px}li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
-li span{color:var(--muted);font-size:.88rem}li.done>span:nth-child(2){color:var(--muted)}li.doing>span:nth-child(2){color:var(--text);font-weight:600}
-.t{margin-left:auto;font-size:.78rem}
-.pill{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;padding:2px 9px;border-radius:99px;border:1px solid var(--line);color:var(--muted)!important}
-.pill.done{border-color:rgba(63,185,80,.5);color:var(--ok)!important}.pill.doing{background:linear-gradient(90deg,var(--gold),var(--amber));color:#111!important;border:0;font-weight:700}
-.pill.waiting{border-color:var(--gold);color:var(--gold)!important}
-.st{font-size:.72rem!important;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)!important}
-code{color:var(--gold);font-size:.85rem}.empty{color:var(--muted);font-size:.88rem}
-.summary{border-color:var(--gold);margin-bottom:14px}
-</style></head><body>
-<header><h1>Public progress dashboard (v1.74.0)</h1><span class="meta">Updated 2026-09-27 11:52:21 · refreshes every 10s · 2/3 steps done</span></header>
-<div class="bar"><i style="width:66%"></i></div>
-<section class="summary"><p>The dashboard is now public. Earlier today: v1.71.0 to v1.73.0 shipped.</p></section>
-<div class="grid">
-<section><div class="label">Steps</div><ul><li class="done"><span class="pill done">Done</span><span>Move the dashboard to dashboard/ and make it public</span><span class="t">11:52</span></li><li class="done"><span class="pill done">Done</span><span>Update both prompts, CLAUDE.md, PRD, and patch notes</span><span class="t">11:52</span></li><li class="doing"><span class="pill doing">In progress</span><span>Push and confirm the page is live</span><span class="t"></span></li></ul></section>
-<section><div class="label">Questions for you</div><ul><li><b>Licence grants use of the prompts (keeps PRD 11&#x27;s reuse rule) rather than granting nothing. Keep that?</b><span>Default: keep the grant: copy, adapt, run; no republishing</span><span class="st">open</span></li></ul></section>
-<section><div class="label">Stuck</div><ul><p class="empty">Nothing here.</p></ul></section>
-<section><div class="label">Latest results</div><ul><li><code>dashboard/index.html</code><span>This page, now public</span></li><li><code>prompts/progress-dashboard.md</code><span>Public by default, nothing private, noindex</span></li><li><code>prompts/documentation.md</code><span>dashboard/ is project content, never ignored</span></li></ul></section>
-</div></body></html>
+:root{--bg:#0a0a0a;--surface:#141414;--surface-2:#1c1c1c;--line:#2a2a2a;--text:#f2f2f2;--muted:#a8a8a8;
+--gold:#FFB800;--amber:#f89e22;--gold-soft:rgba(255,184,0,.13);--ok:#3fb950;--ok-soft:rgba(63,185,80,.13);--bad:#f85149;--bad-soft:rgba(248,81,73,.13);
+--font:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--mono:ui-monospace,"Cascadia Mono","SF Mono",Menlo,Consolas,monospace;
+--radius:6px;--sidebar:248px;--topbar-h:68px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--text);font:0.875rem/1.5 var(--font);font-variant-numeric:tabular-nums}
+h1,h2,p{margin-top:0}:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.pd-shell{display:grid;grid-template-columns:var(--sidebar) minmax(0,1fr);min-height:100vh}
+.pd-sidebar{position:sticky;top:0;display:flex;flex-direction:column;height:100vh;padding:1.25rem 1rem;border-right:1px solid var(--line);background:var(--surface)}
+.pd-brand{display:inline-flex;align-items:center;gap:.5rem;padding:.25rem;color:var(--text);font-size:1.25rem;font-weight:700;letter-spacing:-.01em;text-decoration:none}
+.pd-brand-mark{position:relative;width:24px;height:24px}.pd-brand-mark span{position:absolute;width:14px;height:14px;border-radius:3px}
+.pd-brand-mark span:first-child{top:0;left:0;background:linear-gradient(135deg,var(--gold),var(--amber))}.pd-brand-mark span:last-child{right:0;bottom:0;border:2px solid var(--text)}
+.pd-org{margin:1rem .25rem 1.25rem;padding:.5rem .75rem;border:1px solid var(--line);border-radius:var(--radius);color:var(--muted);font-size:.75rem}
+.pd-org strong{display:block;color:var(--text);font-size:.8125rem}
+.pd-nav{display:grid;gap:2px}
+.pd-nav a{display:flex;align-items:center;gap:.75rem;min-height:38px;padding:0 .75rem;border-radius:var(--radius);color:var(--muted);font-weight:500;text-decoration:none}
+.pd-nav a:hover{background:var(--surface-2);color:var(--text)}
+.pd-nav a:first-child{background:var(--gold-soft);color:var(--gold);box-shadow:inset 3px 0 0 var(--gold)}
+.pd-nav-count{margin-left:auto;padding:0 .5rem;border-radius:99px;background:var(--surface-2);color:var(--text);font-size:.75rem;line-height:20px}
+.pd-sidebar-foot{display:flex;align-items:center;gap:.75rem;margin-top:auto;padding:.75rem .25rem 0;border-top:1px solid var(--line)}
+.pd-sidebar-foot p{margin:0;color:var(--muted);font-size:.75rem}.pd-sidebar-foot strong{display:block;color:var(--text);font-size:.875rem}
+.pd-avatar{display:grid;flex:none;place-items:center;width:34px;height:34px;border-radius:99px;background:linear-gradient(135deg,var(--gold),var(--amber));color:#1a1400;font-size:.75rem;font-weight:700}
+.pd-main-wrap{min-width:0}
+.pd-topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:1rem;min-height:var(--topbar-h);padding:.75rem 2rem;border-bottom:1px solid var(--line);background:rgba(10,10,10,.9);backdrop-filter:blur(8px)}
+.pd-topbar-title{margin-right:auto;min-width:0}.pd-topbar h1{margin:0;font-size:1.5rem;line-height:1.2}
+.pd-live{display:flex;align-items:center;gap:.5rem;margin:2px 0 0;color:var(--muted);font-size:.75rem}
+.pd-live-dot{width:7px;height:7px;border-radius:99px;background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft);animation:pd-pulse 2s ease-in-out infinite}
+@keyframes pd-pulse{50%{box-shadow:0 0 0 6px transparent}}@media (prefers-reduced-motion:reduce){.pd-live-dot{animation:none}}
+.pd-chip{padding:.25rem .75rem;border-radius:var(--radius);background:linear-gradient(90deg,var(--gold),var(--amber));color:#1a1400;font-weight:700;white-space:nowrap}
+.pd-main{display:grid;grid-template-columns:minmax(0,1fr);gap:2.5rem;padding:2rem}
+.pd-section{scroll-margin-top:calc(var(--topbar-h) + 1rem)}
+.pd-section-title{margin-bottom:1rem;font-size:.75rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--gold)}
+.pd-card{padding:1.25rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.pd-card-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.25rem 1rem;margin-bottom:.75rem}
+.pd-card-head h3{margin:0;font-size:1rem;font-weight:600}.pd-card-note{margin:0;color:var(--muted);font-size:.75rem}
+.pd-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin:0 0 1rem;padding:0;list-style:none}
+.pd-kpi{padding:1rem 1.25rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.pd-kpi-label{margin-bottom:.25rem;color:var(--muted);font-size:.75rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.pd-kpi-value{margin-bottom:.5rem;font-size:2.25rem;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.pd-kpi-delta{display:flex;align-items:center;gap:.5rem;margin:0;font-size:.75rem;font-weight:500;color:var(--muted)}
+.pd-kpi-delta::before{content:"";flex:none;width:6px;height:6px;border-radius:99px;background:currentColor}
+.pd-kpi-delta.is-good{color:var(--ok)}.pd-kpi-delta.is-bad{color:var(--bad)}
+.pd-meter{display:block;height:6px;overflow:hidden;border-radius:99px;background:var(--surface-2);margin-bottom:1rem}
+.pd-meter-fill{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--gold),var(--amber))}
+.pd-summary{margin:0;font-size:.9375rem}
+.pd-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.pd-table{width:100%;min-width:560px;border-collapse:separate;border-spacing:0}
+.pd-table th,.pd-table td{padding:.5rem .75rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.pd-table tbody th{font-weight:500}.pd-table td{color:var(--muted)}
+.pd-table thead th{background:var(--surface-2);color:var(--muted);font-size:.75rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.pd-table tbody tr:last-child>*{border-bottom:0}.pd-table tbody tr:hover>*{background:var(--surface-2)}
+.pd-table tr.is-doing>*{background:#1f1a0d}.pd-table tr.is-done th{color:var(--muted)}
+.pd-num{width:1%;white-space:nowrap;color:var(--muted)}
+.pd-table code{font-family:var(--mono);font-size:.8125rem;color:var(--gold)}
+.pd-status{display:inline-flex;align-items:center;gap:6px;padding:2px .5rem;border-radius:99px;font-size:.75rem;font-weight:600;white-space:nowrap;text-transform:capitalize}
+.pd-status::before{content:"";width:6px;height:6px;border-radius:99px;background:currentColor}
+.pd-status--done{background:var(--ok-soft);color:var(--ok)}.pd-status--waiting{background:var(--gold-soft);color:var(--gold)}
+.pd-status--doing{background:linear-gradient(90deg,var(--gold),var(--amber));color:#1a1400}
+.pd-status--todo{background:var(--surface-2);color:var(--muted)}
+.pd-empty{color:var(--muted)}.pd-empty p{margin:0}.pd-empty-title{color:var(--text);font-weight:600}
+.pd-footer{padding-top:1.25rem;border-top:1px solid var(--line);color:var(--muted);font-size:.75rem}
+@media (max-width:1200px){.pd-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.pd-shell{grid-template-columns:minmax(0,1fr)}
+.pd-sidebar{position:static;min-width:0;height:auto;padding:.75rem 1rem;border-right:0;border-bottom:1px solid var(--line)}
+.pd-org,.pd-sidebar-foot{display:none}.pd-nav{min-width:0;max-width:100%;grid-auto-flow:column;grid-auto-columns:max-content;overflow-x:auto;margin-top:.5rem}}
+@media (max-width:640px){.pd-topbar{flex-wrap:wrap;padding:.75rem 1rem}.pd-main{padding:1rem;gap:2rem}.pd-topbar h1{font-size:1.25rem}}
+@media (max-width:420px){.pd-kpis{grid-template-columns:minmax(0,1fr)}}
+</style></head>
+<body><div class="pd-shell">
+<aside class="pd-sidebar"><a class="pd-brand" href="#overview"><span class="pd-brand-mark" aria-hidden="true"><span></span><span></span></span>Progress</a>
+<p class="pd-org"><strong>Current task</strong>Dashboard redesign from the admin-dashboard template</p>
+<nav class="pd-nav" aria-label="Sections"><a href="#overview">Overview</a><a href="#steps">Steps<span class="pd-nav-count">5</span></a><a href="#questions">Questions<span class="pd-nav-count">0</span></a><a href="#stuck">Stuck<span class="pd-nav-count">0</span></a><a href="#results">Results<span class="pd-nav-count">4</span></a></nav>
+<div class="pd-sidebar-foot"><span class="pd-avatar" aria-hidden="true">C</span><p><strong>Claude</strong>Maintained in this session</p></div></aside>
+<div class="pd-main-wrap">
+<header class="pd-topbar"><div class="pd-topbar-title"><h1>Dashboard redesign from the admin-dashboard template</h1><p class="pd-live"><span class="pd-live-dot" aria-hidden="true"></span>Updated 2026-09-27 12:25:43, refreshes every 10 seconds</p></div><span class="pd-chip">80%</span></header>
+<main class="pd-main">
+<section class="pd-section" id="overview" aria-labelledby="h-overview"><h2 class="pd-section-title" id="h-overview">Overview</h2>
+<ul class="pd-kpis"><li class="pd-kpi"><p class="pd-kpi-label">Steps done</p><p class="pd-kpi-value">4/5</p><p class="pd-kpi-delta is-good">80% complete</p></li><li class="pd-kpi"><p class="pd-kpi-label">In progress</p><p class="pd-kpi-value">1</p><p class="pd-kpi-delta is-flat">working now</p></li><li class="pd-kpi"><p class="pd-kpi-label">Stuck</p><p class="pd-kpi-value">0</p><p class="pd-kpi-delta is-good">nothing blocked</p></li><li class="pd-kpi"><p class="pd-kpi-label">Open questions</p><p class="pd-kpi-value">0</p><p class="pd-kpi-delta is-good">none waiting</p></li></ul>
+<div class="pd-card"><div class="pd-card-head"><h3>Progress</h3><p class="pd-card-note">4 of 5 steps done</p></div>
+<span class="pd-meter" role="img" aria-label="80% complete"><span class="pd-meter-fill" style="width:80%"></span></span>
+<p class="pd-summary">Rebuilt on the admin-dashboard template layout, in the existing gold-on-black palette. Checked at desktop and phone widths.</p></div></section>
+<section class="pd-section" id="steps" aria-labelledby="h-steps"><h2 class="pd-section-title" id="h-steps">Steps</h2><div class="pd-table-wrap"><table class="pd-table"><thead><tr><th scope="col">#</th><th scope="col">Step</th><th scope="col">Status</th><th scope="col">Time</th></tr></thead><tbody><tr class="is-done"><td class="pd-num">1</td><th scope="row">Read the template, its contract, and its styles</th><td><span class="pd-status pd-status--done">Done</span></td><td class="pd-num">12:24</td></tr><tr class="is-done"><td class="pd-num">2</td><th scope="row">Rebuild the page on the template layout, in the CLAUDE.md palette</th><td><span class="pd-status pd-status--done">Done</span></td><td class="pd-num">12:24</td></tr><tr class="is-done"><td class="pd-num">3</td><th scope="row">Screenshot at desktop and phone widths</th><td><span class="pd-status pd-status--done">Done</span></td><td class="pd-num">12:25</td></tr><tr class="is-done"><td class="pd-num">4</td><th scope="row">Record the layout in CLAUDE.md and the PRD</th><td><span class="pd-status pd-status--done">Done</span></td><td class="pd-num">12:25</td></tr><tr class="is-doing"><td class="pd-num">5</td><th scope="row">Push and confirm the page is live</th><td><span class="pd-status pd-status--doing">In progress</span></td><td class="pd-num">12:25</td></tr></tbody></table></div></section>
+<section class="pd-section" id="questions" aria-labelledby="h-q"><h2 class="pd-section-title" id="h-q">Questions for you</h2><div class="pd-card pd-empty"><p class="pd-empty-title">Nothing here</p><p>No questions waiting.</p></div></section>
+<section class="pd-section" id="stuck" aria-labelledby="h-stuck"><h2 class="pd-section-title" id="h-stuck">Stuck</h2><div class="pd-card pd-empty"><p class="pd-empty-title">Nothing here</p><p>Nothing is blocked.</p></div></section>
+<section class="pd-section" id="results" aria-labelledby="h-res"><h2 class="pd-section-title" id="h-res">Latest results</h2><div class="pd-table-wrap"><table class="pd-table"><thead><tr><th scope="col">File</th><th scope="col">What changed</th></tr></thead><tbody><tr><th scope="row"><code>dashboard/index.html</code></th><td>Rebuilt on the admin-dashboard layout</td></tr><tr><th scope="row"><code>CLAUDE.md</code></th><td>Layout recorded beside the style</td></tr><tr><th scope="row"><code>docs/PRD.md</code></th><td>Section 20 note, version 1.78.0</td></tr><tr><th scope="row"><code>docs/PATCHNOTES.md</code></th><td>v1.78.0 entry</td></tr></tbody></table></div></section>
+<footer class="pd-footer">A working page kept by Claude during long tasks in this project. Not indexed. The published copy shows the state as of the last publish.</footer>
+</main></div></div></body></html>

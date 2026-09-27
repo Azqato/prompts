@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.77.0
+**Version:** 1.78.0
 **Status:** Active
 **Author:** Azqato
 
@@ -584,6 +584,7 @@ Adopted in v1.71.0, at the author's request, to test the Progress Dashboard prom
 - For any task with more than five steps, or likely to take longer than thirty minutes, Claude keeps `dashboard/index.html`: the steps and their status, anything stuck, questions waiting with the default it will take, and the latest results. It is created before the work starts and updated after every step, by Claude itself in the session, with no agent or plugin.
 - The style, chosen after the look of 1000xstocks.com, is recorded in `CLAUDE.md`: dark, medium density, gold `#FFB800` with a gold-to-amber gradient, spaced uppercase labels, system fonts. It is the dashboard's style only and has nothing to do with this site's design in `docs/DESIGN.md`.
 - Since v1.74.0 the page is public: `dashboard/` is tracked and goes live with the site at `https://azqato.github.io/prompts/dashboard/`, so progress can be watched from anywhere. It shows the state as of the last push, not live, and carries `noindex` and nothing private. It was `.dashboard/`, ignored, from v1.71.0; GitHub Pages does not serve folders whose names start with a dot, so the rename was required, not cosmetic. It is not listed in `sitemap.xml`.
+- Since v1.78.0 the page uses the layout of the author's admin-dashboard template (sidebar, top bar, four summary figures, progress card, tables), rebuilt inline in the recorded palette rather than the template's own colors. `CLAUDE.md` records the layout.
 - If the prompt feels wrong in use, that is a finding for `prompts/progress-dashboard.md`, which is the point of running it here.
 
 ---
@@ -1812,6 +1813,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.78.0 | 2026-09-27 | This site's progress dashboard rebuilt on the author's admin-dashboard template layout, in the palette `CLAUDE.md` already records. `CLAUDE.md` records the layout; section 20 notes it. |
 | 1.77.0 | 2026-09-27 | Removed the last `.dashboard/` and `.gitignore` wording tied to the dashboard from both prompts. The Documentation prompt's enforced folder tree now shows `/dashboard`, and its Repository Hygiene bullet simply says the folder is public project content, never ignored. Its general ignore-file rules are unchanged. |
 | 1.76.0 | 2026-09-27 | Progress Dashboard prompt: finished the v1.74.0 change to a public page. Description says public; the intro and a rule say the published copy updates only when the project is published, while the copy on disk is live; results use project-relative paths; Claude names the public address; the standing-rule line carries the nothing-private rule. |
 | 1.75.0 | 2026-09-27 | Added the section 27 verification checklist (32 sections: two verified today against `git ls-files`, the rest not yet) and its rule in section 20, as the v1.73.0 Documentation prompt requires. The licence's grant for using the prompts was confirmed by the author. |

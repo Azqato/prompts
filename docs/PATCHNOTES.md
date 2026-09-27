@@ -4,6 +4,20 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.78.0 - 2026-09-27
+
+### Changed
+
+- `dashboard/index.html`: rebuilt on the layout of the author's admin-dashboard template. A sidebar with the brand, the current task, and section links with counts; a sticky top bar with a live dot, the update time, and the percent complete; four summary figures; a progress card; and tables for steps, questions, stuck items, and results, with word-and-color status pills and empty states. The colors stay the ones `CLAUDE.md` records (near-black, `#141414` panels, gold to amber), at the author's request, instead of the template's graphite and amber.
+- The template's shared stylesheets and script are not linked. The page must load nothing from the network, so only the styles it uses are written inline, and the template's drawer, which needs a script, becomes a scrolling strip of section links below 900px.
+- `CLAUDE.md`: the layout recorded beside the style, so later dashboards match. PRD section 20 notes it.
+
+### Notes
+
+Checked at desktop width and inside a 375px frame. Headless Edge on Windows will not size its window below about 490px, so a phone-width screenshot needs the page in a narrow frame; at the asked-for 390px the screenshot was cropped, not overflowing.
+
+---
+
 ## v1.77.0 - 2026-09-27
 
 ### Changed

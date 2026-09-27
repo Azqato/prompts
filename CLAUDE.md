@@ -13,3 +13,5 @@ Style, chosen 2026-09-27 after the look of 1000xstocks.com:
 - Accent gold `#FFB800`, with a gold-to-amber gradient (`#FFB800` to `#f89e22`) on the progress bar and the in-progress badge.
 - Panel labels in small uppercase with wide letter spacing, and pill-shaped status badges.
 - System fonts only, since the page loads nothing from the network.
+
+Layout, chosen 2026-09-27: the admin-dashboard template from the author's templateinterface repository, rebuilt inline in the palette above (the template's own graphite and amber colors are not used). A left sidebar with the brand, the current task, and section links with counts; a sticky top bar with the task name, a pulsing live dot with the update time, and the percent complete; four summary figures (steps done, in progress, stuck, open questions); a progress card with a gold meter and the summary; then tables for steps, questions, stuck items, and results, with status pills that carry a word as well as a color. Below 900px the sidebar becomes a strip of section links across the top. No script: the page reloads every 10 seconds instead.
