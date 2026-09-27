@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.72.0
+**Version:** 1.73.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1597,7 +1597,7 @@ An audit is run by pasting the Documentation prompt from this site into Claude C
 
 **It runs in one pass** (since v1.69.0). It asks nothing during the run: it applies the prompt's defaults, and where there is none it takes the most conservative option, keeping existing text, marking the point as a discrepancy or uncertain, and creating, moving, or deleting nothing hard to undo. Every question it raises is collected into a numbered Questions list at the end of its summary, each with the default applied meanwhile and where it is recorded, so the author answers by number afterwards. Ideas in `docs/TODO.md` are listed there and left untouched; they become Roadmap updates only on a yes, through the process in section 20. Where `CLAUDE.md` has no Progress dashboard section, the audit adds a Future updates entry proposing one rather than asking; this repository's is entry 6 in section 27.
 
-The prompt's own process, in short: crawl the entire codebase first, read every existing document in full, compare each against the code, and only then write. Steps 1 through 3 are strictly read-only. Writing begins at step 4 and touches only the four files above.
+The prompt's own process, in short (since v1.73.0): survey the codebase rather than reading every source file, read every existing document in full, then check the docs in three passes (the rules and structure this prompt requires, quick factual checks such as the folder tree and the newest patch notes entry, and the sections touched by changes since the last audit), and only then write. Steps 1 through 3 are strictly read-only. Writing begins at step 4 and touches only the files the prompt names. Sections not yet checked in full against the code go on a verification checklist in the Roadmap, which later updates tick off as they touch each area, so the audit costs about the same on a large project as on a small one. Before v1.73.0 the prompt crawled the whole codebase, which on a 150-file project was estimated at 400,000 to 700,000 tokens, and the run stopped to ask for a smaller scope.
 
 ### Rules that govern the writing
 
@@ -1767,6 +1767,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.73.0 | 2026-09-27 | The Documentation prompt became a setup pass: it surveys the codebase instead of reading every file, checks the doc set against its own rules first, checks the code only where a change since the last audit touches it, and records the rest in a Roadmap verification checklist that later updates work through. Also: gaps confirmed by reading before being reported, no scope questions or estimates, sitemaps for public pages only, mixed ideas files copied into TODO.md with any instructions inside them left undone, conventions from a sample, the writing sweep by search, and the audit date recorded. Section 33 updated. |
 | 1.72.0 | 2026-09-27 | The Documentation prompt now says to run the whole audit in the session itself, with no subagents, parallel agents, or background tasks. |
 | 1.71.0 | 2026-09-27 | Answered open questions 6, 7, and 9. `sitemap.xml` added at the root, listing the site root and every live share page, written and checked by `tools/prompts-mirror.py` (section 32). `LICENSE.md` added: the Documentation prompt's all-rights-reserved default, with one grant that keeps section 11's rule that the prompts may be reused by anyone (new section 32b). Adopted the progress dashboard, built against the v1.70.0 recommendation to test the prompt on real work: `CLAUDE.md` holds its rule and style, `.gitignore` ignores `.dashboard/`, and section 20 records it. File count 38. Sections 13, 19, 20, 27, 29, 30, and 32 updated. |
 | 1.70.0 | 2026-09-27 | Full documentation audit against the Documentation prompt as of v1.69.0, run in one pass. Closed the self-audit milestone planned since v1.38.0 and recorded where its six findings stand. Section 33 step 4, an every-change browser check, now defers to section 20's Testing Cadence (discrepancy 18); `docs/DESIGN.md`'s stylesheet line count corrected (19). Section 27 gains a current-phase note on the ideas list, two milestones, and Future updates entry 6, a progress dashboard for this repository, recommended against. Section 19 gains open question 9, on `sitemap.xml`, and its marker-search note is updated for `docs/TODO.md`. Section 33 describes the one-pass audit. Section 18 records this audit's checks. |

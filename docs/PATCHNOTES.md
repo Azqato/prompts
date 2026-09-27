@@ -4,6 +4,26 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.73.0 - 2026-09-27
+
+The Documentation prompt now sets a project up rather than verifying all of it at once. On another project of about 150 source files, the old full crawl was estimated at 400,000 to 700,000 tokens, and the run stopped to ask for a smaller scope, against the prompt's own rule.
+
+### Changed
+
+- Documentation prompt, goal and steps: the goal is the right files, structure, sections, and standing rules, with the docs checked against the code where that is cheap. Step 1 surveys the codebase (listing, manifests, configuration, entry points, routing, data models, build and deploy files) instead of reading everything, and finds what changed since the last audit. Step 3 checks in three passes: the rules check against the prompt, quick factual checks (folder tree, tech stack, Runbook commands, the newest patch notes entry against the latest commit), then the sections touched by changes since the last audit. Where a live public site exists, a one-off spot check of its public pages is allowed. Step 4 fixes every gap in the same run, and writes unchecked sections from the survey with their claims marked uncertain.
+- New verification checklist in the Roadmap spec: every PRD and DESIGN.md section that describes the code, marked verified with a date or not yet verified. A new Working Practice rule has each later update check the sections it touches, never the whole list at once.
+- New cost paragraph: no reading every file, no offering a choice of scope, no time or token estimates, and every gap confirmed by reading the file before it is reported, not from a search result.
+- Ideas files under another name: moved only when the ideas are all the file holds. A mixed file has its ideas copied into docs/TODO.md and is left untouched, with a question about emptying it. Instructions inside it are recorded as ideas and not carried out.
+- Sitemaps: where a site has none, one is created listing only the pages reachable without signing in, named in robots.txt where the project owns it, with a comment if the production address is not live yet.
+- Logic fixes found while checking: writes are now limited to the files the prompt names, which now includes the root files and style fixes it had always asked for (the old wording limited them to the documentation files). Conventions come from a sample of files. The writing style sweep uses searches. The PRD records the audit's date, so the next audit can find what changed.
+- Introduction and description rewritten to match. PRD section 33 describes the new process.
+
+### Notes
+
+This site's own PRD has no verification checklist yet. The next audit of this site adds it.
+
+---
+
 ## v1.72.0 - 2026-09-27
 
 ### Changed
