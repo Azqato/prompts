@@ -4,6 +4,27 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.84.0 - 2026-09-27
+
+Builds Future update 7 from the ideas list: a prompt that uses the `latent-spaces/brag` repository directly instead of any version of it written here.
+
+### Added
+
+- `prompts/launch-video.md`, the Launch Video prompt, with its share page `p/launch-video.html`. It installs the open-source `/brag` Claude Code plugin once and runs it to make a launch video of the reader's project, with music, sound effects, and share copy, in a `brag-output/` folder. It builds no video pipeline of its own and copies none of the plugin's files.
+  - Full workflow, at the author's choice: it always runs `/brag --full`, because on Opus 5.5 `/brag` otherwise switches itself to the lighter `/brag-slim`. It checks for Node.js 22 or newer, ffmpeg, and the Hyperframes command line, and asks before installing anything missing.
+  - Installed at user scope, at the author's choice, so every project on the machine and any other prompt can use it without installing it again. Claude runs `claude plugin marketplace add latent-spaces/brag` and `claude plugin install brag@brag` (user scope is that command's default), or, where it cannot run the `claude` command, gives the reader the two `/plugin` commands and the scope to choose. The commands were checked against the Claude Code plugin documentation rather than recalled.
+  - It says how to update the plugin, since plugins from third-party marketplaces do not update themselves, asks once for tone, format, length, music, sound effects, voiceover, and title with defaults drawn from the project, and asks whether `brag-output/` should be kept out of version control.
+  - Audited against PRD section 11: no push, commit, or publish instruction, and no reference to the author's accounts. Naming the plugin's public repository is the point of the prompt and takes no action on any account.
+- The README lists it.
+
+### Changed
+
+- Motion Design prompt: its introduction points to Launch Video for a story-style video of a whole project, as the two make different kinds of video.
+- PRD: Future update 7 marked built, with the two decisions that differ from its recommendation. Twelve prompts and 40 files in sections 13, 16, 18, 23, and 30. The verification checklist's repository structure line re-checked against `git ls-files` after the addition. `sitemap.xml` now lists twelve share pages, written by the mirror sync.
+- DESIGN.md 1.11.7: the focus-stop count for twelve prompts is fifteen.
+
+---
+
 ## v1.83.0 - 2026-09-27
 
 ### Changed

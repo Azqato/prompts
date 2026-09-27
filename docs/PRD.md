@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.83.0
+**Version:** 1.84.0
 **Status:** Active
 **Author:** Azqato
 
@@ -251,7 +251,7 @@ The `hidden: true` flag remains supported for retiring a prompt from navigation 
 
 ## 13. Repository Structure
 
-The whole project is 38 files in seven folders. There is no build output and no vendored code. There is no ignore file: v1.71.0 added a `.gitignore` whose only entry was `.dashboard/`, and v1.74.0 removed it when the dashboard became public at `dashboard/` (section 20), leaving nothing to ignore. `.editorconfig` and `.vscode/` are absent, and every file in the working tree is tracked.
+The whole project is 40 files in seven folders. There is no build output and no vendored code. There is no ignore file: v1.71.0 added a `.gitignore` whose only entry was `.dashboard/`, and v1.74.0 removed it when the dashboard became public at `dashboard/` (section 20), leaving nothing to ignore. `.editorconfig` and `.vscode/` are absent, and every file in the working tree is tracked.
 
 `.gitattributes`, added in v1.36.0, is the only piece of git configuration the repository carries (a `.gitignore` existed from v1.71.0 to v1.74.0). It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
 
@@ -273,8 +273,8 @@ The whole project is 38 files in seven folders. There is no build output and no 
 ├── js/
 │   ├── prompts-data.js Hand-maintained mirror of prompts/*.md. Largest file by far.
 │   └── script.js       All client logic: parse, render, route, copy.
-├── prompts/            Eleven .md files, one per prompt. The readable source.
-├── p/                  Eleven generated share pages, one per visible prompt, and one retired.
+├── prompts/            Twelve .md files, one per prompt. The readable source.
+├── p/                  Twelve generated share pages, one per visible prompt, and one retired.
 │                       Public addresses: retired, never deleted. Section 32a.
 ├── tools/
 │   └── prompts-mirror.py  Maintenance only. Checks or resyncs the mirror
@@ -358,7 +358,7 @@ Every explicit rule found in the documentation, collected in one place. Sources 
 - Em dashes are prohibited in all three forms in all copy, including markdown docs and inline comments. CSS custom properties such as `--color-bg` are exempt (PRD 11). See section 18 for where the docs currently break this.
 - No marketing language, no filler phrases, plain declarative sentences (PRD 11).
 - A prompt page contains exactly three things: title, description, code block. No other sections (PRD 8).
-- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all eleven prompts, four on 2026-08-23, `prompt-audit`, `brand-identity`, and `ios-simulator` on 2026-09-23, `game-setup` on 2026-09-24, `motion-design` on 2026-09-25, and `progress-dashboard` and `assumption-check` on 2026-09-27.
+- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all twelve prompts, four on 2026-08-23, `prompt-audit`, `brand-identity`, and `ios-simulator` on 2026-09-23, `game-setup` on 2026-09-24, `motion-design` on 2026-09-25, and `progress-dashboard`, `assumption-check`, and `launch-video` on 2026-09-27.
 - Prompt text must not reference the author's specific services, accounts, or credentials (PRD 11).
 - The public surface is the deployed page, not the source that builds it. Files under `prompts/` are source, so renaming or removing a prompt is done bare, with no redirect, except for its share page, which is retired (PRD 12, 32a).
 - A genuine public address is retired behind a `REDIRECTS` entry, which is then permanent, never chains, and is never reused for different content (PRD 12).
@@ -426,8 +426,8 @@ Implemented but undocumented at the time of the v1.18.0 pass: the error view (`r
 
 Checked and confirmed clean on 2026-09-27 during the v1.70.0 audit:
 
-- All eleven `prompts/*.md` files are mirrored in `js/prompts-data.js` with no orphans, and every share page is current, by `tools/prompts-mirror.py`.
-- All eleven live share pages carry the six sharing tags with an absolute, unique https `og:url`, descriptions of 135 to 149 characters, and titles of 29 to 37 characters with no collision in the first 30. The one retired page forwards as section 32a describes.
+- All twelve `prompts/*.md` files are mirrored in `js/prompts-data.js` with no orphans, and every share page is current, by `tools/prompts-mirror.py`.
+- All twelve live share pages carry the six sharing tags with an absolute, unique https `og:url`, descriptions of 135 to 149 characters, and titles of 29 to 37 characters with no collision in the first 30. The one retired page forwards as section 32a describes.
 - `js/script.js` sets the title per route: the site name on home, "<prompt> - Azqato's Prompts" on a prompt page.
 - The section banners of `css/style.css` are in the order `docs/DESIGN.md` section 11 lists, with the two `max-width` breakpoints at 1023px and 767px and the reduced-motion block last.
 - Line counts: `index.html` 51, `css/style.css` 569, `js/script.js` 370, share pages 21, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
@@ -673,7 +673,7 @@ Each of these was considered and rejected, with the reason. They are listed so t
 | Not built | Why |
 | --- | --- |
 | Search or filtering | The library is small enough to scan, and the sidebar shows everything at once. Search earns its complexity at a scale this project does not intend to reach |
-| Tags or categories | Same reason. Eleven prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
+| Tags or categories | Same reason. Twelve prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
 | Syntax highlighting | Would mean a library, which breaks the no-dependency rule. Prompt text is prose, not code, so highlighting would add noise rather than meaning |
 | A build step | The entire architecture exists to avoid one. See section 7 |
 | Automated `prompts-data.js` generation | Would require Node in the loop and a build convention. The resync is done with a throwaway script per change instead, which keeps the repository free of tooling. This is a real tradeoff and it is recorded as technical debt in section 30 |
@@ -979,6 +979,8 @@ Based on: the Documentation prompt's rule for projects with no Progress dashboar
 
 **Recommendation.** Do it, with `/brag-slim` as the default, the full `/brag` named as the heavier option, and a project-level install. A prompt this thin is worth having because it records the right skill, the right install command, and the options in one place, and it keeps the site from growing its own version of a maintained tool.
 
+**Built in v1.84.0**, with two decisions that differ from the recommendation above. The author chose the full `/brag` over `/brag-slim`, so the prompt always passes `--full` (on Opus 5.5 `/brag` otherwise switches itself to `/brag-slim`), and checks for Node.js 22, ffmpeg, and the Hyperframes command line. And the install is at user scope, once per machine, not per project, so every project and any other prompt can use it. It installs through the plugin marketplace (`claude plugin marketplace add latent-spaces/brag`, then `claude plugin install brag@brag`, whose default is user scope), falling back to the two `/plugin` commands in a session. The name stayed Launch Video.
+
 Based on: the author's ideas list, 2026-09-27, and the `latent-spaces/brag` README and `skills/brag-slim/SKILL.md`, read on 2026-09-27.
 
 ### Deferred
@@ -999,7 +1001,7 @@ Added in v1.75.0, under the Documentation prompt's v1.73.0 rule. Each section th
 | PRD 9 | Navigation | Not yet |  |
 | PRD 10 | Copy Button Behavior | Not yet | Working on the live site per the author, 2026-09-27; the text itself not yet checked against `js/script.js` |
 | PRD 10a | Prompt Collapse Behavior | Not yet |  |
-| PRD 13 | Repository Structure | Verified 2026-09-27 | Tree and count checked against `git ls-files`: 38 files, seven folders |
+| PRD 13 | Repository Structure | Verified 2026-09-27 | Tree and count checked against `git ls-files`: 40 files, seven folders, after `launch-video` was added |
 | PRD 14 | Architecture and Flow | Not yet |  |
 | PRD 15 | Code Conventions | Not yet |  |
 | PRD 17 | Stack, Tooling, and Deployment | Not yet |  |
@@ -1242,7 +1244,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 
 | Layer | Technology | Version |
 | --- | --- | --- |
-| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus eleven generated share pages of 21 lines each and one retired share page |
+| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus twelve generated share pages of 21 lines each and one retired share page |
 | Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 569 lines, no `@import` |
 | Logic | JavaScript, ES5-flavoured with `const` and `let` | No transpiler. Runs as written. 370 lines |
 | Maintenance tooling | Python 3, standard library only | `tools/prompts-mirror.py`. Never runs in a browser, never required to build or serve |
@@ -1285,6 +1287,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 │   ├── game-setup.md
 │   ├── github-wiki.md
 │   ├── ios-simulator.md
+│   ├── launch-video.md
 │   ├── mobile-responsive-audit.md
 │   ├── motion-design.md
 │   ├── progress-dashboard.md
@@ -1307,7 +1310,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
                             into the Roadmap on request. See section 20.
 ```
 
-Thirty-eight files, seven folders, two levels deep at most. No build output and no vendored code. No ignore file (one existed from v1.71.0 to v1.74.0, for `.dashboard/` only). `.editorconfig`, `.github/`, and `.vscode/` are absent, and every other file in the working tree is tracked.
+Forty files, seven folders, two levels deep at most. No build output and no vendored code. No ignore file (one existed from v1.71.0 to v1.74.0, for `.dashboard/` only). `.editorconfig`, `.github/`, and `.vscode/` are absent, and every other file in the working tree is tracked.
 
 ### Data models
 
@@ -1839,6 +1842,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.84.0 | 2026-09-27 | Added the Launch Video prompt (`prompts/launch-video.md`), Future update 7: it installs the `/brag` plugin once at user scope and runs its full workflow with `--full`. Motion Design's introduction points to it. Twelve prompts, 40 files; sections 13, 16, 18, 23, 30, and the verification checklist updated. |
 | 1.83.0 | 2026-09-27 | Turned the ideas-list entry about the `latent-spaces/brag` repository into Future update 7, a Launch Video prompt that installs and runs `/brag-slim` directly. Recorded that the site never used the repository directly: update 2 only took the launch copy idea from its README. |
 | 1.82.0 | 2026-09-27 | Progress Dashboard prompt: the final update, with every step done and the summary, is written before the project is published, and publishing or confirming a deploy is never a step on the page, since the live copy could never show it done. Found on this site, where the page was left showing its last step in progress. |
 | 1.81.0 | 2026-09-27 | Documentation prompt: its Roadmap entry for a progress dashboard now links to the Progress Dashboard prompt's share page and restates none of its layout, branding, or rules, so the dashboard is defined in one place. The folder tree line and the Repository Hygiene rule that `/dashboard` is public and never ignored stay, as rules the Documentation prompt owns. |
