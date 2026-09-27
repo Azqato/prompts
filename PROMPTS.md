@@ -5,7 +5,7 @@
 - https://x.com/himanshubuildss/status/2103374896147378635?s=46
 - https://x.com/Voxyz_ai/status/2103946635831050740?s=20
 - https://x.com/kloss_xyz/status/2104088147739242660?s=46
-
+- https://x.com/vullnetademaj/status/2104169192438296889?s=46
 
 2) also do the following:
 Update the documentation audit prompt so it permanently includes and maintains docs/PROMPTS.md.
