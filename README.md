@@ -26,6 +26,8 @@ The library covers recurring maintenance work, the kind of task that is tedious 
 - **iOS Simulator** gets an iPhone or iPad app running in Apple's iOS Simulator and reviews how it looks. It installs Xcode if needed, builds and launches the app on the smallest and largest iPhones, checks every screen in dark mode and with large text, and can include iPad and the foldable iPhone Duo. It reports each problem with a screenshot and a proposed fix.
 - **Game Setup** starts a three.js browser game on solid foundations: a clean project structure, a game loop that runs the same on any screen, controls for keyboard, gamepad, and touch, and sound, then builds a small playable version of the game and tests it in a real browser.
 - **Motion Design** makes a short, looping product animation entirely in code: one shape morphing through interface states, from a button to a music player to a command palette, driven by an on-screen cursor in time with a song, and rendered to a video ready for social media.
+- **Progress Dashboard** has Claude keep a live page for a long task, showing progress, anything stuck, and the questions waiting for you, each with what Claude will do if you do not answer, so a task can run without you watching the session.
+- **Assumption Check** has Claude list what it believes about your code before changing it, marking which beliefs it confirmed by reading the code and which are guesses, so the guesses can be checked before they turn into bugs.
 - **Add Prompt** is the one that maintains this site. Hand it a raw prompt and it writes the title and description and files everything in the right places.
 
 Each page is deliberately the same shape, so once you have read one you know exactly where to look on all the others.

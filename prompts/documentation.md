@@ -6,7 +6,7 @@ meta: Claude Code Prompt
 
 Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`, plus a LICENSE.md beside the README where the project has no licence of its own. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Repository Hygiene, Licensing, Social Sharing Tags, Page Titles, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
 
-It also keeps `docs/TODO.md`, a plain list of your ideas for future updates, which it never merges away. Nothing in it is built directly: the audit, and every later session about to push an update, asks whether to turn the ideas into Roadmap updates. On a yes it reads whatever each idea points to, works out what you mean, and writes the update in its own words with its reasoning and a recommendation, then asks whether you want to work on any of them. Its testing rule keeps tests to headless Edge, run once before a major update ships rather than after every small edit, and it replaces an older every-change testing rule where it finds one.
+It also keeps `docs/TODO.md`, a plain list of your ideas for future updates, which it never merges away. Nothing in it is built directly: the audit, and every later session about to push an update, asks whether to turn the ideas into Roadmap updates. On a yes it reads whatever each idea points to, works out what you mean, and writes the update in its own words with its reasoning and a recommendation, then asks whether you want to work on any of them. Its testing rule keeps tests to headless Edge, run once before a major update ships rather than after every small edit, together with a check of the assumptions the change relies on, and it replaces an older every-change testing rule where it finds one. Projects that are never pushed anywhere run the same checks when a major update is finished.
 
 Use it when a project needs one authoritative, exhaustive doc set in a single pass. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, cross-checks the docs against reality, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
 
@@ -22,7 +22,7 @@ Steps 1 through 3 are strictly read-only. Do not write, edit, refactor, rename, 
 2. Open every document in /docs one by one, and read each in full, including docs/TODO.md (see its specification below). Its ideas are not instructions: do not act on any of them during the audit.
 3. For each document, compare its content against the actual codebase and identify anything that is outdated, missing, inaccurate, or incomplete.
 4. Rewrite or update each document so it is fully accurate and comprehensive based on the current version of the site.
-5. After all documents are updated, provide a summary of what changed in each file and why. Report whether docs/TODO.md was read, which ideas became which Roadmap entries, and which I chose to leave, and name anything that was not browser-tested (see Testing Cadence).
+5. After all documents are updated, provide a summary of what changed in each file and why. Report whether docs/TODO.md was read, which ideas became which Roadmap entries, and which I chose to leave, name anything that was not browser-tested (see Testing Cadence), and list any claim you wrote in the docs from inference rather than from reading the code, so I can check it.
 
 Standards to uphold:
 
@@ -396,7 +396,7 @@ it and leave it alone. If it does not, adopt this default and write it in:
   or a webhook. If the only way to exercise something is against a live system,
   stop and ask rather than deciding alone.
 Testing Cadence
-Record when the project runs its browser tests. Unlike every other policy here,
+Record when the project runs its browser tests and its assumption check. Unlike every other policy here,
 this one replaces an existing rule of a specific kind rather than deferring to
 it. If the project's docs require a browser test after every change or every
 edit, and give no reason specific to this project for it, replace that rule with
@@ -407,17 +407,26 @@ a real project-specific reason (for example, "payments code must be tested on
 every change"), keep it and flag it for the author instead. Any other existing
 testing rule is kept, as with every other default. The default:
 - Browser tests use headless Microsoft Edge, as Browser Testing says.
-- Run the browser test once, right before a major update ships to production.
-  Do not test between edits.
+- A major update ships when it is pushed or deployed. Where the project is not
+  pushed or deployed anywhere, and runs from local files, it ships when the
+  major update is finished. "Before shipping" below means that moment.
+- Right before a major update ships, run two checks, once each:
+  1. Assumption check: list the assumptions the finished change relies on,
+     marked verified (you read the code that shows it) or guessed (inferred,
+     and from what). Check every guess that is cheap to check, fix anything
+     found wrong, and show the author what is still guessed.
+  2. Browser test, once. Do not test between edits.
+- If a change is large and depends on something you have not read, check that
+  one thing before building on it.
 - A major update changes behavior, layout, scripts, styles, routing, the build,
   or dependencies. A minor one changes only wording, documentation, comments,
   patch notes, or data the project's own check script validates. Minor updates
-  ship without a browser test.
+  ship without a browser test or an assumption check.
 - Cheap checks that do not open a browser (a linter, a type check, a project
   check script) may still run after minor edits.
 - Batch the work: make every edit first, then test once at the end.
 - When a test fails, fix it and rerun only the failing check, then run the full
-  test once before pushing.
+  test once before shipping.
 - A test the author asks for always runs, whatever this rule says.
 - Confirming that a deploy arrived, by comparing the deployed files with the
   local copies, is not a test. It is cheap and still happens after every push.
@@ -814,7 +823,8 @@ Written as concrete instructions, not principles.
   to the file to open.
 - How to verify a change, including the exact command or manual check, and what to
   update afterwards (patch notes, version history). Follow the Testing Cadence:
-  a browser test only before a major update ships.
+  an assumption check and a browser test only right before a major update
+  ships (or is finished, where the project is not pushed anywhere).
 - The docs/TODO.md rule from its specification above: before pushing (or when a
   major update is finished, where nothing is pushed), check it and ask whether to
   turn its ideas into researched Roadmap updates.

@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.65.0
+**Version:** 1.66.0
 **Status:** Active
 **Author:** Azqato
 
@@ -251,7 +251,7 @@ The `hidden: true` flag remains supported for retiring a prompt from navigation 
 
 ## 13. Repository Structure
 
-The whole project is 30 files in six folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+The whole project is 32 files in six folders. There is no build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 `.gitattributes` is the one piece of git configuration the repository carries, added in v1.36.0. It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
 
@@ -267,8 +267,8 @@ The whole project is 30 files in six folders. There is no build output, no vendo
 ├── js/
 │   ├── prompts-data.js Hand-maintained mirror of prompts/*.md. Largest file by far.
 │   └── script.js       All client logic: parse, render, route, copy.
-├── prompts/            Nine .md files, one per prompt. The readable source.
-├── p/                  Nine generated share pages, one per visible prompt, and one retired.
+├── prompts/            Eleven .md files, one per prompt. The readable source.
+├── p/                  Eleven generated share pages, one per visible prompt, and one retired.
 │                       Public addresses: retired, never deleted. Section 32a.
 ├── tools/
 │   └── prompts-mirror.py  Maintenance only. Checks or resyncs the mirror
@@ -352,7 +352,7 @@ Every explicit rule found in the documentation, collected in one place. Sources 
 - Em dashes are prohibited in all three forms in all copy, including markdown docs and inline comments. CSS custom properties such as `--color-bg` are exempt (PRD 11). See section 18 for where the docs currently break this.
 - No marketing language, no filler phrases, plain declarative sentences (PRD 11).
 - A prompt page contains exactly three things: title, description, code block. No other sections (PRD 8).
-- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all nine prompts, four on 2026-08-23, `prompt-audit`, `brand-identity`, and `ios-simulator` on 2026-09-23, `game-setup` on 2026-09-24, and `motion-design` on 2026-09-25.
+- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all eleven prompts, four on 2026-08-23, `prompt-audit`, `brand-identity`, and `ios-simulator` on 2026-09-23, `game-setup` on 2026-09-24, `motion-design` on 2026-09-25, and `progress-dashboard` and `assumption-check` on 2026-09-27.
 - Prompt text must not reference the author's specific services, accounts, or credentials (PRD 11).
 - The public surface is the deployed page, not the source that builds it. Files under `prompts/` are source, so renaming or removing a prompt is done bare, with no redirect, except for its share page, which is retired (PRD 12, 32a).
 - A genuine public address is retired behind a `REDIRECTS` entry, which is then permanent, never chains, and is never reused for different content (PRD 12).
@@ -515,9 +515,9 @@ The approach to take on future tasks here.
 
 Run `python tools/prompts-mirror.py`. It must print OK. If anything under `prompts/` changed, run `python tools/prompts-mirror.py --sync` first, then the check.
 
-**Browser tests only before a major update ships** (since v1.61.0). A major update changes `index.html`, `css/style.css`, `js/script.js`, `tools/prompts-mirror.py`, or the page template: anything that affects how the site renders or behaves. For those, open `index.html` from disk in headless Edge, not from a server, and check the home list, one prompt page, the copy button, and a direct hash link, once, after all the edits and just before pushing. The mirror script catches drift and malformed prompt files; it cannot catch a rendering or layout problem, so for a major update it replaces none of this.
+**Browser tests only before a major update ships** (since v1.61.0). A major update changes `index.html`, `css/style.css`, `js/script.js`, `tools/prompts-mirror.py`, or the page template: anything that affects how the site renders or behaves. For those, once, after all the edits and just before pushing, run two checks (since v1.66.0, the first). An assumption check: list the assumptions the change relies on, marked verified (read in the code) or guessed, check every cheap guess, fix anything found wrong, and show the author what is still guessed. Then the browser test: open `index.html` from disk in headless Edge, not from a server, and check the home list, one prompt page, the copy button, and a direct hash link. If a change is large and depends on something not yet read, check that one thing before building on it. The mirror script catches drift and malformed prompt files; it cannot catch a rendering or layout problem, so for a major update it replaces none of this.
 
-Everything else is minor: prompt text, a new prompt, docs, README, patch notes. A minor update ships on the mirror check alone, with no browser test, since the prompt pages are rendered by code the update did not touch. This replaces the rule, in force from v1.0 to v1.60.0, that every change was opened in a browser before pushing, which spent usage on edits that could not affect rendering. A browser test the author asks for always runs.
+Everything else is minor: prompt text, a new prompt, docs, README, patch notes. A minor update ships on the mirror check alone, with no assumption check and no browser test, since the prompt pages are rendered by code the update did not touch. This replaces the rule, in force from v1.0 to v1.60.0, that every change was opened in a browser before pushing, which spent usage on edits that could not affect rendering. A browser test the author asks for always runs.
 
 **Verify locally, never against the live site.** This project has stated that rule since v1.0 by describing the check as opening the file from disk, and v1.31.0 makes it explicit because the Documentation prompt now requires the rule to be written down rather than implied. Verifying against `azqato.github.io/prompts` would mean the change had already shipped, so a failure would be something to roll back rather than something to fix before pushing.
 
@@ -639,7 +639,7 @@ Each of these was considered and rejected, with the reason. They are listed so t
 | Not built | Why |
 | --- | --- |
 | Search or filtering | The library is small enough to scan, and the sidebar shows everything at once. Search earns its complexity at a scale this project does not intend to reach |
-| Tags or categories | Same reason. Nine prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
+| Tags or categories | Same reason. Eleven prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
 | Syntax highlighting | Would mean a library, which breaks the no-dependency rule. Prompt text is prose, not code, so highlighting would add noise rather than meaning |
 | A build step | The entire architecture exists to avoid one. See section 7 |
 | Automated `prompts-data.js` generation | Would require Node in the loop and a build convention. The resync is done with a throwaway script per change instead, which keeps the repository free of tooling. This is a real tradeoff and it is recorded as technical debt in section 30 |
@@ -654,7 +654,7 @@ Not committed and not scheduled. Recorded so the ideas are not lost.
 
 - A copy confirmation that survives a page change, so a copy made just before navigating is still visibly acknowledged.
 - A "last updated" date per prompt, derived from the patch notes rather than from file metadata, which would let a reader tell a revised prompt from an original one.
-- A skip-to-content link, so a keyboard user reaching a prompt page does not pass twelve focus stops before the copy button. See the accessibility section of `docs/DESIGN.md`. This is now the largest known gap in the project.
+- A skip-to-content link, so a keyboard user reaching a prompt page does not pass fourteen focus stops before the copy button. See the accessibility section of `docs/DESIGN.md`. This is now the largest known gap in the project.
 - A live region for the copy button's result, which is currently announced only through an `aria-label` change.
 - Remembering the collapse state across a navigation, which is deliberately not built today because it would mean introducing browser storage. Recorded so the reason is visible if it is ever reconsidered rather than the idea simply reappearing.
 
@@ -803,6 +803,8 @@ A partial read-only pass was run on 2026-09-07 and stopped before any file was w
 ### Future updates
 
 Proposed updates turned from the author's ideas list (section 20). Each is a proposal, not a commitment: nothing here is built until the author says so.
+
+**All five shipped in v1.66.0.** The entries are kept as the record of how they were planned. The decisions went: update 1 allows downloaded sound effects, from a library whose license allows commercial use without attribution, with each file's source and license recorded, and still never downloads music; update 2's copy is one neutral version; update 3's references are optional; update 4 installs no agent at all, since the author wanted Claude itself in control, and asks before writing a standing rule; update 5 is a standalone prompt, and its check also became part of the Documentation prompt's Testing Cadence and of section 20, run right before a major update ships.
 
 #### 1. Motion Design: techniques and checks from a longer launch film
 
@@ -1110,7 +1112,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 
 | Layer | Technology | Version |
 | --- | --- | --- |
-| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus nine generated share pages of 21 lines each and one retired share page |
+| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus eleven generated share pages of 21 lines each and one retired share page |
 | Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 569 lines, no `@import` |
 | Logic | JavaScript, ES5-flavoured with `const` and `let` | No transpiler. Runs as written. 370 lines |
 | Maintenance tooling | Python 3, standard library only | `tools/prompts-mirror.py`. Never runs in a browser, never required to build or serve |
@@ -1139,6 +1141,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 │                           route, copy. No exports, no modules, all globals.
 ├── prompts/                One .md per prompt. The readable source of truth.
 │   ├── add-prompt.md
+│   ├── assumption-check.md
 │   ├── brand-identity.md
 │   ├── documentation.md
 │   ├── game-setup.md
@@ -1146,6 +1149,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 │   ├── ios-simulator.md
 │   ├── mobile-responsive-audit.md
 │   ├── motion-design.md
+│   ├── progress-dashboard.md
 │   └── prompt-audit.md
 ├── p/                      One generated share page per visible prompt, named
 │                           by slug. Sharing tags and a meta refresh, nothing
@@ -1165,7 +1169,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
                             into the Roadmap on request. See section 20.
 ```
 
-Thirty files, six folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
+Thirty-two files, six folders, two levels deep at most. No build output, no vendored code, no ignored directory, and no ignore file: `.gitignore`, `.editorconfig`, `.github/`, and `.vscode/` are all absent, so every file in the working tree is tracked.
 
 ### Data models
 
@@ -1435,7 +1439,7 @@ Six on every share page, and the same six on `index.html` describing the site.
 
 No image is declared, so `twitter:card` is `summary` and there is no `og:image`. The canonical address comes from section 17 and is written into `tools/prompts-mirror.py` and `js/script.js` as a constant, because `og:url` has to be absolute and nothing on a static site can derive it.
 
-**One description, not two.** The frontmatter `description` serves the home card, the share page's meta description, and `og:description`. A separate short field for sharing was considered and rejected, because two descriptions of the same prompt would drift, and the tighter one is the better card text anyway. In v1.46.0 the three descriptions over the target were rewritten to fit and a fourth was reworded, and all five then ran 140 to 149 characters. Brand Identity, added in v1.48.0, was written to fit at 146, iOS Simulator, added in v1.54.0 as iPhone and iPad Simulator, at 144, Game Setup, added in v1.57.0, at 140, and Motion Design, added in v1.60.0, at 135.
+**One description, not two.** The frontmatter `description` serves the home card, the share page's meta description, and `og:description`. A separate short field for sharing was considered and rejected, because two descriptions of the same prompt would drift, and the tighter one is the better card text anyway. In v1.46.0 the three descriptions over the target were rewritten to fit and a fourth was reworded, and all five then ran 140 to 149 characters. Brand Identity, added in v1.48.0, was written to fit at 146, iOS Simulator, added in v1.54.0 as iPhone and iPad Simulator, at 144, Game Setup, added in v1.57.0, at 140, Motion Design, added in v1.60.0, at 135, and Progress Dashboard and Assumption Check, added in v1.66.0, at 145 and 147.
 
 **Budgets**, enforced by the mirror check:
 
@@ -1672,6 +1676,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.66.0 | 2026-09-27 | Built all five Future updates in section 27. Motion Design gains optional effects (liquid glass, goo, iris, flood, footage), four key stills before the full build, a single-frame pop scan, -14 LUFS loudness, downloaded sound effects with a credits file, four gotchas, and neutral launch copy with alt text. Brand Identity, Motion Design, and Game Setup ask for optional references. Added the Progress Dashboard prompt (the tenth: Claude keeps a self-refreshing HTML page for a long task, with no agents) and the Assumption Check prompt (the eleventh, read-only). The Documentation prompt's Testing Cadence adds an assumption check right before a major update ships, next to the browser test, defines shipping for projects never pushed anywhere, and its summary lists claims written from inference. Section 20 adopts the check. Audited both new prompts against section 11 with nothing to remove. Updated the prompt and file counts in sections 13, 16, 23, 30, and 32a, and the focus-stop count in section 23. |
 | 1.65.0 | 2026-09-27 | Documentation prompt: the `docs/TODO.md` template's empty comment replaced with a two-line placeholder, an idea bullet with an indented source bullet, which is never treated as an idea and is restored when the list empties. This repository's `docs/TODO.md` and section 20 updated to match. |
 | 1.64.0 | 2026-09-27 | Turned the author's first ideas-list item, six posts on X, into five proposed updates under section 27's new "Future updates": Motion Design techniques and checks, Motion Design launch copy, design references in the design prompts, a Progress Dashboard prompt, and an Assumption Check prompt. The item removed from `docs/TODO.md`. |
 | 1.63.0 | 2026-09-27 | Documentation prompt: the Gather step for `docs/TODO.md` ideas now caps reading a link at two attempts (web fetch, then one headless Edge load with a normal user agent), forbids logins, the author's cookies, and mirrors or scrapers, treats a title or preview as unreadable, and asks for all unreadable sources' text in one message. Section 20 matches. |
