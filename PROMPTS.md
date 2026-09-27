@@ -4,7 +4,7 @@
 - https://x.com/shiri_shh/status/2103521939134550246?s=46
 - https://x.com/himanshubuildss/status/2103374896147378635?s=46
 - https://x.com/Voxyz_ai/status/2103946635831050740?s=20
-
+- https://x.com/kloss_xyz/status/2104088147739242660?s=46
 
 
 2) also do the following:
