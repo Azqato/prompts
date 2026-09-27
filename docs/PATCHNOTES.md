@@ -4,6 +4,16 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.63.0 - 2026-09-27
+
+### Changed
+
+- `prompts/documentation.md`: the Gather step for `docs/TODO.md` ideas now says how hard to try before asking. Turning six posts on X into Roadmap updates, three read attempts failed or returned only a title. A link now gets at most two attempts: the web fetch tool, then one headless Edge load with a normal browser user agent. Logging in, using the author's accounts or cookies, and third-party mirrors or scrapers are ruled out. An error, a login wall, or only a title or preview counts as unreadable. Claude then asks for the text of every unreadable source in one message, listed by author and link, or asks straight away if the author says to skip the attempts.
+- `docs/PRD.md` section 20: the same rule for this repository.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.62.0 - 2026-09-27
 
 ### Changed

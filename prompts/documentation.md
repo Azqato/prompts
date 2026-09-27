@@ -189,10 +189,16 @@ project's name:
 The ideas are never executed directly. Each one is a brief, not an entry: it is
 turned into proposed updates in the Roadmap, and only with the author's say-so.
 Turning an idea into an update means:
-1. Gather: read everything the idea points to (links, files, pasted text). If a
-   source cannot be read, for example a social media post behind a login, ask me
-   for its text rather than guessing from the link or its title. Reading is
-   allowed during the read-only steps.
+1. Gather: read everything the idea points to (links, files, pasted text).
+   For a link, make at most two attempts: the session's web fetch tool, then,
+   if that fails, one headless Edge load with a normal browser user agent.
+   Never log in, use my accounts or cookies, or go through a third-party
+   mirror or scraper to reach a source. If neither attempt returns the full
+   text (an error, a login wall, or only a title or preview), stop and ask me
+   for the text of each unreadable source in one message, listing them by
+   author and link and saying what little you did get. Never guess a source's
+   content from its link, title, or preview. If I say to skip the attempts,
+   ask straight away. Reading is allowed during the read-only steps.
 2. Interpret: work out which concept I mean. One note may hold several concepts,
    or none worth pursuing.
 3. Relate: judge how it applies to this project in particular: what already
