@@ -10,4 +10,5 @@ removed from this file. Never put passwords, keys, or other secrets here.
 
 ## Ideas
 
-<!-- Add ideas here. -->
+- <Your idea, in plain language>
+  - <A link, file, or note it refers to>

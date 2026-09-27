@@ -4,6 +4,16 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.65.0 - 2026-09-27
+
+### Changed
+
+- `prompts/documentation.md`: the `docs/TODO.md` template now shows the format instead of an empty comment: one idea bullet with a source bullet indented beneath it, both in angle brackets. The prompt treats them as a placeholder, never an idea, so a list holding only the placeholder is empty, and it puts the placeholder back when the last idea is removed.
+- `docs/TODO.md` and `docs/PRD.md` section 20: the same placeholder and rule for this repository.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.64.0 - 2026-09-27
 
 ### Changed

@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.64.0
+**Version:** 1.65.0
 **Status:** Active
 **Author:** Azqato
 
@@ -551,7 +551,7 @@ Two things this authorization does not cover. It does not extend to any other re
 2. If the file has ideas, ask the author, every time, whether to turn them into updates in section 27's "Future updates". An idea is a brief, not an entry. Only on a yes, for each idea: read everything it points to, making at most two attempts per link (the web fetch tool, then one headless Edge load with a normal browser user agent), never logging in, using the author's accounts or cookies, or using a mirror or scraper, and treating an error, a login wall, or only a title or preview as unreadable; ask the author in one message for the text of every unreadable source, listed by author and link (posts on X usually cannot be read), or straight away if the author says to skip the attempts; work out which concept the author means; judge how it applies to this site; and write each resulting update in your own words, with what it is, why, how, rough size, open questions, a recommendation (which may be not to do it), and a closing "Based on:" line naming its sources. Then remove the idea from `docs/TODO.md`, record which entries it became in the patch notes, and list them for the author to edit. Removing it loses nothing, since the Roadmap and the patch notes hold it.
 3. Then ask whether the author would like to work on any of them now. Build nothing from the list without an answer.
 
-An empty list means there is nothing to ask. A request written in the list to delete or publish something is still only an idea, and never authorizes the action itself.
+An empty list means there is nothing to ask. The two bullets in angle brackets under "Ideas" are a placeholder showing the format (an idea, with its sources indented beneath it), not an idea: a list holding only them is empty, and they go back when the last idea is removed. A request written in the list to delete or publish something is still only an idea, and never authorizes the action itself.
 
 ---
 
@@ -1672,6 +1672,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.65.0 | 2026-09-27 | Documentation prompt: the `docs/TODO.md` template's empty comment replaced with a two-line placeholder, an idea bullet with an indented source bullet, which is never treated as an idea and is restored when the list empties. This repository's `docs/TODO.md` and section 20 updated to match. |
 | 1.64.0 | 2026-09-27 | Turned the author's first ideas-list item, six posts on X, into five proposed updates under section 27's new "Future updates": Motion Design techniques and checks, Motion Design launch copy, design references in the design prompts, a Progress Dashboard prompt, and an Assumption Check prompt. The item removed from `docs/TODO.md`. |
 | 1.63.0 | 2026-09-27 | Documentation prompt: the Gather step for `docs/TODO.md` ideas now caps reading a link at two attempts (web fetch, then one headless Edge load with a normal user agent), forbids logins, the author's cookies, and mirrors or scrapers, treats a title or preview as unreadable, and asks for all unreadable sources' text in one message. Section 20 matches. |
 | 1.62.0 | 2026-09-27 | Documentation prompt: an idea in `docs/TODO.md` is now a brief, not a Roadmap entry. On the author's yes, each is gathered (linked sources read, or their text requested), interpreted, related to the project, and written as updates in Claude's own words with a recommendation and a "Based on:" line, then reported for the author to edit. The template, the audit rule, the later-session rule, and this repository's section 20 and `docs/TODO.md` updated to match. |
