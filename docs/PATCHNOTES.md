@@ -4,6 +4,20 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.64.0 - 2026-09-27
+
+### Changed
+
+- `docs/PRD.md` section 27: a new "Future updates" part with five proposed updates, turned from the ideas list's first item, which asked for six posts on X to be analyzed. X could not be read, so the author pasted their text; the one repository linked was read directly. The entries:
+  1. Motion Design: optional effects (liquid glass, goo, iris, flood transitions, footage), a single-frame pop scan and -14 LUFS loudness, and four new gotchas. From the @twoclipping post.
+  2. Motion Design: launch copy and alt text, and states that tell the project's story. From the @shiri_shh post and the `latent-spaces/brag` README.
+  3. Design references asked for in Brand Identity, Motion Design, and Game Setup, with no link directory on the site. From the @himanshubuildss and @vullnetademaj posts.
+  4. A new Progress Dashboard prompt. From the @Voxyz_ai post.
+  5. A new Assumption Check prompt. From the @kloss_xyz post.
+- `docs/TODO.md`: the item removed, since the Roadmap and these notes now hold it. The list is empty.
+
+---
+
 ## v1.63.0 - 2026-09-27
 
 ### Changed

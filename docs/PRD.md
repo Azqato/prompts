@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.63.0
+**Version:** 1.64.0
 **Status:** Active
 **Author:** Azqato
 
@@ -800,6 +800,94 @@ A partial read-only pass was run on 2026-09-07 and stopped before any file was w
 
 **Shipped in v1.46.0.** The scope above is kept as the record of how it was planned. The decisions went: `p/<slug>.html` for the path; the existing descriptions tightened to fit, all five now 140 to 149 characters, so the home cards changed with them; and both ways of reaching the share address, a Copy link button and the address bar rewrite. The policy it produced is section 32a. The Copy link button was removed in v1.47.0 as confusing beside Copy, leaving the address bar rewrite.
 
+### Future updates
+
+Proposed updates turned from the author's ideas list (section 20). Each is a proposal, not a commitment: nothing here is built until the author says so.
+
+#### 1. Motion Design: techniques and checks from a longer launch film
+
+**What.** Add optional techniques and two quality checks to the Motion Design prompt, taken from a longer, scene-based version of the same method: a launch film where every scene is built out of the previous one.
+- Techniques: liquid glass (each glass element carries its own clone of the scene behind it, displaced by an SVG `feDisplacementMap` at three slightly different scales for colored edges), goo merges (blur plus an alpha threshold), an iris transition, a shape that floods the frame and contracts into the next scene, and real video footage in the scene.
+- Checks: after the one-frame-per-beat contact sheet, scan the render for single-frame pops (a frame whose difference from its neighbours spikes to about three times theirs), and normalize the final mix to -14 LUFS, the loudness social platforms play at.
+- Gotchas: `backdrop-filter: url()` misreads displacement maps in Chromium, so clone the scene instead; a flood must overshoot past the corners and take about 0.3s, or half the screen changes in one frame; a child with `visibility: visible` shows through a hidden parent, so use `inherit`; footage must be re-encoded all-intra (`ffmpeg -g 1`) and loaded as a blob URL, since a simple local server cannot seek video.
+- Ask for four key stills for approval before the full build, as well as the beat map.
+
+**Why.** The current prompt already has the pure `seek(t)` model, closed-form springs, and the motion-blur render, which is the same foundation. What it lacks are the effects that make the result look current, and the two checks catch defects the contact sheet cannot: a one-frame glitch between beats, and a mix that is too loud or too quiet once uploaded.
+
+**How.** Add a short "Optional effects" block to Build, the gotchas to Gotchas, and the two checks to Render. Keep the single morphing shape as the default rather than turning the prompt into a scripted film: the source's scene-by-scene script is one product's story, and copying it would make every reader's video the same.
+
+**Size.** Small: prompt text only.
+
+**Open questions.** The source downloads its sound effects from a stock library; the current prompt synthesizes them or takes files the reader supplies, and never downloads audio. Keep that rule, which avoids licensing surprises? Should the reader's own photos and footage become an input?
+
+**Recommendation.** Do it, keeping the no-download rule.
+
+Based on: a post by @twoclipping on X sharing a launch-film prompt, pasted by the author into `docs/TODO.md`.
+
+#### 2. Motion Design: launch copy and a story drawn from the project
+
+**What.** Let the Motion Design prompt end with short launch copy for the post that carries the video (a headline, two or three sentences, and alt text), written from the project it read at the start, and let it propose the states as a story about what the project does rather than a generic tour of components.
+
+**Why.** A repository-to-launch-video skill does this in one run, and it is the part people use a motion video for: posting it. Alt text is also the one piece of accessibility a video post needs.
+
+**How.** Two lines in the prompt: one in Start (suggest states that tell what this project does), one in Report (the copy and alt text). No new tools. The skill it was modeled on depends on a third-party video framework; the prompt keeps its own no-framework render.
+
+**Size.** Small.
+
+**Open questions.** Should the copy be written for a specific platform, or kept neutral?
+
+**Recommendation.** Do it, together with update 1.
+
+Based on: a post by @shiri_shh on X, and the README of the `latent-spaces/brag` repository on GitHub (MIT licence), read on 2026-09-27.
+
+#### 3. Ask for design references in the design prompts
+
+**What.** Brand Identity, Motion Design, and Game Setup each ask, in their one batch of questions, for two to five references the reader likes: site URLs, screenshots, or a gallery page. Claude reads what it can, asks for screenshots of what it cannot (the same rule as the ideas list), and states which qualities it takes from each (spacing, type, motion, color) rather than copying any one.
+
+**Why.** Both source posts make the same point: a model given concrete references produces far better design than one given adjectives. The prompts already ask for a palette and a font; references are the missing input.
+
+**How.** One question and one rule per prompt. The site itself gains no list of links: a directory of third-party galleries is outside what this site is (section 21), would go stale, and would fill a prompt library with other people's products. The prompts may name kinds of source (a curated site gallery, a component gallery, a motion gallery) without naming products.
+
+**Size.** Small.
+
+**Open questions.** Should references be optional (recommended) or required?
+
+**Recommendation.** Do it, optional, with no link directory on the site.
+
+Based on: posts by @himanshubuildss and @vullnetademaj on X, each listing design reference and component sites.
+
+#### 4. New prompt: Progress Dashboard
+
+**What.** A prompt that sets up a helper agent whose only job is a progress dashboard for long tasks: one HTML file, opened by double-click, refreshing itself, showing the tasks and their status, anything stuck, questions waiting for the reader with the default Claude will take if unanswered, and the latest deliverables. The first run asks the reader's style (light or dark, dense or airy, one accent) and remembers it. A rule in the reader's Claude instructions has the main session start the dashboard before any task over about five steps or thirty minutes, update it after each step, and keep going on the default when a question waits.
+
+**Why.** Long unattended runs are where readers lose track of what happened, and where a blocking question stalls everything. This makes both visible, and it fits the library's other setup-style prompts.
+
+**How.** A new prompt through the section 12 process. It writes only to a `.dashboard/` folder and the agent's own files, shows every file it will create or change, and writes nothing until the reader confirms. It names no specific model or effort level, since those change; it describes the choice instead (a cheaper, faster setting than the main session).
+
+**Size.** Medium: a new prompt, its share page, and the usual count updates.
+
+**Open questions.** Install the agent for all the reader's projects or only the current one? The source installs it globally, which changes every project. Does a self-refreshing page opened from disk behave in every browser (to be tested in headless Edge)? The name.
+
+**Recommendation.** Do it, project-level by default with global as an option.
+
+Based on: a post by @Voxyz_ai on X describing a dashboard-building subagent.
+
+#### 5. New prompt: Assumption Check
+
+**What.** A short, read-only prompt: Claude lists every assumption it is making about the codebase, marks each as verified (it read the code) or guessed (inferred, with the reason), proposes the smallest fix for each that may be wrong, and applies nothing until the reader reviews the list.
+
+**Why.** Guessed assumptions are where an agent's bugs usually start, and naming them costs one message. It is useful before any large change, and small enough to paste mid-session.
+
+**How.** A new prompt through section 12. It is close to the Documentation prompt's Documentation Versus Reality section, which checks docs against code; this checks the agent's own beliefs, so it stays separate. One addition over the source: where checking a guess is cheap, read the code and move it to verified before asking.
+
+**Size.** Small.
+
+**Open questions.** The name. Whether other prompts should run it at their start.
+
+**Recommendation.** Do it, as a standalone prompt.
+
+Based on: a post by @kloss_xyz on X sharing an assumptions prompt.
+
 ### Deferred
 
 - **Search.** Deferred until the library exceeds roughly twenty prompts. Below that the sidebar is faster than any search box.
@@ -1584,6 +1672,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.64.0 | 2026-09-27 | Turned the author's first ideas-list item, six posts on X, into five proposed updates under section 27's new "Future updates": Motion Design techniques and checks, Motion Design launch copy, design references in the design prompts, a Progress Dashboard prompt, and an Assumption Check prompt. The item removed from `docs/TODO.md`. |
 | 1.63.0 | 2026-09-27 | Documentation prompt: the Gather step for `docs/TODO.md` ideas now caps reading a link at two attempts (web fetch, then one headless Edge load with a normal user agent), forbids logins, the author's cookies, and mirrors or scrapers, treats a title or preview as unreadable, and asks for all unreadable sources' text in one message. Section 20 matches. |
 | 1.62.0 | 2026-09-27 | Documentation prompt: an idea in `docs/TODO.md` is now a brief, not a Roadmap entry. On the author's yes, each is gathered (linked sources read, or their text requested), interpreted, related to the project, and written as updates in Claude's own words with a recommendation and a "Based on:" line, then reported for the author to edit. The template, the audit rule, the later-session rule, and this repository's section 20 and `docs/TODO.md` updated to match. |
 | 1.61.0 | 2026-09-27 | Documentation prompt: adds `docs/TODO.md`, the author's ideas list, kept out of the consolidation sweep and emptied into the PRD Roadmap only when the author agrees, with a Working Practice rule that every session checks it before pushing (fetching first, so an edit made on GitHub is never overwritten) and asks each time; and a Testing Cadence default, a browser test in headless Edge only before a major update ships, which replaces an every-change testing rule an earlier version may have written. This repository adopts both: the author's `PROMPTS.md`, added on GitHub, moved to `docs/TODO.md`, its request to change this prompt done here and removed; section 20 now tests in a browser only before a major update and checks the ideas list before every push; section 30's four-file rule gains the exception. File count 30. |
