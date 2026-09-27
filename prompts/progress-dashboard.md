@@ -40,7 +40,8 @@ Working
 - Create the dashboard before starting the task, and tell me its path, and its public address if the project is published somewhere you can name.
 - Update it after every step, and whenever something gets stuck or a question comes up.
 - When you need a decision, add it to Questions with your default and keep working on anything that does not depend on it. When you reach work that does, take the default, say so on the dashboard, and mark the question as answered by default.
-- When the task is finished, update it one last time with a short summary at the top.
+- When the task is finished, update it one last time with a short summary at the top, with every step marked done.
+- Where the task ends with the project being published, write that final update before it is published, so the finished page goes live with everything else. The published copy only changes when the project is published, so an update written afterwards stays on disk and the live page is left showing the task unfinished. For the same reason, never make publishing, or confirming that something is live, a step on the page: it can never be marked done in the copy that goes live. Report those in the conversation instead.
 
 Afterwards
 Ask whether I want this as a standing rule. If I do, show me the exact lines for the project's CLAUDE.md, and write them once I confirm: for any task with more than 5 steps, or likely to take longer than 30 minutes, create and maintain dashboard/index.html as described here, using the recorded style. The page is published with the project, so nothing private goes on it.

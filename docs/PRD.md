@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.81.0
+**Version:** 1.82.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1823,6 +1823,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.82.0 | 2026-09-27 | Progress Dashboard prompt: the final update, with every step done and the summary, is written before the project is published, and publishing or confirming a deploy is never a step on the page, since the live copy could never show it done. Found on this site, where the page was left showing its last step in progress. |
 | 1.81.0 | 2026-09-27 | Documentation prompt: its Roadmap entry for a progress dashboard now links to the Progress Dashboard prompt's share page and restates none of its layout, branding, or rules, so the dashboard is defined in one place. The folder tree line and the Repository Hygiene rule that `/dashboard` is public and never ignored stay, as rules the Documentation prompt owns. |
 | 1.80.0 | 2026-09-27 | Progress Dashboard prompt: every dashboard now follows one fixed layout, the one this site's dashboard uses, written out in the prompt and linked as a working example. Colors and fonts come from the project's existing branding (design doc, CSS custom properties, brand files), never invented and never copied from the example; the reader is asked for colors only where the project has none. The layout gains a Roadmap section wherever the project's docs keep a roadmap. |
 | 1.79.0 | 2026-09-27 | The progress dashboard gained a Roadmap section read from section 27. Future updates 1 to 5 each gained the `**Built in v1.66.0.**` line entry 6 already had, so every entry states its own status. Section 20 records the rule that a built entry always gets that line. |

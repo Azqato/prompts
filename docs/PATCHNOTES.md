@@ -4,6 +4,18 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.82.0 - 2026-09-27
+
+### Fixed
+
+- This site's dashboard showed its last step, "Push and confirm the Roadmap is live", as in progress after the task had finished. That step could only be marked done after the push, and the dashboard only reaches the live site through a push, so the final update never went live. The page was republished with every step done and the final summary.
+
+### Changed
+
+- Progress Dashboard prompt, new default rule: where a task ends with the project being published, the final update (every step done, the summary at the top) is written before publishing, so the finished page goes live with the rest. Publishing, and confirming that something is live, are never steps on the page, since the live copy could never show them done; they are reported in the conversation instead. The rule does not tell the reader to publish anything, which stays their decision (PRD section 11).
+
+---
+
 ## v1.81.0 - 2026-09-27
 
 ### Changed
