@@ -4,6 +4,23 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.62.0 - 2026-09-27
+
+### Changed
+
+- `prompts/documentation.md`: an idea in `docs/TODO.md` is now treated as a brief for Claude to work out, not text to copy into the Roadmap. v1.61.0 said to add each idea "written as a planned update", which would have turned a note such as "analyze these six posts" into a Roadmap entry saying the same thing. On the author's yes, each idea now goes through five steps:
+  - **Gather:** read what it points to, and ask for the text of any source that cannot be read, such as a post behind a login, rather than guessing from the link.
+  - **Interpret:** work out the concept the author means.
+  - **Relate:** judge how it applies to the project.
+  - **Propose:** write one or more updates in Claude's own words, each with what, why, how, rough size, open questions, and a recommendation (which may be not to do it), ending with a "Based on:" line naming its sources.
+  - **Report:** remove the idea, log which entries it became, and list them in the summary for the author to edit. The author chose to have entries written and then reported, rather than approved as drafts first.
+
+  The TODO.md template, the audit rule, the later-session rule in Working Practice, the summary requirement, and the page description are updated to match.
+- `docs/PRD.md` section 20 and `docs/TODO.md`: the same process and template wording for this repository.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.61.0 - 2026-09-27
 
 ### Added
