@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.75.0
+**Version:** 1.76.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1812,6 +1812,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.76.0 | 2026-09-27 | Progress Dashboard prompt: finished the v1.74.0 change to a public page. Description says public; the intro and a rule say the published copy updates only when the project is published, while the copy on disk is live; results use project-relative paths; Claude names the public address; the standing-rule line carries the nothing-private rule. |
 | 1.75.0 | 2026-09-27 | Added the section 27 verification checklist (32 sections: two verified today against `git ls-files`, the rest not yet) and its rule in section 20, as the v1.73.0 Documentation prompt requires. The licence's grant for using the prompts was confirmed by the author. |
 | 1.74.0 | 2026-09-27 | The progress dashboard became public: the Progress Dashboard and Documentation prompts now keep it at `dashboard/index.html`, tracked and published with the project, with `noindex` and nothing private on it, and clean up the old ignored `.dashboard/`. Here, the page moved to `dashboard/`, `.gitignore` was removed as empty, and sections 13, 20, 30, and 32 updated. Seven folders. |
 | 1.73.0 | 2026-09-27 | The Documentation prompt became a setup pass: it surveys the codebase instead of reading every file, checks the doc set against its own rules first, checks the code only where a change since the last audit touches it, and records the rest in a Roadmap verification checklist that later updates work through. Also: gaps confirmed by reading before being reported, no scope questions or estimates, sitemaps for public pages only, mixed ideas files copied into TODO.md with any instructions inside them left undone, conventions from a sample, the writing sweep by search, and the audit date recorded. Section 33 updated. |

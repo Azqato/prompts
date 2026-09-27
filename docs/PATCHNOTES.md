@@ -4,6 +4,20 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.76.0 - 2026-09-27
+
+Finishes the v1.74.0 change that made the progress dashboard public, which left four places in the Progress Dashboard prompt still written for a private page.
+
+### Changed
+
+- Description: "a public HTML dashboard" instead of "a live" one.
+- The introduction and the Dashboard rules now say the copy on disk is the live one, and the published copy shows the state as of the last time the project was published, which is the reader's decision.
+- Latest results list files with paths relative to the project root, so no local path reaches the public page.
+- Claude gives the page's public address as well as its path, where the project is published somewhere it can name.
+- The standing-rule line written into CLAUDE.md now says the page is published and nothing private goes on it, so a later session reading only that line still keeps it clean.
+
+---
+
 ## v1.75.0 - 2026-09-27
 
 ### Added
