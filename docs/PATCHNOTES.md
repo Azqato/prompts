@@ -4,6 +4,20 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.75.0 - 2026-09-27
+
+### Added
+
+- PRD section 27, Verification checklist: the 32 PRD and DESIGN.md sections that describe the code, each marked verified with a date or not yet verified. Two are verified: the repository structure in sections 13 and 30, checked against `git ls-files` (38 files, seven folders). The rest are checked a section at a time as later updates touch them.
+- PRD section 20: the rule that does that checking, in its own subsection.
+
+### Notes
+
+- The author confirmed the licence's one grant: the prompts may be copied, adapted, and run, and not republished as a collection. No change to `LICENSE.md`.
+- Considered and not done: telling the Progress Dashboard prompt to keep its build script inside `dashboard/`. The folder is now public, so the script would be published with it, and it would assume every project has Python. Editing the page directly is enough for most tasks.
+
+---
+
 ## v1.74.0 - 2026-09-27
 
 The progress dashboard is now public, so progress on a long task can be watched from the live site.

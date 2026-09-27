@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.74.0
+**Version:** 1.75.0
 **Status:** Active
 **Author:** Azqato
 
@@ -573,6 +573,10 @@ Two things this authorization does not cover. It does not extend to any other re
 
 An empty list means there is nothing to ask. The two bullets in angle brackets under "Ideas" are a placeholder showing the format (an idea, with its sources indented beneath it), not an idea: a list holding only them is empty, and they go back when the last idea is removed. A request written in the list to delete or publish something is still only an idea, and never authorizes the action itself.
 
+### The verification checklist, with every update
+
+When an update changes an area of the code, check that area's PRD or DESIGN.md section against the code in the same session, record any discrepancy in section 18, and mark the section verified with the date in the section 27 verification checklist. Only the sections the update touches; never the whole list at once.
+
 ### Progress dashboard, for long tasks
 
 Adopted in v1.71.0, at the author's request, to test the Progress Dashboard prompt on real work in the repository that maintains it. The rule lives in `CLAUDE.md` at the root:
@@ -956,6 +960,45 @@ Based on: the Documentation prompt's rule for projects with no Progress dashboar
 - **Automated mirror generation.** Deferred indefinitely. It would need Node in the loop, which is the dependency the project exists to avoid. A by-hand verification script is the compromise, and it is planned rather than deferred.
 - **Continuous integration.** Deferred. There is nothing to build and no test to run, so a workflow would exist only to check the mirror, and that check can be a script the author runs.
 - **Tags for release versions.** Deferred. The patch notes and the version history table already serve the purpose, and tags would be a second place to keep in sync.
+
+### Verification checklist
+
+Added in v1.75.0, under the Documentation prompt's v1.73.0 rule. Each section that describes the code, and whether it has been checked in full against the code, with the date. The audit does not check them all at once: an update that changes an area checks that area's section in the same session and marks it here (section 20). This is maintenance, not a feature, so it needs no decision and sits outside Future updates.
+
+| Section | Covers | Status | Note |
+| --- | --- | --- | --- |
+| PRD 7 | Technical Requirements | Not yet |  |
+| PRD 8 | Page Structure | Not yet |  |
+| PRD 9 | Navigation | Not yet |  |
+| PRD 10 | Copy Button Behavior | Not yet | Working on the live site per the author, 2026-09-27; the text itself not yet checked against `js/script.js` |
+| PRD 10a | Prompt Collapse Behavior | Not yet |  |
+| PRD 13 | Repository Structure | Verified 2026-09-27 | Tree and count checked against `git ls-files`: 38 files, seven folders |
+| PRD 14 | Architecture and Flow | Not yet |  |
+| PRD 15 | Code Conventions | Not yet |  |
+| PRD 17 | Stack, Tooling, and Deployment | Not yet |  |
+| PRD 29 | Runbook | Not yet | The mirror check and sync commands ran as documented on 2026-09-27; the rest not yet checked |
+| PRD 30 | System architecture | Not yet |  |
+| PRD 30 | Tech stack | Not yet |  |
+| PRD 30 | Folder structure | Verified 2026-09-27 | Same check as section 13 |
+| PRD 30 | Data models | Not yet |  |
+| PRD 30 | Internal data flow | Not yet |  |
+| PRD 30 | State management | Not yet |  |
+| PRD 30 | Third-party integrations | Not yet |  |
+| PRD 30 | Performance requirements | Not yet |  |
+| PRD 30 | Known technical debt | Not yet |  |
+| PRD 31 | Security | Not yet |  |
+| PRD 32 | Public Surface and Retired Items | Not yet |  |
+| PRD 32a | Social Sharing Tags and Page Titles | Not yet | The share pages themselves are checked by `tools/prompts-mirror.py` on every run; the section's text is not |
+| DESIGN 2 | Color System | Not yet |  |
+| DESIGN 3 | Typography | Not yet |  |
+| DESIGN 4, 4a | Layout and Spacing System | Not yet |  |
+| DESIGN 5 | Component Specs | Not yet |  |
+| DESIGN 7, 8 | Navigation and Footer | Not yet |  |
+| DESIGN 9 | Responsive Behavior | Not yet |  |
+| DESIGN 10 | Accessibility | Not yet |  |
+| DESIGN 11 | CSS File Structure | Not yet |  |
+| DESIGN 12, 12a | Architecture, Templates, and Component Patterns | Not yet |  |
+| DESIGN 12b | Animation and Motion | Not yet |  |
 
 ---
 
@@ -1769,6 +1812,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.75.0 | 2026-09-27 | Added the section 27 verification checklist (32 sections: two verified today against `git ls-files`, the rest not yet) and its rule in section 20, as the v1.73.0 Documentation prompt requires. The licence's grant for using the prompts was confirmed by the author. |
 | 1.74.0 | 2026-09-27 | The progress dashboard became public: the Progress Dashboard and Documentation prompts now keep it at `dashboard/index.html`, tracked and published with the project, with `noindex` and nothing private on it, and clean up the old ignored `.dashboard/`. Here, the page moved to `dashboard/`, `.gitignore` was removed as empty, and sections 13, 20, 30, and 32 updated. Seven folders. |
 | 1.73.0 | 2026-09-27 | The Documentation prompt became a setup pass: it surveys the codebase instead of reading every file, checks the doc set against its own rules first, checks the code only where a change since the last audit touches it, and records the rest in a Roadmap verification checklist that later updates work through. Also: gaps confirmed by reading before being reported, no scope questions or estimates, sitemaps for public pages only, mixed ideas files copied into TODO.md with any instructions inside them left undone, conventions from a sample, the writing sweep by search, and the audit date recorded. Section 33 updated. |
 | 1.72.0 | 2026-09-27 | The Documentation prompt now says to run the whole audit in the session itself, with no subagents, parallel agents, or background tasks. |
