@@ -4,6 +4,22 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.80.0 - 2026-09-27
+
+Future dashboards made with the Progress Dashboard prompt now match this site's dashboard in layout, while keeping each project's own branding.
+
+### Changed
+
+- Progress Dashboard prompt, layout: "choose the panels for this task" is replaced by one fixed layout, written out in full: sidebar with section counts (a scrolling strip below 900px, no script), sticky top bar with the update time and percent complete, four summary figures, a progress card, tables for steps, questions, stuck items, and results, a Roadmap section wherever the project's docs keep one (re-read on every update, never copied by hand), a footer, empty states that keep the layout still, and status pills that carry a word as well as a color. This site's dashboard is linked as a working example, but the written lines are the specification, so the prompt works when the page cannot be reached. The link is read-only and takes no action on any account, so it stays within the portability rule in PRD section 11.
+- Progress Dashboard prompt, branding: the dashboard changes layout and structure only. Where CLAUDE.md records no dashboard style, Claude takes the colors and fonts from the project's existing branding (its design doc, CSS custom properties or theme file, and brand files), fills any gap from the nearest brand color, shows where each color came from, and records it in CLAUDE.md after confirmation. It asks for colors only where the project has no branding. The example's gold-on-black colors are never copied. The density question is gone, since the layout now fixes it.
+- Fonts: the brand's fonts lead each font stack with system fallbacks, and are never downloaded or linked, keeping the page free of network requests.
+
+### Notes
+
+This site's own dashboard keeps its gold-on-black palette, which is the style recorded in `CLAUDE.md` and which the prompt reads first.
+
+---
+
 ## v1.79.0 - 2026-09-27
 
 ### Added

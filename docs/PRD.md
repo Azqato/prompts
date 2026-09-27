@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.79.0
+**Version:** 1.80.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1823,6 +1823,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.80.0 | 2026-09-27 | Progress Dashboard prompt: every dashboard now follows one fixed layout, the one this site's dashboard uses, written out in the prompt and linked as a working example. Colors and fonts come from the project's existing branding (design doc, CSS custom properties, brand files), never invented and never copied from the example; the reader is asked for colors only where the project has none. The layout gains a Roadmap section wherever the project's docs keep a roadmap. |
 | 1.79.0 | 2026-09-27 | The progress dashboard gained a Roadmap section read from section 27. Future updates 1 to 5 each gained the `**Built in v1.66.0.**` line entry 6 already had, so every entry states its own status. Section 20 records the rule that a built entry always gets that line. |
 | 1.78.0 | 2026-09-27 | This site's progress dashboard rebuilt on the author's admin-dashboard template layout, in the palette `CLAUDE.md` already records. `CLAUDE.md` records the layout; section 20 notes it. |
 | 1.77.0 | 2026-09-27 | Removed the last `.dashboard/` and `.gitignore` wording tied to the dashboard from both prompts. The Documentation prompt's enforced folder tree now shows `/dashboard`, and its Repository Hygiene bullet simply says the folder is public project content, never ignored. Its general ignore-file rules are unchanged. |
