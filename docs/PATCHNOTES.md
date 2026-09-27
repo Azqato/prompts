@@ -4,6 +4,19 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.81.0 - 2026-09-27
+
+### Changed
+
+- Documentation prompt: when a project has no progress dashboard, the Roadmap entry it adds now proposes building one by running the Progress Dashboard prompt, linked by its share page (`/p/progress-dashboard.html`). The entry does not restate the dashboard's layout, branding, or rules, so a change to the dashboard is made in one prompt only. The description of the CLAUDE.md section it keeps was shortened for the same reason.
+- Kept in the Documentation prompt on purpose: `/dashboard` in the enforced folder tree, and the Repository Hygiene rule that it is public project content and never ignored. Those are rules about the repository, which that prompt owns.
+
+### Notes
+
+The link is to a public page and takes no action on any account, so it is within PRD section 11. If the Progress Dashboard prompt is ever renamed, its old share page must redirect to the new one (section 32), or this link breaks.
+
+---
+
 ## v1.80.0 - 2026-09-27
 
 Future dashboards made with the Progress Dashboard prompt now match this site's dashboard in layout, while keeping each project's own branding.
