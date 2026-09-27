@@ -4,6 +4,15 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.68.0 - 2026-09-27
+
+### Changed
+
+- `prompts/documentation.md`: where a project's `CLAUDE.md` has no Progress dashboard section, the audit no longer asks about one, which v1.67.0 had it do. It adds an entry under "Future updates" in the PRD Roadmap proposing a live progress page for long tasks, with what, why, how, size, open questions, and a recommendation for that project, unless the Roadmap already covers it. The author decides in a later session, as with every Roadmap entry. A declined entry moves to the Roadmap's deferred items with the reason, so later audits do not propose it again. An existing section is still kept unchanged and recorded in Working Practice.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.67.0 - 2026-09-27
 
 ### Changed
