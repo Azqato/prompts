@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.68.0
+**Version:** 1.69.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1676,6 +1676,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.69.0 | 2026-09-27 | Documentation prompt: the audit runs in one pass without asking questions. It applies the prompt's defaults, takes the most conservative option where there is none, and collects every question (including the `docs/TODO.md` ideas, which it no longer asks about mid-run) into a numbered Questions list at the end of its summary, each with the default applied meanwhile. The push-time TODO question for later sessions is unchanged. |
 | 1.68.0 | 2026-09-27 | Documentation prompt: where `CLAUDE.md` has no Progress dashboard section, the audit no longer asks about one. It adds a Roadmap "Future updates" entry proposing it, decided in a later session like any other entry, and a declined one moves to the deferred items so it is not proposed again. Replaces the ask-once behavior added in v1.67.0. |
 | 1.67.0 | 2026-09-27 | Documentation prompt: the consolidation sweep keeps a Progress dashboard section the author chose in `CLAUDE.md` and records it in Working Practice, and, where there is none and none was declined, asks the author once whether to add one, writing nothing on a no except the recorded decision; Repository Hygiene lists `.dashboard/` as ignored when it exists and reports it as a discrepancy if it is not. This project uses no dashboard, so nothing else here changes. |
 | 1.66.0 | 2026-09-27 | Built all five Future updates in section 27. Motion Design gains optional effects (liquid glass, goo, iris, flood, footage), four key stills before the full build, a single-frame pop scan, -14 LUFS loudness, downloaded sound effects with a credits file, four gotchas, and neutral launch copy with alt text. Brand Identity, Motion Design, and Game Setup ask for optional references. Added the Progress Dashboard prompt (the tenth: Claude keeps a self-refreshing HTML page for a long task, with no agents) and the Assumption Check prompt (the eleventh, read-only). The Documentation prompt's Testing Cadence adds an assumption check right before a major update ships, next to the browser test, defines shipping for projects never pushed anywhere, and its summary lists claims written from inference. Section 20 adopts the check. Audited both new prompts against section 11 with nothing to remove. Updated the prompt and file counts in sections 13, 16, 23, 30, and 32a, and the focus-stop count in section 23. |

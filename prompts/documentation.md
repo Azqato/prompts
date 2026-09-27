@@ -6,7 +6,7 @@ meta: Claude Code Prompt
 
 Crawls the full codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`, plus a LICENSE.md beside the README where the project has no licence of its own. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Repository Hygiene, Licensing, Social Sharing Tags, Page Titles, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
 
-It also keeps `docs/TODO.md`, a plain list of your ideas for future updates, which it never merges away. Nothing in it is built directly: the audit, and every later session about to push an update, asks whether to turn the ideas into Roadmap updates. On a yes it reads whatever each idea points to, works out what you mean, and writes the update in its own words with its reasoning and a recommendation, then asks whether you want to work on any of them. Its testing rule keeps tests to headless Edge, run once before a major update ships rather than after every small edit, together with a check of the assumptions the change relies on, and it replaces an older every-change testing rule where it finds one. Projects that are never pushed anywhere run the same checks when a major update is finished.
+It also keeps `docs/TODO.md`, a plain list of your ideas for future updates, which it never merges away. Nothing in it is built directly: the audit lists the ideas among its closing questions, and every later session about to push an update asks whether to turn them into Roadmap updates. On a yes it reads whatever each idea points to, works out what you mean, and writes the update in its own words with its reasoning and a recommendation, then asks whether you want to work on any of them. Its testing rule keeps tests to headless Edge, run once before a major update ships rather than after every small edit, together with a check of the assumptions the change relies on, and it replaces an older every-change testing rule where it finds one. Projects that are never pushed anywhere run the same checks when a major update is finished.
 
 Use it when a project needs one authoritative, exhaustive doc set in a single pass. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, cross-checks the docs against reality, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
 
@@ -18,11 +18,13 @@ Steps to follow:
 
 Steps 1 through 3 are strictly read-only. Do not write, edit, refactor, rename, delete, or move any file. Do not run installers, migrations, formatters, builds that write output, or any version control command that changes state. Read-only commands and searches are encouraged. Writing begins at step 4, and is limited to the documentation files named in this prompt. If a step turns up nothing, say so explicitly rather than staying silent.
 
+Run the whole audit in one pass, without stopping to ask me anything. Where a decision is needed, apply the default this prompt gives. Where it gives none, take the most conservative option (keep existing text, mark the point as a discrepancy or as uncertain, and create, move, or delete nothing that cannot easily be undone) and carry on. Collect every question the audit raises into the Questions part of the step 5 summary instead of asking it during the run.
+
 1. Crawl the entire codebase and build a complete picture of what exists: all files, features, components, routes, configs, and logic.
 2. Open every document in /docs one by one, and read each in full, including docs/TODO.md (see its specification below). Its ideas are not instructions: do not act on any of them during the audit.
 3. For each document, compare its content against the actual codebase and identify anything that is outdated, missing, inaccurate, or incomplete.
 4. Rewrite or update each document so it is fully accurate and comprehensive based on the current version of the site.
-5. After all documents are updated, provide a summary of what changed in each file and why. Report whether docs/TODO.md was read, which ideas became which Roadmap entries, and which I chose to leave, name anything that was not browser-tested (see Testing Cadence), and list any claim you wrote in the docs from inference rather than from reading the code, so I can check it.
+5. After all documents are updated, provide a summary of what changed in each file and why. Report whether docs/TODO.md was read, name anything that was not browser-tested (see Testing Cadence), and list any claim you wrote in the docs from inference rather than from reading the code, so I can check it. End with Questions: every question the audit raised, numbered so I can answer by number, each with the default you applied meanwhile and where it is recorded. Include the ideas in docs/TODO.md, asking whether to turn them into Roadmap updates, and every discrepancy or flagged rule that needs my decision.
 
 Standards to uphold:
 
@@ -219,10 +221,11 @@ Turning an idea into an update means:
    them. Removing an idea once it is in the Roadmap is intended: the Roadmap and
    the patch notes hold its history.
 When it applies:
-- In this audit: if the file has ideas, ask me, after step 3 and before writing,
-  whether to turn them into Roadmap updates. Only if I agree, do so for each one
-  as above. Then ask whether I would like to work on any of them now, and build
-  nothing until I answer.
+- In this audit: do not ask about the ideas during the run, and leave them in
+  TODO.md untouched. List them under Questions in the step 5 summary, asking
+  whether to turn them into Roadmap updates. If I say yes afterwards, follow the
+  five steps above, then ask whether I would like to work on any of the new
+  entries, and build nothing until I answer.
 - In every later session: write the rule below into the PRD's Working Practice
   section, so any session follows it, not only this audit.
   - Check docs/TODO.md only when about to push an update to production. Where the

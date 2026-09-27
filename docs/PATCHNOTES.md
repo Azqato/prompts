@@ -4,6 +4,18 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.69.0 - 2026-09-27
+
+### Changed
+
+- `prompts/documentation.md`: the audit now runs in one go. It no longer stops to ask during the run: it applies the prompt's defaults, and where none applies it takes the most conservative option (keep the existing text, mark the point as a discrepancy or uncertain, and create, move, or delete nothing hard to undo). Every question it raises goes into a numbered Questions list at the end of the step 5 summary, each with the default applied meanwhile and where it is recorded, so they can be answered by number afterwards.
+  - `docs/TODO.md` ideas are no longer asked about after step 3. They stay untouched and are listed among the closing questions; on a yes afterwards, the five-step process runs as before.
+  - Later sessions still ask about the ideas every time before pushing, as the author set in v1.61.0.
+  - The page description matches.
+- `js/prompts-data.js`: resynced.
+
+---
+
 ## v1.68.0 - 2026-09-27
 
 ### Changed
