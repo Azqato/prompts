@@ -4,6 +4,22 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.74.0 - 2026-09-27
+
+The progress dashboard is now public, so progress on a long task can be watched from the live site.
+
+### Changed
+
+- Progress Dashboard prompt: the page lives at `dashboard/index.html` instead of `.dashboard/index.html`, and is tracked and published with the project instead of ignored. New rules: nothing private on the page (no secrets, keys, personal details, or private paths; questions about those stay in the conversation), a `noindex` tag since it is a working page, `progress-dashboard/` if `dashboard/` is already taken, and cleanup of the older setup (move a `.dashboard/` page, remove the ignore line, and remove `.gitignore` if that leaves it empty). The standing-rule line names the new path.
+- Documentation prompt: the Repository Hygiene default now treats `dashboard/` as project content, never ignored and never consolidated, and reports a leftover `.dashboard/` or an ignore line for either as a discrepancy. Its other mentions of the path updated.
+- This site: the dashboard moved to `dashboard/index.html` and is live at `/prompts/dashboard/`. `.gitignore` removed, since its only entry is gone and the Repository Hygiene rule says a project that generates nothing carries no ignore file. `CLAUDE.md` and PRD sections 13, 20, 30, and 32 updated.
+
+### Notes
+
+The rename was required, not a style choice: GitHub Pages builds with Jekyll unless a `.nojekyll` file is present, and Jekyll skips folders whose names start with a dot, which is why `/prompts/.gitignore` already returned 404. The live page shows the state as of the last push; the ten-second reload only shows something new between pushes when opened from disk.
+
+---
+
 ## v1.73.0 - 2026-09-27
 
 The Documentation prompt now sets a project up rather than verifying all of it at once. On another project of about 150 source files, the old full crawl was estimated at 400,000 to 700,000 tokens, and the run stopped to ask for a smaller scope, against the prompt's own rule.

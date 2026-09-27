@@ -4,7 +4,7 @@ description: Keep a live HTML dashboard during a long task: progress, anything s
 meta: Claude Code Prompt
 ---
 
-Gives a long task a page you can glance at instead of scrolling back through the session. Claude builds one HTML file, `.dashboard/index.html`, before the work starts and updates it after every step. It shows the steps and their status, anything stuck and what it is waiting for, the questions waiting for you, each with the default Claude will take if you do not answer, and the latest files it changed. The page opens with a double-click and reloads itself every ten seconds. It needs no server and makes no network requests, and every time on it comes from the system clock rather than an estimate.
+Gives a long task a page you can glance at instead of scrolling back through the session. Claude builds one HTML file, `dashboard/index.html`, before the work starts and updates it after every step. It shows the steps and their status, anything stuck and what it is waiting for, the questions waiting for you, each with the default Claude will take if you do not answer, and the latest files it changed. The page opens with a double-click and reloads itself every ten seconds. It needs no server and makes no network requests, and every time on it comes from the system clock rather than an estimate. The page is part of the project, so it is published with it: on a static site, anyone can watch progress at `/dashboard/`. Claude keeps anything private off it.
 
 Claude keeps the dashboard itself, in the same session: nothing is installed, and no agents or plugins are set up. When it needs a decision, it adds the question to the page and carries on with whatever does not depend on the answer, so a question you have not seen yet never stalls the whole task. The first time, it asks how you like the page to look (light or dark, dense or airy, one accent color) and records your answer in `CLAUDE.md` so every later dashboard matches. When the task is done, it asks whether to make this a standing rule for long tasks in the project, and shows you the exact lines before writing them.
 
@@ -18,7 +18,7 @@ Read the README, CLAUDE.md, and docs/ if they exist, and check whether a dashboa
 Then tell me the task as you understand it, broken into steps, and the default you will take for each decision you can already foresee. If the task itself is unclear, ask a short follow-up rather than guessing.
 
 Dashboard
-- One file, .dashboard/index.html, that opens by double-clicking. No server, no network requests, and no external scripts, fonts, or images: everything is inline.
+- One file, dashboard/index.html, that opens by double-clicking. No server, no network requests, and no external scripts, fonts, or images: everything is inline.
 - It reloads itself every 10 seconds with <meta http-equiv="refresh" content="10">, which works from a local file.
 - Choose the panels for this task rather than using a fixed template, but always include:
   - Steps and their status: done, in progress, waiting, or not started.
@@ -26,7 +26,8 @@ Dashboard
   - Questions for me: each with the default you will take if I do not answer.
   - Latest results: the files created or changed, and what each one is.
 - Take every time from the system clock when you write the update. Never estimate one.
-- If the project uses git and .dashboard/ is not ignored, tell me and add it to .gitignore.
+- The dashboard is part of the project, tracked like any other file and published wherever the project is published: on a static site it is served at /dashboard/, and otherwise anyone who can see the repository can read it. Put nothing on it you would not publish: no secrets, keys, personal details, private paths, or private matters. Keep a question that involves any of those in the conversation, and put only a neutral line on the page. Include <meta name="robots" content="noindex">, since it is a working page rather than content.
+- If dashboard/ already exists for something else, use progress-dashboard/ instead and tell me. If an earlier version of this prompt left a .dashboard/ folder, move its page to the new folder; if .gitignore lists dashboard/ or .dashboard/, tell me and remove that line, removing .gitignore itself if nothing else is left in it.
 
 Working
 - Create the dashboard before starting the task, and tell me its path.
@@ -35,5 +36,5 @@ Working
 - When the task is finished, update it one last time with a short summary at the top.
 
 Afterwards
-Ask whether I want this as a standing rule. If I do, show me the exact lines for the project's CLAUDE.md, and write them once I confirm: for any task with more than 5 steps, or likely to take longer than 30 minutes, create and maintain .dashboard/index.html as described here, using the recorded style.
+Ask whether I want this as a standing rule. If I do, show me the exact lines for the project's CLAUDE.md, and write them once I confirm: for any task with more than 5 steps, or likely to take longer than 30 minutes, create and maintain dashboard/index.html as described here, using the recorded style.
 ```

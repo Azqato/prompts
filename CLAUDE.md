@@ -4,7 +4,7 @@ Read `docs/PRD.md` first, section 20 above all: it is the working practice for t
 
 ## Progress dashboard
 
-For any task with more than 5 steps, or likely to take longer than 30 minutes, create and maintain `.dashboard/index.html` as the Progress Dashboard prompt describes: one self-contained HTML file that opens by double-click and reloads every 10 seconds, showing the steps and their status, anything stuck, questions waiting for the author with the default you will take, and the latest results. Create it before starting, update it after every step, and keep working on the default when a question waits. Maintain it yourself in the session; do not install any agents, subagents, or plugins. `.dashboard/` is ignored and never part of the project.
+For any task with more than 5 steps, or likely to take longer than 30 minutes, create and maintain `dashboard/index.html` as the Progress Dashboard prompt describes: one self-contained HTML file that opens by double-click and reloads every 10 seconds, showing the steps and their status, anything stuck, questions waiting for the author with the default you will take, and the latest results. Create it before starting, update it after every step, and keep working on the default when a question waits. Maintain it yourself in the session; do not install any agents, subagents, or plugins. The page is tracked and goes live with the site at https://azqato.github.io/prompts/dashboard/, so put nothing private on it, and keep its `noindex` tag.
 
 Style, chosen 2026-09-27 after the look of 1000xstocks.com:
 

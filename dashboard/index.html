@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta http-equiv="refresh" content="10"><meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Public progress dashboard (v1.74.0) - Progress</title>
+<style>
+:root{--bg:#0a0a0a;--panel:#141414;--line:#2a2a2a;--text:#f2f2f2;--muted:#a8a8a8;--gold:#FFB800;--amber:#f89e22;--ok:#3fb950;--bad:#f85149}
+*{box-sizing:border-box;margin:0}body{background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding:24px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;margin-bottom:18px}
+h1{font-size:1.5rem}.meta{color:var(--muted);font-size:.85rem}
+.label{font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin:6px 0 18px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--amber))}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:8px}li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+li span{color:var(--muted);font-size:.88rem}li.done>span:nth-child(2){color:var(--muted)}li.doing>span:nth-child(2){color:var(--text);font-weight:600}
+.t{margin-left:auto;font-size:.78rem}
+.pill{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;padding:2px 9px;border-radius:99px;border:1px solid var(--line);color:var(--muted)!important}
+.pill.done{border-color:rgba(63,185,80,.5);color:var(--ok)!important}.pill.doing{background:linear-gradient(90deg,var(--gold),var(--amber));color:#111!important;border:0;font-weight:700}
+.pill.waiting{border-color:var(--gold);color:var(--gold)!important}
+.st{font-size:.72rem!important;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)!important}
+code{color:var(--gold);font-size:.85rem}.empty{color:var(--muted);font-size:.88rem}
+.summary{border-color:var(--gold);margin-bottom:14px}
+</style></head><body>
+<header><h1>Public progress dashboard (v1.74.0)</h1><span class="meta">Updated 2026-09-27 11:52:21 · refreshes every 10s · 2/3 steps done</span></header>
+<div class="bar"><i style="width:66%"></i></div>
+<section class="summary"><p>The dashboard is now public. Earlier today: v1.71.0 to v1.73.0 shipped.</p></section>
+<div class="grid">
+<section><div class="label">Steps</div><ul><li class="done"><span class="pill done">Done</span><span>Move the dashboard to dashboard/ and make it public</span><span class="t">11:52</span></li><li class="done"><span class="pill done">Done</span><span>Update both prompts, CLAUDE.md, PRD, and patch notes</span><span class="t">11:52</span></li><li class="doing"><span class="pill doing">In progress</span><span>Push and confirm the page is live</span><span class="t"></span></li></ul></section>
+<section><div class="label">Questions for you</div><ul><li><b>Licence grants use of the prompts (keeps PRD 11&#x27;s reuse rule) rather than granting nothing. Keep that?</b><span>Default: keep the grant: copy, adapt, run; no republishing</span><span class="st">open</span></li></ul></section>
+<section><div class="label">Stuck</div><ul><p class="empty">Nothing here.</p></ul></section>
+<section><div class="label">Latest results</div><ul><li><code>dashboard/index.html</code><span>This page, now public</span></li><li><code>prompts/progress-dashboard.md</code><span>Public by default, nothing private, noindex</span></li><li><code>prompts/documentation.md</code><span>dashboard/ is project content, never ignored</span></li></ul></section>
+</div></body></html>

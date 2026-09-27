@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.73.0
+**Version:** 1.74.0
 **Status:** Active
 **Author:** Azqato
 
@@ -251,9 +251,9 @@ The `hidden: true` flag remains supported for retiring a prompt from navigation 
 
 ## 13. Repository Structure
 
-The whole project is 38 files in six folders. There is no build output and no vendored code. Since v1.71.0 there is one ignore file, `.gitignore`, with a single entry, `.dashboard/`: the Progress Dashboard's working page, rebuilt during long tasks and never part of the project (section 20). `.editorconfig` and `.vscode/` are absent, and every other file in the working tree is tracked.
+The whole project is 38 files in seven folders. There is no build output and no vendored code. There is no ignore file: v1.71.0 added a `.gitignore` whose only entry was `.dashboard/`, and v1.74.0 removed it when the dashboard became public at `dashboard/` (section 20), leaving nothing to ignore. `.editorconfig` and `.vscode/` are absent, and every file in the working tree is tracked.
 
-`.gitattributes`, added in v1.36.0, was the only piece of git configuration the repository carried until `.gitignore` joined it in v1.71.0. It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
+`.gitattributes`, added in v1.36.0, is the only piece of git configuration the repository carries (a `.gitignore` existed from v1.71.0 to v1.74.0). It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
 
 ```
 /
@@ -262,7 +262,8 @@ The whole project is 38 files in six folders. There is no build output and no ve
 │                       carries no setup, structure, or procedure; see section 33.
 ├── .gitattributes      Pins LF line endings on checkout. Six lines of comment and
 │                       one rule. Not part of the deployed site.
-├── .gitignore          Ignores .dashboard/, the Progress Dashboard's page.
+├── dashboard/
+│   └── index.html      The Progress Dashboard's page, public. Section 20.
 ├── CLAUDE.md           The progress dashboard rule and style. Section 20.
 ├── LICENSE.md          All rights reserved, with the prompts free to use.
 │                       Section 32b.
@@ -576,9 +577,9 @@ An empty list means there is nothing to ask. The two bullets in angle brackets u
 
 Adopted in v1.71.0, at the author's request, to test the Progress Dashboard prompt on real work in the repository that maintains it. The rule lives in `CLAUDE.md` at the root:
 
-- For any task with more than five steps, or likely to take longer than thirty minutes, Claude keeps `.dashboard/index.html`: the steps and their status, anything stuck, questions waiting with the default it will take, and the latest results. It is created before the work starts and updated after every step, by Claude itself in the session, with no agent or plugin.
+- For any task with more than five steps, or likely to take longer than thirty minutes, Claude keeps `dashboard/index.html`: the steps and their status, anything stuck, questions waiting with the default it will take, and the latest results. It is created before the work starts and updated after every step, by Claude itself in the session, with no agent or plugin.
 - The style, chosen after the look of 1000xstocks.com, is recorded in `CLAUDE.md`: dark, medium density, gold `#FFB800` with a gold-to-amber gradient, spaced uppercase labels, system fonts. It is the dashboard's style only and has nothing to do with this site's design in `docs/DESIGN.md`.
-- `.dashboard/` is ignored by `.gitignore` and is never documented as part of the project.
+- Since v1.74.0 the page is public: `dashboard/` is tracked and goes live with the site at `https://azqato.github.io/prompts/dashboard/`, so progress can be watched from anywhere. It shows the state as of the last push, not live, and carries `noindex` and nothing private. It was `.dashboard/`, ignored, from v1.71.0; GitHub Pages does not serve folders whose names start with a dot, so the rename was required, not cosmetic. It is not listed in `sitemap.xml`.
 - If the prompt feels wrong in use, that is a finding for `prompts/progress-dashboard.md`, which is the point of running it here.
 
 ---
@@ -1196,7 +1197,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 │                           copied, adapted, and run. See 32b.
 ├── sitemap.xml             The site root and every live share page. Generated
 │                           by tools/prompts-mirror.py --sync, checked by it too.
-├── .gitignore              .dashboard/ only.
+├── dashboard/index.html    The Progress Dashboard's page, public, noindex.
 ├── .gitattributes          * text=auto eol=lf. See section 13.
 ├── css/
 │   └── style.css           569 lines. Whole design system. Tokens in :root,
@@ -1236,7 +1237,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
                             into the Roadmap on request. See section 20.
 ```
 
-Thirty-eight files, six folders, two levels deep at most. No build output and no vendored code. One ignore file, `.gitignore`, ignoring only `.dashboard/` (since v1.71.0). `.editorconfig`, `.github/`, and `.vscode/` are absent, and every other file in the working tree is tracked.
+Thirty-eight files, seven folders, two levels deep at most. No build output and no vendored code. No ignore file (one existed from v1.71.0 to v1.74.0, for `.dashboard/` only). `.editorconfig`, `.github/`, and `.vscode/` are absent, and every other file in the working tree is tracked.
 
 ### Data models
 
@@ -1439,7 +1440,8 @@ Section 12 states the removal policy. This section is the list that policy is ap
 | `README.md` | **No** as an address, though it is the repository's public front door on GitHub | Never remove |
 | `sitemap.xml` | **Yes**, since v1.71.0. Served at `/prompts/sitemap.xml` for crawlers. It lists the site root and each live share page, all under its own path, which is the scope a sitemap there may cover | Regenerated by `--sync`, never hand-edited. Removing it would need no redirect, since nothing links to it, but it would stop the share pages being listed |
 | `LICENSE.md` | **No** as a page, though it is served and GitHub reads it to detect the licence | Never move it from the root. See 32b |
-| `CLAUDE.md`, `.gitignore`, `.gitattributes` | **No.** Repository configuration, never requested by the page | Plain delete, with the rule each carries recorded first |
+| `dashboard/index.html` | **Yes**, since v1.74.0, at `/prompts/dashboard/`. A working page, `noindex`, not in the sitemap | Remove only with the `CLAUDE.md` rule; it is linked from nowhere, so no redirect |
+| `CLAUDE.md`, `.gitattributes` | **No.** Repository configuration, never requested by the page | Plain delete, with the rule each carries recorded first |
 
 The asset paths are the subtle case. They are public in the sense that the deployed page requests them, so renaming one without updating `index.html` breaks the live site. But no external party holds them, so the compatibility obligation is satisfied by editing the reference in the same commit rather than by a permanent redirect.
 
@@ -1767,6 +1769,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.74.0 | 2026-09-27 | The progress dashboard became public: the Progress Dashboard and Documentation prompts now keep it at `dashboard/index.html`, tracked and published with the project, with `noindex` and nothing private on it, and clean up the old ignored `.dashboard/`. Here, the page moved to `dashboard/`, `.gitignore` was removed as empty, and sections 13, 20, 30, and 32 updated. Seven folders. |
 | 1.73.0 | 2026-09-27 | The Documentation prompt became a setup pass: it surveys the codebase instead of reading every file, checks the doc set against its own rules first, checks the code only where a change since the last audit touches it, and records the rest in a Roadmap verification checklist that later updates work through. Also: gaps confirmed by reading before being reported, no scope questions or estimates, sitemaps for public pages only, mixed ideas files copied into TODO.md with any instructions inside them left undone, conventions from a sample, the writing sweep by search, and the audit date recorded. Section 33 updated. |
 | 1.72.0 | 2026-09-27 | The Documentation prompt now says to run the whole audit in the session itself, with no subagents, parallel agents, or background tasks. |
 | 1.71.0 | 2026-09-27 | Answered open questions 6, 7, and 9. `sitemap.xml` added at the root, listing the site root and every live share page, written and checked by `tools/prompts-mirror.py` (section 32). `LICENSE.md` added: the Documentation prompt's all-rights-reserved default, with one grant that keeps section 11's rule that the prompts may be reused by anyone (new section 32b). Adopted the progress dashboard, built against the v1.70.0 recommendation to test the prompt on real work: `CLAUDE.md` holds its rule and style, `.gitignore` ignores `.dashboard/`, and section 20 records it. File count 38. Sections 13, 19, 20, 27, 29, 30, and 32 updated. |
