@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.87.0
+**Version:** 1.88.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1077,6 +1077,36 @@ Based on: the `mengto/skills` repository on GitHub (MIT licence, Meng To), read 
 
 Based on: the `mengto/skills` repository on GitHub (MIT licence, Meng To), read in full on 2026-09-28 at commit `798db0a`: `workflow/workflow-progress-screenshots/SKILL.md`. Written in this site's own words; nothing is copied.
 
+#### 15. New prompt: Frontend References
+
+**What.** A setup prompt, like Progress Dashboard, that writes a standing "Frontend references" rule into the reader's CLAUDE.md, so Claude reaches for a short list of outside references only when building a new page, when told something looks bad, or when one is named, and just does the work for small changes. Each reference is matched to where the reader gets stuck:
+- No style yet: a DESIGN.md chosen from Refero Styles (2,000+ design systems taken from product sites) or VoltAgent's awesome-design-md (73 brand DESIGN.md files, MIT, 118k stars), saved in the project and imported from its CLAUDE.md with an `@` line.
+- Rough components: 21st.dev (12,000+ React and Tailwind components, with a Claude Code MCP set up by `npx @21st-dev/cli@latest init --client claude`; two free copies a day, so Claude says what it is looking for before calling it), then Component Gallery (60 components across 95 design systems, free) to see how mature systems handle the same component.
+- Flat motion: Kinetics (153 spring-physics animations, each as CSS, React, or an AI prompt).
+- A demo video: whatships (2,257 launch videos from X) for references the reader picks, tiled into one contact sheet to read pacing and transitions, then built with HyperFrames.
+- Still off at the end: Impeccable (Paul Bakaus, Apache 2.0, 72k stars), a Claude Code plugin whose `polish`, `distill`, `bolder`, and other commands turn "make it better" into specific changes.
+The rules come from the source and are kept: the project's own design system and components come first, and references only fill what is undecided; ask before installing any MCP, plugin, or tool, and never imitate one that is missing; if a page cannot be read, ask the reader to paste it rather than filling in from memory; say which reference was used and what it changed; show the rule and write nothing until confirmed.
+
+**Why.** Opus 5.5 is already strong at frontend work; what it lacks is concrete references, which is the same point update 3 made. This turns an eight-link post into a rule Claude follows on its own, at the moments it helps, with guardrails the post already had.
+
+**How it relates.** It complements rather than duplicates: Brand Identity asks for references (update 3) and builds a brand, Design Review reports what to remove, Video to Prompt reads a video in detail, and Launch Video already uses HyperFrames. The Frontend References rule can point to those prompts where they fit (for example, Design Review before Impeccable's `polish`). It is a new prompt through section 12, not an edit to those.
+
+**What this site adds to the source.**
+- Licence and reuse notes, from reading each source on 2026-09-28: awesome-design-md documents design tokens but its brands' names, logos, and identities stay their owners', so a DESIGN.md sets colors, type, and spacing and is never used to copy a brand; whatships says it is not a download service and asks for the original X post to be cited, so its videos are references to study, not footage to reuse; Refero Styles, Kinetics (github.com/ckissi/kinetics), and 21st.dev state no licence on the pages read, so their material is treated as reference unless the reader confirms the terms.
+- Scope: the source writes to `~/.claude/CLAUDE.md`, every project the reader has. The prompt asks, offering user scope (matching the author's choice for Launch Video) or the current project only.
+- Every reference is dated as checked, since a list of third-party sites goes stale.
+
+**Size.** Small to medium: one prompt, its share page, and the usual count updates.
+
+**Open questions.**
+1. Section 21 says this site is not a directory of third-party links, and update 3 declined one. This prompt names seven sites inside a prompt the reader runs, rather than as site content. Is that acceptable, or should the prompt describe the kinds of reference (a DESIGN.md, a component registry, a motion library) and leave the names out?
+2. User scope or project scope by default?
+3. Include 21st.dev, whose free tier is two copies a day and which needs an MCP install, or leave it as optional?
+
+**Recommendation.** Do it, as a standalone prompt that keeps the named sites (the names are what make it useful), each with its date checked and its reuse note, user scope offered first, and 21st.dev marked optional. Nothing in the rule installs or calls anything without the reader's say-so.
+
+Based on: the author's ideas list, 2026-09-28, a post listing eight frontend reference sites with a suggested CLAUDE.md section; and the pages of Refero Styles, awesome-design-md, 21st.dev, Component Gallery, Kinetics, whatships, and Impeccable (and its GitHub repository), read with the web fetch tool on 2026-09-28. HyperFrames was not re-read: Launch Video already relies on it. No page was loaded in a browser, under the CLAUDE.md rule that keeps headless Edge to local checks.
+
 ### Deferred
 
 - **Automated mirror generation.** Deferred indefinitely. It would need Node in the loop, which is the dependency the project exists to avoid. A by-hand verification script is the compromise, and it is planned rather than deferred.
@@ -1940,6 +1970,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.88.0 | 2026-09-28 | The ideas-list entry the author added on GitHub (eight frontend reference sites) researched and proposed as Future update 15, a Frontend References prompt; not built. The idea left `docs/TODO.md`, which is back to its placeholder. |
 | 1.87.0 | 2026-09-28 | Five new prompts adapted from the `mengto/skills` repository (MIT, Meng To), Future updates 8 to 12: Design Review, Video to Prompt, Score to Target, Animation Performance, and Landing Page. Updates 13 and 14 folded design quality checks into Brand Identity and honest-screenshot rules into Mobile Responsive Audit. Seventeen prompts, 50 files. Section 27 records all seven with their sources. |
 | 1.86.0 | 2026-09-27 | Documentation prompt: CLAUDE.md is a Project File, kept at the root and never consolidated, moved, or deleted; each of its rules is recorded in the PRD's Working Practice, with differences flagged rather than resolved; a `@docs/CLAUDE.md` import is accepted but not created; none is created unless the prompt's own rules need one. Added to the folder tree, the root-files exclusion, the intro, and the Working Practice spec. This repository: `CLAUDE.md` gains a Default rules section, recorded in section 20. Launch Video prompt: renders with Hyperframes' own Chrome headless shell, installed into the Hyperframes cache with `npx hyperframes browser ensure` and checked with `browser path`, never the system Chrome or Edge (Edge was tried and does not work). |
 | 1.85.0 | 2026-09-27 | Search moved from Deferred to a planned milestone in section 27, at the author's request. The trigger is unchanged: it is built when the library passes roughly twenty prompts, so the promises in sections 21, 23, and the FAQ still hold. |

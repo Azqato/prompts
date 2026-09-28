@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.88.0 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Roadmap: the new idea in `docs/TODO.md`, a list of eight frontend reference sites, is researched and proposed as Future update 15: a Frontend References prompt that writes a standing rule into CLAUDE.md, with the reuse terms each site states, a choice of user or project scope, and three open questions. It is a proposal; nothing is built.
+- `docs/TODO.md` is back to its placeholder, since the idea now lives in the Roadmap.
+
+---
+
 ## v1.87.0 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.
