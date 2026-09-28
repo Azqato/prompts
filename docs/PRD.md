@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.89.0
+**Version:** 1.90.0
 **Status:** Active
 **Author:** Azqato
 
@@ -482,7 +482,7 @@ Numbered so they can be answered by reference. An answered question is folded in
 8. This site now falls under a policy it does not meet. As of v1.37.0 the Documentation prompt says a project that serves a site records a social sharing policy and carries `og:title`, `og:description`, `og:url`, `og:type`, `og:site_name`, and `twitter:card` on every shareable page. `index.html` carries a `<meta name="description">` and nothing else, so a pasted link renders from the title tag alone and, on a client that requires `og:title`, may not render an embed at all. Two things have to be decided before it can be fixed rather than one. First, the canonical domain: this repository has no `sitemap.xml` and no `CNAME`, so the Pages address is recorded nowhere the audit can read, and `og:url` cannot be guessed. Second, the architecture: every route is a hash on one `index.html`, and a link renderer never sees the fragment, so one static set of tags is the only thing achievable without a build step. That is a real limit worth stating rather than working around, since the prompt's own rule is that `og:url` is unique per page. Should the tags be added for the site as a whole, with the per-page requirement noted as not applicable to a hash-routed single page, or declined and recorded as declined? Tracked on the roadmap in section 27 as of v1.38.0, along with the rest of the self-audit against the current standard. As of v1.44.0 the per-prompt cards the author wants are scoped as their own roadmap item in section 27, which answers the canonical domain half of this question and proposes generated share pages for the architecture half. **Answered in v1.46.0**, by building them. The canonical domain is the one in section 17, and the architecture half was answered with generated share pages rather than by declaring the per-page rule not applicable. The policy is section 32a.
 
 9. **Should this site carry a `sitemap.xml`?** Raised by the v1.70.0 audit. The standard puts one at the root of a project that serves a site, and finding 2 of the self-audit in section 27 argued it would list a single URL. Since v1.46.0 there are eleven share pages, real addresses a sitemap at `/prompts/sitemap.xml` could list, all under its own path. Default applied meanwhile: none created, since adding one is a decision about how the site is indexed. Recommendation: add it, listing the site root and every live share page, and have `tools/prompts-mirror.py --sync` write it so it cannot drift. **Answered in v1.71.0**, as recommended. See section 32.
-10. **May headless Edge load a link an idea points to?** Raised in v1.86.0. The `CLAUDE.md` default rules say headless Edge is used only for local checks; step 2 of the ideas list in section 20 allows one headless Edge load, with a normal user agent, of a link in `docs/TODO.md`. Both texts are kept until the author decides which holds.
+10. **May headless Edge load a link an idea points to?** Raised in v1.86.0. The `CLAUDE.md` default rules say headless Edge is used only for local checks; step 2 of the ideas list in section 20 allows one headless Edge load, with a normal user agent, of a link in `docs/TODO.md`. Both texts are kept until the author decides which holds. **Answered 2026-09-28: allowed.** One headless Edge load per link, when the web fetch tool cannot read it, never signed in. `CLAUDE.md` names the exception, so both texts now agree.
 
 Answered on 2026-08-24:
 
@@ -582,9 +582,9 @@ When an update changes an area of the code, check that area's PRD or DESIGN.md s
 
 Adopted in v1.86.0, at the author's request. `CLAUDE.md` at the root is the copy Claude reads, since Claude Code loads it automatically from there; this section records the same rules, and the two change together. The rules, as written there:
 
-> Never use subagents; do all work directly. Use headless Edge only, never Chrome, and only for local checks. Never run state-changing checks against production. Before pushing: fetch, and if docs/TODO.md changed on the remote, keep the author's edits and ask about any ideas in it. After every change, update docs/PRD.md and docs/PATCHNOTES.md.
+> Never use subagents; do all work directly. Use headless Edge only, never Chrome, and only for local checks; the one exception is a single headless Edge load of a link a docs/TODO.md idea points to, when the web fetch tool cannot read it, never signed in. Never run state-changing checks against production. Before pushing: fetch, and if docs/TODO.md changed on the remote, keep the author's edits and ask about any ideas in it. After every change, update docs/PRD.md and docs/PATCHNOTES.md.
 
-The subagent rule is stricter than the author's global limit of five concurrent subagents, and wins here. The headless Edge rule repeats the Browser testing section and adds that it is for local checks only; the one place it does not yet match is step 2 of the ideas list above, which allows one headless Edge load of a link an idea points to (section 19, question 10).
+The subagent rule is stricter than the author's global limit of five concurrent subagents, and wins here. The headless Edge rule repeats the Browser testing section and adds that it is for local checks only; since v1.90.0 it also names the one exception, the single headless Edge load of a link an idea points to that step 2 of the ideas list allows (section 19, question 10, answered).
 
 ### Progress dashboard, for long tasks
 
@@ -795,7 +795,7 @@ Since v1.61.0 new work can also arrive through the author's ideas list, `docs/TO
 | Per-prompt social sharing cards | September 2026 | Complete (v1.46.0) |
 | Ideas list and its Roadmap process | September 2026 | Complete (v1.61.0 to v1.62.0) |
 | First ideas-list batch: five updates, two new prompts | September 2026 | Complete (v1.64.0 to v1.66.0) |
-| Skip-to-content link and copy-result live region | Unscheduled | Planned |
+| Skip-to-content link and copy-result live region | Next session (author, 2026-09-28) | Planned |
 | Search | When the library passes roughly twenty prompts | Planned (moved from Deferred in v1.85.0) |
 | Next prompt added | On demand | Ongoing |
 
@@ -1975,6 +1975,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.90.0 | 2026-09-28 | Author's answers: open question 10 answered, one headless Edge load of an idea's link is allowed and `CLAUDE.md` names it; the skip-to-content milestone is scheduled for the next session; Search keeps its trigger of roughly twenty prompts. |
 | 1.89.0 | 2026-09-28 | Added the Frontend References prompt, Future update 15: a standing CLAUDE.md rule pointing Claude at seven outside design references at the moments they help, user scope recommended, 21st.dev optional, each site dated with its reuse terms. Section 21 now allows third-party sites a prompt uses directly as a resource, while still ruling out link lists for browsing. Eighteen prompts, 52 files. |
 | 1.88.0 | 2026-09-28 | The ideas-list entry the author added on GitHub (eight frontend reference sites) researched and proposed as Future update 15, a Frontend References prompt; not built. The idea left `docs/TODO.md`, which is back to its placeholder. |
 | 1.87.0 | 2026-09-28 | Five new prompts adapted from the `mengto/skills` repository (MIT, Meng To), Future updates 8 to 12: Design Review, Video to Prompt, Score to Target, Animation Performance, and Landing Page. Updates 13 and 14 folded design quality checks into Brand Identity and honest-screenshot rules into Mobile Responsive Audit. Seventeen prompts, 50 files. Section 27 records all seven with their sources. |

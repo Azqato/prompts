@@ -4,7 +4,7 @@ Read `docs/PRD.md` first, section 20 above all: it is the working practice for t
 
 ## Default rules
 
-Never use subagents; do all work directly. Use headless Edge only, never Chrome, and only for local checks. Never run state-changing checks against production. Before pushing: fetch, and if docs/TODO.md changed on the remote, keep the author's edits and ask about any ideas in it. After every change, update docs/PRD.md and docs/PATCHNOTES.md.
+Never use subagents; do all work directly. Use headless Edge only, never Chrome, and only for local checks; the one exception is a single headless Edge load of a link a docs/TODO.md idea points to, when the web fetch tool cannot read it, never signed in. Never run state-changing checks against production. Before pushing: fetch, and if docs/TODO.md changed on the remote, keep the author's edits and ask about any ideas in it. After every change, update docs/PRD.md and docs/PATCHNOTES.md.
 
 ## Progress dashboard
 

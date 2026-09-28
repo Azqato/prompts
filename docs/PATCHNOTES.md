@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.90.0 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- `CLAUDE.md` default rules: headless Edge stays for local checks, with one named exception, a single load of a link a `docs/TODO.md` idea points to when the web fetch tool cannot read it, never signed in. Open question 10 is answered, and PRD section 20 matches.
+- Roadmap: the skip-to-content link and copy-result live region are scheduled for the next session. Search keeps its trigger of roughly twenty prompts (eighteen today).
+
+---
+
 ## v1.89.0 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.
