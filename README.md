@@ -29,6 +29,11 @@ The library covers recurring maintenance work, the kind of task that is tedious 
 - **Progress Dashboard** has Claude keep a live page for a long task, showing progress, anything stuck, and the questions waiting for you, each with what Claude will do if you do not answer, so a task can run without you watching the session.
 - **Assumption Check** has Claude list what it believes about your code before changing it, marking which beliefs it confirmed by reading the code and which are guesses, so the guesses can be checked before they turn into bugs.
 - **Launch Video** turns your project into a short launch video with music, motion, and the copy for the post, by running the open-source `/brag` plugin, installed once so every project can use it.
+- **Design Review** reviews a site's design and reports defects and decoration that does no job, each tied to the exact element, and recommends removing things before restyling them.
+- **Video to Prompt** turns a screen recording of a site or animation into one detailed prompt that can rebuild it.
+- **Score to Target** scores work out of 10 against a written rubric and improves it round by round until every item reaches the bar you set.
+- **Animation Performance** measures a page's animations, pauses what runs offscreen, fixes leaks, and proves it with before and after numbers.
+- **Landing Page** plans and writes a landing or pricing page around one action, with no invented proof.
 - **Add Prompt** is the one that maintains this site. Hand it a raw prompt and it writes the title and description and files everything in the right places.
 
 Each page is deliberately the same shape, so once you have read one you know exactly where to look on all the others.

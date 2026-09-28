@@ -38,6 +38,7 @@ Any headless Chromium browser enforces an effective minimum viewport (~485-500px
 - The reliable check for "is there page-level overflow" is `scrollWidth === clientWidth`, not a visual read of a screenshot.
 - For subtler layout bugs (like uneven spacing between sibling buttons), measure `getBoundingClientRect().left`/`.right` for every sibling and diff the gaps programmatically rather than eyeballing a zoomed screenshot.
 - Test against a local copy served via `python -m http.server`, not the live site, so fixes can be verified before shipping.
+- Screenshots still help me see a fix, as evidence alongside the measurements rather than instead of them. For each visual fix, take the before, the key moment, and the after in the same framing (same width, scroll position, and state). Look at every image before trusting it, and retake any that shows a half-loaded page, missing fonts, or the wrong state. Label them honestly: a narrow headless window is a phone-width browser check, not a test on a device.
 
 ## 4. Design decisions, ask, don't guess
 If fixing overflow requires a real design choice (e.g., should a wide table hide columns responsively, switch to a card layout, or just gain a visible horizontal scrollbar; should hidden content be recoverable via a menu), stop and ask which approach to use before implementing. Don't silently pick an approach for anything that changes how content is presented, only for pure bug fixes (CSS correctness issues with one obviously correct fix).

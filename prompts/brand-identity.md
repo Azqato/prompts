@@ -73,7 +73,7 @@ If the brief found an [existing brand], add a fourth concept:
 D. Evolved: the existing brand refined, keeping its current guidelines and format while expanding them wherever that helps.
 In that case A, B, and C take the existing brand only as a suggestion and go in whatever direction serves the brand best.
 
-All concepts must communicate [core value], target [audience], and avoid the Phase 2 clichés. Save SVGs to brand/concepts/ and run the render check on each. Document each concept (intent, shapes, palette, type) in docs/DESIGN.md under ## Brand Identity > Concepts. Summarize the concepts and ask me to pick one (or combine) before continuing.
+All concepts must communicate [core value], target [audience], and avoid the Phase 2 clichés. Save SVGs to brand/concepts/ and run the render check on each. Document each concept (intent, shapes, palette, type) in docs/DESIGN.md under ## Brand Identity > Concepts. Before presenting them, check each concept, and later the brand kit, against these: it has one focal point; every gradient, glow, texture, or effect in it has a job (it carries meaning, hierarchy, or recognition), and anything that has none is removed rather than restyled; and it could not be pasted onto an unrelated brand unchanged. Fix what fails, and note what you removed. Summarize the concepts and ask me to pick one (or combine) before continuing.
 
 Phase 4: Scalability (logo system for the chosen concept)
 

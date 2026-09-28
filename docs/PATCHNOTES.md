@@ -4,6 +4,32 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.87.0 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+Five new prompts and two improvements, adapted from Meng To's `mengto/skills` repository (MIT licence). Each is written in this site's own words, with the parts tied to Codex, to one person's accounts, or to committing and pushing left out.
+
+### Added
+
+- **Design Review**: a read-only review of a site's design. Every finding cites the exact element, is classed as a quality defect or as decoration with no job, and is ranked P0 to P3; the fix is removal first. No AI-authorship guesses, no taste score, no redesign.
+- **Video to Prompt**: reads a screen recording with ffprobe and ffmpeg, frame by frame at each beat, and writes one prompt detailed enough to rebuild it, including mobile and reduced-motion behavior. Uses stitched viewport captures for full-page stills.
+- **Score to Target**: an anchored rubric written before scoring, items scored separately from real evidence, and rounds of fixes until every item reaches the bar, with no rounding up. Independent judging is optional.
+- **Animation Performance**: measures offscreen CSS animations and canvas or WebGL loops at several scroll positions, pauses what is offscreen, fixes leaks in cleanup, and re-measures. Commits nothing.
+- **Landing Page**: landing and pricing modes. Asks for the one action, audience, objections, and real proof, then writes the outline, copy, FAQ, and indexing advice. Missing proof stays a marked placeholder.
+
+### Changed
+
+- Brand Identity: concepts and the brand kit are checked for one focal point, a job for every effect, and nothing that could be pasted onto an unrelated brand.
+- Mobile Responsive Audit: screenshots are taken before, at the key moment, and after in the same framing, looked at before being trusted, and labelled as phone-width browser checks rather than device tests.
+- README, PRD sections 13, 18, 21, 27, and 30, and DESIGN section 10 updated for seventeen prompts and 50 files.
+
+### Notes
+
+Seven more of the repository's ideas were considered and left out: skills that commit and push (section 11 forbids it), one that manages several sessions, ones tied to the author's own accounts or game, and about seventy style cards and effect recipes, which are parts for a build rather than prompts.
+
+---
+
 ## v1.86.0 - 2026-09-27
 
 Updated by: Claude (Opus 5.5), at the author's request.
