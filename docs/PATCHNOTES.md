@@ -4,6 +4,19 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.86.0 - 2026-09-27
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Documentation prompt: says how to handle CLAUDE.md. Claude Code loads it automatically only from the project root (or `.claude/CLAUDE.md`), so an audit that folded it into the PRD would silently drop the project's rules. It is now a Project File: kept at the root and never consolidated, moved, or deleted. Each of its rules is recorded in the PRD's Working Practice, with a line saying CLAUDE.md is the copy Claude reads and that the two change together, and any difference between them is flagged under Questions rather than resolved. A CLAUDE.md that is a single `@docs/CLAUDE.md` import is accepted where it exists but never created unprompted, and the audit creates no CLAUDE.md unless its own rules need one.
+- Documentation prompt: CLAUDE.md added to the folder tree and to the list of files that stay at the root; the intro and the Working Practice spec mention it.
+- Launch Video prompt: rendering now defaults to Hyperframes' own Chrome headless shell, installed (after asking) into the Hyperframes cache with `npx hyperframes browser ensure`, and never the Chrome or Edge already on the machine. The prompt checks with `npx hyperframes browser path` that the renderer points into that cache, and stops rather than rendering with a system browser. Edge was tried and does not work, so the prompt says not to substitute it. The pinned build also keeps the rendered video the same on every machine.
+- This repository: `CLAUDE.md` gains a Default rules section (no subagents; headless Edge only, for local checks; no state-changing checks against production; fetch and check docs/TODO.md before pushing; update the PRD and patch notes after every change). PRD section 20 records it.
+
+---
+
 ## v1.85.0 - 2026-09-27
 
 ### Changed

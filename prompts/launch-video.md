@@ -6,7 +6,7 @@ meta: Claude Code Prompt
 
 Makes a short, shareable launch video about the project you built, with its own soundtrack, sound effects, and the copy for the post that carries it. It does not build a video tool of its own: it runs `/brag`, an open-source Claude Code plugin (MIT licence, github.com/latent-spaces/brag) that reads your project's code, plans a story specific to it, storyboards it, and renders it with the Hyperframes video framework. It uses the full `/brag` workflow rather than its lighter `/brag-slim` mode.
 
-The first time, it checks whether `/brag` is installed and, after asking you, installs it once for your user account rather than inside the project, so every project on your machine and any other prompt can use it without installing it again. It checks the tools the full workflow needs (Node.js 22 or newer, ffmpeg, and the Hyperframes command line) and asks before installing anything missing. Then it asks you once for the tone, format, and length, with a suggestion for each drawn from your project, and runs it. You get a `brag-output/` folder with the plan, the composition brief, the share copy, and the rendered video.
+The first time, it checks whether `/brag` is installed and, after asking you, installs it once for your user account rather than inside the project, so every project on your machine and any other prompt can use it without installing it again. It checks the tools the full workflow needs (Node.js 22 or newer, ffmpeg, and the Hyperframes command line) and asks before installing anything missing. For rendering it installs Hyperframes' own headless Chrome into the Hyperframes cache rather than using the browser already on your machine: the pinned build keeps the output the same everywhere, and Edge does not work as a substitute. Then it asks you once for the tone, format, and length, with a suggestion for each drawn from your project, and runs it. You get a `brag-output/` folder with the plan, the composition brief, the share copy, and the rendered video.
 
 Use it when you want a launch video that tells the story of a whole project. For a looping animation of one interface morphing through its states in time with a song, use the Motion Design prompt instead.
 
@@ -24,6 +24,7 @@ Install, once
 Requirements
 - The full workflow needs Node.js 22 or newer, ffmpeg on the PATH, and the Hyperframes command line (`npx hyperframes doctor` checks it). Check each one and list what is present, with versions, and what is missing.
 - Ask before installing anything that is missing, and install nothing into this project to satisfy it.
+- Render with Hyperframes' own Chrome headless shell, never the Chrome or Edge already installed on this machine. After asking, run `npx hyperframes browser ensure` to install the pinned build into the Hyperframes cache, then run `npx hyperframes browser path` and check that the path it prints is inside that cache. If it points at a system browser instead, stop and tell me rather than rendering with it. Do not try Edge as a substitute: it does not work with Hyperframes' renderer.
 
 Brief
 Read the project first: its README, its main page or entry point, and its styles. Then ask me once, with your suggested default for each drawn from what you read, and wait:
