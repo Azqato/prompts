@@ -4,6 +4,16 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.93.0 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Brand Identity prompt: the Brand Design page's "What it shows" gains a fourth section, **Other brand images**, so nothing made over time is missed, including files from an earlier run of the prompt or from other work. It looks through the rest of `brand/` (concepts, mockups, the guidelines PDF, the presentation) and the site's own asset folders for logos, symbols, wordmarks, favicons, app and touch icons, share images, social banners, and web manifests, skipping dependency folders, build output, and caches. It lists only files that exist now, grouped by where they live, with each file's path shown. On the gated page these files are copied into the build under `brand/other/`, so the file handler still accepts only paths inside the brand folders.
+
+---
+
 ## v1.92.0 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.

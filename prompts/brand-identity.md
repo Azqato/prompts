@@ -127,6 +127,7 @@ What it shows
   1. Logo system (brand/logo): the symbol, wordmark, and lockups, with favicons and app icons.
   2. Brand kit (brand/kit): social images, the email signature, and the color and type tokens.
   3. Render checks (brand/checks, PNGs only): each logo file rendered to confirm it draws correctly.
+  4. Other brand images: any other brand design files in the project, so nothing made over time is missed, including files from an earlier run of this prompt or from other work. Look in the rest of brand/ (such as brand/concepts, brand/mockups, brand/brand-guidelines.pdf, and brand/presentation.html) and in the site's own asset folders for logos, symbols, wordmarks, favicons, app and touch icons, share and link-preview images, social banners, and web manifests. Skip dependency folders, build output, and caches, and list only files that exist now: do not restore deleted files from git history. Group them by where they live, and show each file's path under its name so the team can find it.
   Match the names to the folders this work actually created, and skip empty folders (or show "No files found.").
 - A responsive grid of tiles in each section (grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)), with a 1rem gap). Each tile has:
   - A 150px-high preview area. SVG, PNG, ICO, JPG, and WebP files show as an img with object-fit: contain and loading="lazy". Other files (CSS, JSON, webmanifest) show their extension as a large label in the accent color.
@@ -136,7 +137,7 @@ What it shows
 - Files listed alphabetically within each section. On the gated page, read them from disk when the page is requested, so new brand files appear without code changes.
 
 Serving the files safely (gated page only)
-- Copy the brand folders into the build output (for example a Content/brand folder) so the deployed site has them, since the repository is not on the server. Use the project's own build or deploy step for this.
+- Copy the brand folders into the build output (for example a Content/brand folder) so the deployed site has them, since the repository is not on the server. Use the project's own build or deploy step for this. Copy the files found for Other brand images into that folder too, under brand/other/ with their original paths kept below it, so the handler never needs to reach outside the brand folders.
 - Serve them through one handler protected by the page's access check, in whatever form the framework uses (for example ?handler=File&path=brand/logo/x.svg, or a route like /brand-design/file?path=...). Do not put them in the public static folder.
 - The handler accepts only paths under the brand folders. It rejects "..", absolute paths, and anything that resolves outside those folders after normalizing, and returns 404 for anything else or any missing file.
 - Set the content type from the extension: image/svg+xml, image/png, image/x-icon, image/jpeg, image/webp, text/css, application/json, and application/manifest+json.

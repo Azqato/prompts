@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.92.0
+**Version:** 1.93.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1975,6 +1975,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.93.0 | 2026-09-28 | Brand Identity prompt: the Brand Design page gains a fourth section, Other brand images, listing every other brand file in the project (the rest of `brand/` and the site's own logos, icons, share images, banners, and manifests), including files from earlier runs or other work, so nothing made over time is missed. Existing files only, never restored from git history; on the gated page they are copied under `brand/other/` so the handler stays inside the brand folders. |
 | 1.92.0 | 2026-09-28 | Brand Identity prompt: Phase 7 always runs instead of asking. A site with a signed-in area gets the gated page as before; a public site with no way to restrict a page, or a project with no site, gets an offline `brand/brand-design.html` instead, self-contained, opened from disk, listing the files as they were when written, and added to `.gitignore` so it is never committed or published. The prompt now has seven phases. |
 | 1.91.0 | 2026-09-28 | Brand Identity prompt: optional Phase 7, a Brand Design showcase page on the reader's site, from the author's specification. It runs only on the reader's yes, as the one exception to the prompt's scope rule; sits behind the site's existing access check; lists each brand folder as a grid of preview tiles with open and download links, read from disk; serves files through one handler that accepts only paths inside the brand folders, with tests for traversal, lookalike folders, and missing files; and is checked locally in a headless browser. The specification's stack-specific details are kept as examples. |
 | 1.90.0 | 2026-09-28 | Author's answers: open question 10 answered, one headless Edge load of an idea's link is allowed and `CLAUDE.md` names it; the skip-to-content milestone is scheduled for the next session; Search keeps its trigger of roughly twenty prompts. |
