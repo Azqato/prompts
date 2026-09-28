@@ -34,6 +34,7 @@ The library covers recurring maintenance work, the kind of task that is tedious 
 - **Score to Target** scores work out of 10 against a written rubric and improves it round by round until every item reaches the bar you set.
 - **Animation Performance** measures a page's animations, pauses what runs offscreen, fixes leaks, and proves it with before and after numbers.
 - **Landing Page** plans and writes a landing or pricing page around one action, with no invented proof.
+- **Frontend References** gives Claude a standing rule for when to use proven outside design references for style, components, motion, and demo videos, asking before installing anything.
 - **Add Prompt** is the one that maintains this site. Hand it a raw prompt and it writes the title and description and files everything in the right places.
 
 Each page is deliberately the same shape, so once you have read one you know exactly where to look on all the others.

@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.88.0
+**Version:** 1.89.0
 **Status:** Active
 **Author:** Azqato
 
@@ -251,7 +251,7 @@ The `hidden: true` flag remains supported for retiring a prompt from navigation 
 
 ## 13. Repository Structure
 
-The whole project is 50 files in seven folders. There is no build output and no vendored code. There is no ignore file: v1.71.0 added a `.gitignore` whose only entry was `.dashboard/`, and v1.74.0 removed it when the dashboard became public at `dashboard/` (section 20), leaving nothing to ignore. `.editorconfig` and `.vscode/` are absent, and every file in the working tree is tracked.
+The whole project is 52 files in seven folders. There is no build output and no vendored code. There is no ignore file: v1.71.0 added a `.gitignore` whose only entry was `.dashboard/`, and v1.74.0 removed it when the dashboard became public at `dashboard/` (section 20), leaving nothing to ignore. `.editorconfig` and `.vscode/` are absent, and every file in the working tree is tracked.
 
 `.gitattributes`, added in v1.36.0, is the only piece of git configuration the repository carries (a `.gitignore` existed from v1.71.0 to v1.74.0). It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
 
@@ -273,8 +273,8 @@ The whole project is 50 files in seven folders. There is no build output and no 
 ├── js/
 │   ├── prompts-data.js Hand-maintained mirror of prompts/*.md. Largest file by far.
 │   └── script.js       All client logic: parse, render, route, copy.
-├── prompts/            Seventeen .md files, one per prompt. The readable source.
-├── p/                  Seventeen generated share pages, one per visible prompt, and one retired.
+├── prompts/            Eighteen .md files, one per prompt. The readable source.
+├── p/                  Eighteen generated share pages, one per visible prompt, and one retired.
 │                       Public addresses: retired, never deleted. Section 32a.
 ├── tools/
 │   └── prompts-mirror.py  Maintenance only. Checks or resyncs the mirror
@@ -358,7 +358,7 @@ Every explicit rule found in the documentation, collected in one place. Sources 
 - Em dashes are prohibited in all three forms in all copy, including markdown docs and inline comments. CSS custom properties such as `--color-bg` are exempt (PRD 11). See section 18 for where the docs currently break this.
 - No marketing language, no filler phrases, plain declarative sentences (PRD 11).
 - A prompt page contains exactly three things: title, description, code block. No other sections (PRD 8).
-- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all seventeen prompts, four on 2026-08-23, `prompt-audit`, `brand-identity`, and `ios-simulator` on 2026-09-23, `game-setup` on 2026-09-24, `motion-design` on 2026-09-25, and `progress-dashboard`, `assumption-check`, and `launch-video` on 2026-09-27, and `design-review`, `video-to-prompt`, `score-to-target`, `animation-performance`, and `landing-page` on 2026-09-28.
+- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all eighteen prompts, four on 2026-08-23, `prompt-audit`, `brand-identity`, and `ios-simulator` on 2026-09-23, `game-setup` on 2026-09-24, `motion-design` on 2026-09-25, and `progress-dashboard`, `assumption-check`, and `launch-video` on 2026-09-27, and `design-review`, `video-to-prompt`, `score-to-target`, `animation-performance`, `landing-page`, and `frontend-references` on 2026-09-28.
 - Prompt text must not reference the author's specific services, accounts, or credentials (PRD 11).
 - The public surface is the deployed page, not the source that builds it. Files under `prompts/` are source, so renaming or removing a prompt is done bare, with no redirect, except for its share page, which is retired (PRD 12, 32a).
 - A genuine public address is retired behind a `REDIRECTS` entry, which is then permanent, never chains, and is never reused for different content (PRD 12).
@@ -426,8 +426,8 @@ Implemented but undocumented at the time of the v1.18.0 pass: the error view (`r
 
 Checked and confirmed clean on 2026-09-27 during the v1.70.0 audit:
 
-- All seventeen `prompts/*.md` files are mirrored in `js/prompts-data.js` with no orphans, and every share page is current, by `tools/prompts-mirror.py`.
-- All seventeen live share pages carry the six sharing tags with an absolute, unique https `og:url`, descriptions of 112 to 149 characters (the Documentation prompt's, at 112, is the only one under 134), and titles of 29 to 40 characters with no collision in the first 30. Measured on 2026-09-28. The one retired page forwards as section 32a describes.
+- All eighteen `prompts/*.md` files are mirrored in `js/prompts-data.js` with no orphans, and every share page is current, by `tools/prompts-mirror.py`.
+- All eighteen live share pages carry the six sharing tags with an absolute, unique https `og:url`, descriptions of 112 to 149 characters (the Documentation prompt's, at 112, is the only one under 134), and titles of 29 to 40 characters with no collision in the first 30. Measured on 2026-09-28. The one retired page forwards as section 32a describes.
 - `js/script.js` sets the title per route: the site name on home, "<prompt> - Azqato's Prompts" on a prompt page.
 - The section banners of `css/style.css` are in the order `docs/DESIGN.md` section 11 lists, with the two `max-width` breakpoints at 1023px and 767px and the reduced-motion block last.
 - Line counts: `index.html` 51, `css/style.css` 569, `js/script.js` 370, share pages 21, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
@@ -620,6 +620,8 @@ They are why every prompt description states its side effects, why the Prompt Co
 
 Someone looking for a large searchable catalogue of prompts to evaluate and compare. The site deliberately does not serve them. There is no search, no tagging, no rating, no submission path, and the library is intentionally small. Section 5 records this as a non-goal, and it is the tradeoff that keeps the site dependency-free.
 
+**Third-party sites inside a prompt are allowed** (since v1.89.0, at the author's direction: "If we are directly using third party sites as a resource in a prompt it is allowed"). A prompt may name outside sites when the prompt itself uses them as a resource the reader's Claude reads, installs, or calls, as Frontend References does. The test is use, not mention: a list of links offered for browsing, on a prompt page or anywhere on the site, is still the catalogue this section rules out. Each named site carries the date it was last checked and what its own terms allow (a site that states no licence is treated as reference only), and the prompt asks before installing or calling anything a site provides. This supersedes the reading in section 27, update 3, that no prompt should name third-party galleries.
+
 ---
 
 ## 22. User Stories
@@ -682,7 +684,7 @@ Each of these was considered and rejected, with the reason. They are listed so t
 | Not built | Why |
 | --- | --- |
 | Search or filtering | The library is small enough to scan, and the sidebar shows everything at once. Search earns its complexity at a scale this project does not intend to reach |
-| Tags or categories | Same reason. Seventeen prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
+| Tags or categories | Same reason. Eighteen prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
 | Syntax highlighting | Would mean a library, which breaks the no-dependency rule. Prompt text is prose, not code, so highlighting would add noise rather than meaning |
 | A build step | The entire architecture exists to avoid one. See section 7 |
 | Automated `prompts-data.js` generation | Would require Node in the loop and a build convention. The resync is done with a throwaway script per change instead, which keeps the repository free of tooling. This is a real tradeoff and it is recorded as technical debt in section 30 |
@@ -1105,6 +1107,8 @@ The rules come from the source and are kept: the project's own design system and
 
 **Recommendation.** Do it, as a standalone prompt that keeps the named sites (the names are what make it useful), each with its date checked and its reuse note, user scope offered first, and 21st.dev marked optional. Nothing in the rule installs or calls anything without the reader's say-so.
 
+**Built in v1.89.0**, as recommended. The author answered the three questions: 1, section 21 now allows third-party sites a prompt uses directly as a resource ("If we are directly using third party sites as a resource in a prompt it is allowed"); 2, user scope recommended, project scope offered; 3, 21st.dev optional. Each site carries its checked date and reuse note.
+
 Based on: the author's ideas list, 2026-09-28, a post listing eight frontend reference sites with a suggested CLAUDE.md section; and the pages of Refero Styles, awesome-design-md, 21st.dev, Component Gallery, Kinetics, whatships, and Impeccable (and its GitHub repository), read with the web fetch tool on 2026-09-28. HyperFrames was not re-read: Launch Video already relies on it. No page was loaded in a browser, under the CLAUDE.md rule that keeps headless Edge to local checks.
 
 ### Deferred
@@ -1124,7 +1128,7 @@ Added in v1.75.0, under the Documentation prompt's v1.73.0 rule. Each section th
 | PRD 9 | Navigation | Not yet |  |
 | PRD 10 | Copy Button Behavior | Not yet | Working on the live site per the author, 2026-09-27; the text itself not yet checked against `js/script.js` |
 | PRD 10a | Prompt Collapse Behavior | Not yet |  |
-| PRD 13 | Repository Structure | Verified 2026-09-27 | Tree and count checked against `git ls-files`: 50 files, seven folders, after the five v1.87.0 prompts were added |
+| PRD 13 | Repository Structure | Verified 2026-09-27 | Tree and count checked against `git ls-files`: 52 files, seven folders, after `frontend-references` was added in v1.89.0 |
 | PRD 14 | Architecture and Flow | Not yet |  |
 | PRD 15 | Code Conventions | Not yet |  |
 | PRD 17 | Stack, Tooling, and Deployment | Not yet |  |
@@ -1367,7 +1371,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 
 | Layer | Technology | Version |
 | --- | --- | --- |
-| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus seventeen generated share pages of 21 lines each and one retired share page |
+| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus eighteen generated share pages of 21 lines each and one retired share page |
 | Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 569 lines, no `@import` |
 | Logic | JavaScript, ES5-flavoured with `const` and `let` | No transpiler. Runs as written. 370 lines |
 | Maintenance tooling | Python 3, standard library only | `tools/prompts-mirror.py`. Never runs in a browser, never required to build or serve |
@@ -1416,6 +1420,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 │   ├── score-to-target.md
 │   ├── animation-performance.md
 │   ├── landing-page.md
+│   ├── frontend-references.md
 │   ├── mobile-responsive-audit.md
 │   ├── motion-design.md
 │   ├── progress-dashboard.md
@@ -1438,7 +1443,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
                             into the Roadmap on request. See section 20.
 ```
 
-Fifty files, seven folders, two levels deep at most. No build output and no vendored code. No ignore file (one existed from v1.71.0 to v1.74.0, for `.dashboard/` only). `.editorconfig`, `.github/`, and `.vscode/` are absent, and every other file in the working tree is tracked.
+Fifty-two files, seven folders, two levels deep at most. No build output and no vendored code. No ignore file (one existed from v1.71.0 to v1.74.0, for `.dashboard/` only). `.editorconfig`, `.github/`, and `.vscode/` are absent, and every other file in the working tree is tracked.
 
 ### Data models
 
@@ -1970,6 +1975,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.89.0 | 2026-09-28 | Added the Frontend References prompt, Future update 15: a standing CLAUDE.md rule pointing Claude at seven outside design references at the moments they help, user scope recommended, 21st.dev optional, each site dated with its reuse terms. Section 21 now allows third-party sites a prompt uses directly as a resource, while still ruling out link lists for browsing. Eighteen prompts, 52 files. |
 | 1.88.0 | 2026-09-28 | The ideas-list entry the author added on GitHub (eight frontend reference sites) researched and proposed as Future update 15, a Frontend References prompt; not built. The idea left `docs/TODO.md`, which is back to its placeholder. |
 | 1.87.0 | 2026-09-28 | Five new prompts adapted from the `mengto/skills` repository (MIT, Meng To), Future updates 8 to 12: Design Review, Video to Prompt, Score to Target, Animation Performance, and Landing Page. Updates 13 and 14 folded design quality checks into Brand Identity and honest-screenshot rules into Mobile Responsive Audit. Seventeen prompts, 50 files. Section 27 records all seven with their sources. |
 | 1.86.0 | 2026-09-27 | Documentation prompt: CLAUDE.md is a Project File, kept at the root and never consolidated, moved, or deleted; each of its rules is recorded in the PRD's Working Practice, with differences flagged rather than resolved; a `@docs/CLAUDE.md` import is accepted but not created; none is created unless the prompt's own rules need one. Added to the folder tree, the root-files exclusion, the intro, and the Working Practice spec. This repository: `CLAUDE.md` gains a Default rules section, recorded in section 20. Launch Video prompt: renders with Hyperframes' own Chrome headless shell, installed into the Hyperframes cache with `npx hyperframes browser ensure` and checked with `browser path`, never the system Chrome or Edge (Edge was tried and does not work). |

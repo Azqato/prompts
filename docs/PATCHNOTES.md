@@ -4,6 +4,21 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.89.0 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Added
+
+- **Frontend References**: a setup prompt that writes a standing "Frontend references" rule into CLAUDE.md, at user scope (recommended) or for the current project. Claude uses seven outside references only when building a new page, when told something looks bad, or when one is named: a DESIGN.md from Refero Styles or awesome-design-md for style, Component Gallery (and, optionally, 21st.dev) for components, Kinetics for motion, whatships and HyperFrames for demo videos, and Impeccable for a final pass. The project's own design system comes first; nothing is installed or called without asking; nothing is filled in from memory; each site is dated 2026-09-28 with what its terms allow. Future update 15.
+
+### Changed
+
+- PRD section 21: prompts may name third-party sites they use directly as a resource. A list of links for browsing is still out of scope. This supersedes the earlier reading in update 3.
+- README, PRD, and DESIGN counts updated for eighteen prompts and 52 files.
+
+---
+
 ## v1.88.0 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.
