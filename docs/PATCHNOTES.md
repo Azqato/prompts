@@ -4,6 +4,20 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.92.0 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Brand Identity prompt: the Brand Design page is now always built, with no question at the end. Its form depends on the site:
+  - A site with a signed-in area for internal pages: the gated page as in v1.91.0, behind the same access check, with the protected file handler and its tests.
+  - A public site with no way to restrict a page, or no site at all: an offline page, `brand/brand-design.html`. It is one self-contained file that opens by double-click and links to each file by relative path. It lists the files as they were when written, since a page opened from disk cannot read its folder; running the phase again refreshes it. It uses the new brand's own palette. It is added to `.gitignore` (creating the file with only that line if there is none), so it is never committed or published, and it is checked opened from disk and absent from `git status`.
+  - Claude says which form it chose and why.
+- The intro, the scope rule, and the README describe both forms. The prompt now has seven phases.
+
+---
+
 ## v1.91.0 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.
