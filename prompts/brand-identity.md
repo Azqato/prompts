@@ -4,7 +4,7 @@ description: Build a complete logo system for a project: a brand brief, three SV
 meta: Claude Code Prompt
 ---
 
-Runs a full brand identity project in seven phases, the way a branding agency would. It reads the project first (the README, `CLAUDE.md`, `PRD.md`, `DESIGN.md`, `package.json`, landing page copy, and any existing brand or style files) and fills in a brand brief, asking once for anything it cannot work out, including, optionally, a few brands, sites, or images you like as references. It then studies five to eight competitors in the project's industry and lists the visual clichés the logo must avoid, draws three concept directions as hand-written SVG (luxury minimalism, typography first, and a symbolic mark), and stops for you to pick one or combine them. If the project already has a brand, a fourth concept evolves it, while the other three treat it only as a starting suggestion.
+Runs a full brand identity project in seven phases, the way a branding agency would. It starts with a read-only pass, reading every markdown documentation file in the project (the README, `CLAUDE.md`, `PRD.md`, `DESIGN.md`, the patch notes, and any others) for anything that bears on the brand, and summarizes what it found with the source of each point. It then reads `package.json`, landing page copy, and any existing brand or style files, and fills in a brand brief, asking once for anything it cannot work out, including, optionally, a few brands, sites, or images you like as references. Next it studies five to eight competitors in the project's industry and lists the visual clichés the logo must avoid, draws three concept directions as hand-written SVG (luxury minimalism, typography first, and a symbolic mark), and stops for you to pick one or combine them. If the project already has a brand, a fourth concept evolves it, while the other three treat it only as a starting suggestion.
 
 The chosen concept becomes a full logo system in `brand/logo/`: horizontal and stacked lockups, the symbol and the wordmark on their own, black, white, and full-color versions, a favicon, app icons, and a single-color version for print, embroidery, and stickers. Every concept and every file is rendered in headless Microsoft Edge and checked by eye for legibility at 16px, in grayscale, and on light and dark backgrounds, rather than judged from the SVG code. A brand kit follows in `brand/kit/`: social media images (a link preview, a profile picture, and X and LinkedIn banners), the colors and type as CSS and JSON files with a contrast table, an email signature logo, and a web app manifest. The favicon also switches to a lighter version in dark mode so it stays visible on dark tab bars. It finishes with `brand/presentation.html`, a single page that reveals the logo and shows it on business cards, packaging, a website, a billboard, an app icon, and merchandise, with the color palette, a type specimen, and the design rationale. The logo files themselves are always SVG, the master every other format is made from. For the mockups, put your own photos in `brand/mockups/` and it places the logo on them; without photos it builds the mockups in CSS and SVG, with perspective, shadows, and textures so they read as physical objects. The presentation is also saved as `brand/brand-guidelines.pdf`, the file to send to a printer, a freelancer, or a client.
 
@@ -14,6 +14,11 @@ Nothing in the project itself is changed: no favicon is linked and no header log
 
 ```
 Act as a world-class brand identity designer. Build a complete logo system for this project, working like a top branding agency.
+
+First: a read-only pass
+Before anything else, open and read in full every markdown documentation file in the project, such as README.md, CLAUDE.md, docs/PRD.md, docs/DESIGN.md, docs/PATCHNOTES.md (or a CHANGELOG), and any other .md file that describes the project, so you understand the current state of the site. Skip dependency folders and build output. This pass changes nothing: do not create, edit, or move any file, and ask me nothing yet.
+While reading, note everything relevant to brand design: the product and what it does, who it is for, its tone of voice, any existing logo, colors, fonts, design tokens, or style rules, what the site looks like today and which pages it has, past design or brand decisions and why they were made (the patch notes often record these), anything the docs say must not change, and any rules about where files go or how work is done here. Where two documents disagree, note both rather than choosing.
+Then give me a short summary of what you found that bears on the brand, with the file each point came from, and carry it into Phase 1.
 
 Documentation rule
 
@@ -42,7 +47,7 @@ msedge --headless --disable-gpu --hide-scrollbars --window-size=1200,900 --scree
 Then open the screenshot and look at it. Fix anything that blurs, fills in, disappears, or loses balance, and check again.
 
 Phase 1: Brand foundation
-Gather context before asking anything: read README, CLAUDE.md, PRD.md, DESIGN.md, package.json, landing page copy, and any existing brand or style files.
+Gather context before asking anything: build on the read-only pass, then read package.json, the landing page copy, and any existing brand or style files it pointed you to.
 Fill in this brief:
 [brand name]
 [core value] the logo must communicate

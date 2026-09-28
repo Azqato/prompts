@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.94.0 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Brand Identity prompt: it now begins with a read-only pass. Claude reads every markdown documentation file in the project in full (README, CLAUDE.md, PRD, DESIGN, patch notes or changelog, and any other `.md` that describes the project, skipping dependency folders and build output) to understand the current state of the site, without creating, editing, or moving anything and without asking questions yet. It notes what bears on the brand: the product, audience, tone of voice, existing logo, colors, fonts, tokens, and style rules, the site's current look and pages, past design decisions and their reasons, anything that must not change, and the project's working rules. Disagreements between documents are noted, not resolved. It summarizes its findings with the file each came from, and Phase 1 builds on that summary instead of re-reading the same files.
+- The intro describes the pass.
+
+---
+
 ## v1.93.0 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.
