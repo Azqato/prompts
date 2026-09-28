@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.90.0
+**Version:** 1.91.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1975,6 +1975,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.91.0 | 2026-09-28 | Brand Identity prompt: optional Phase 7, a Brand Design showcase page on the reader's site, from the author's specification. It runs only on the reader's yes, as the one exception to the prompt's scope rule; sits behind the site's existing access check; lists each brand folder as a grid of preview tiles with open and download links, read from disk; serves files through one handler that accepts only paths inside the brand folders, with tests for traversal, lookalike folders, and missing files; and is checked locally in a headless browser. The specification's stack-specific details are kept as examples. |
 | 1.90.0 | 2026-09-28 | Author's answers: open question 10 answered, one headless Edge load of an idea's link is allowed and `CLAUDE.md` names it; the skip-to-content milestone is scheduled for the next session; Search keeps its trigger of roughly twenty prompts. |
 | 1.89.0 | 2026-09-28 | Added the Frontend References prompt, Future update 15: a standing CLAUDE.md rule pointing Claude at seven outside design references at the moments they help, user scope recommended, 21st.dev optional, each site dated with its reuse terms. Section 21 now allows third-party sites a prompt uses directly as a resource, while still ruling out link lists for browsing. Eighteen prompts, 52 files. |
 | 1.88.0 | 2026-09-28 | The ideas-list entry the author added on GitHub (eight frontend reference sites) researched and proposed as Future update 15, a Frontend References prompt; not built. The idea left `docs/TODO.md`, which is back to its placeholder. |

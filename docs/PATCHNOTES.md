@@ -4,6 +4,22 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.91.0 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Brand Identity prompt: a new optional Phase 7 adds a Brand Design showcase page to the reader's site, so their team can preview, open, and download every file in `brand/` without opening the repository. It runs only if the reader says yes, since it is the one part of the prompt that changes the project; the scope rule and intro say so.
+  - Placement: next to the site's other internal pages, behind the same access check. If the site has no protected area, it asks where to put the page rather than making brand files public.
+  - Content: one section per brand folder (logo system, brand kit, render checks), each a responsive grid of 150px preview tiles with open and download links. Files meant for dark backgrounds preview on the brand's dark color. Files are read from disk on each request, so new ones appear without code changes.
+  - Safety: files are copied into the build output and served through one protected handler that accepts only paths inside the brand folders and returns 404 for anything else, with tests for an empty path, an outside path, `../` traversal, a lookalike `brandx/` folder, and a missing file.
+  - Styling uses the site's own tokens and works at phone width. It finishes by updating the project's PRD, patch notes, and README, and by a local headless browser check, including that a signed-out visitor is refused.
+- The specification named one framework's handler syntax and build folder; the prompt keeps those as examples so it works on any stack.
+- README: the Brand Identity description mentions the optional page.
+
+---
+
 ## v1.90.0 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.

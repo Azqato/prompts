@@ -4,11 +4,11 @@ description: Build a complete logo system for a project: a brand brief, three SV
 meta: Claude Code Prompt
 ---
 
-Runs a full brand identity project in six phases, the way a branding agency would. It reads the project first (the README, `CLAUDE.md`, `PRD.md`, `DESIGN.md`, `package.json`, landing page copy, and any existing brand or style files) and fills in a brand brief, asking once for anything it cannot work out, including, optionally, a few brands, sites, or images you like as references. It then studies five to eight competitors in the project's industry and lists the visual clichés the logo must avoid, draws three concept directions as hand-written SVG (luxury minimalism, typography first, and a symbolic mark), and stops for you to pick one or combine them. If the project already has a brand, a fourth concept evolves it, while the other three treat it only as a starting suggestion.
+Runs a full brand identity project in six phases, plus an optional seventh, the way a branding agency would. It reads the project first (the README, `CLAUDE.md`, `PRD.md`, `DESIGN.md`, `package.json`, landing page copy, and any existing brand or style files) and fills in a brand brief, asking once for anything it cannot work out, including, optionally, a few brands, sites, or images you like as references. It then studies five to eight competitors in the project's industry and lists the visual clichés the logo must avoid, draws three concept directions as hand-written SVG (luxury minimalism, typography first, and a symbolic mark), and stops for you to pick one or combine them. If the project already has a brand, a fourth concept evolves it, while the other three treat it only as a starting suggestion.
 
 The chosen concept becomes a full logo system in `brand/logo/`: horizontal and stacked lockups, the symbol and the wordmark on their own, black, white, and full-color versions, a favicon, app icons, and a single-color version for print, embroidery, and stickers. Every concept and every file is rendered in headless Microsoft Edge and checked by eye for legibility at 16px, in grayscale, and on light and dark backgrounds, rather than judged from the SVG code. A brand kit follows in `brand/kit/`: social media images (a link preview, a profile picture, and X and LinkedIn banners), the colors and type as CSS and JSON files with a contrast table, an email signature logo, and a web app manifest. The favicon also switches to a lighter version in dark mode so it stays visible on dark tab bars. It finishes with `brand/presentation.html`, a single page that reveals the logo and shows it on business cards, packaging, a website, a billboard, an app icon, and merchandise, with the color palette, a type specimen, and the design rationale. The logo files themselves are always SVG, the master every other format is made from. For the mockups, put your own photos in `brand/mockups/` and it places the logo on them; without photos it builds the mockups in CSS and SVG, with perspective, shadows, and textures so they read as physical objects. The presentation is also saved as `brand/brand-guidelines.pdf`, the file to send to a printer, a freelancer, or a client.
 
-Nothing in the project itself is changed: no favicon is linked and no header logo is swapped. Everything stays in `brand/` for you to use however you decide. Written documentation goes into a `## Brand Identity` section of `docs/PRD.md` (the brief, competitive analysis, and deliverables checklist) and of `docs/DESIGN.md` (the concepts, logo system specs, rationale, and usage guidelines), and anything already in either file is left alone.
+Nothing in the project itself is changed: no favicon is linked and no header logo is swapped. Everything stays in `brand/` for you to use however you decide. The one exception is optional and only on your say-so: at the end it offers to add a Brand Design page to your site, behind the same sign-in as your other internal pages, where your team can preview, open, and download every brand file without opening the repository. The files are served through one handler that accepts only paths inside the brand folders, with tests for path tricks. Written documentation goes into a `## Brand Identity` section of `docs/PRD.md` (the brief, competitive analysis, and deliverables checklist) and of `docs/DESIGN.md` (the concepts, logo system specs, rationale, and usage guidelines), and anything already in either file is left alone.
 
 ## Prompt
 
@@ -26,7 +26,7 @@ If either file already exists, add or update a ## Brand Identity section instead
 
 Scope rule
 
-Do not change the project's site or app. Do not link the favicon, replace a header logo, or edit anything outside brand/ and the two ## Brand Identity sections. The new identity lives only in brand/ and the presentation until I decide how to use it.
+Do not change the project's site or app. Do not link the favicon, replace a header logo, or edit anything outside brand/ and the two ## Brand Identity sections. The new identity lives only in brand/ and the presentation until I decide how to use it. The only exception is Phase 7, which runs only if I say yes to it.
 
 Guiding principles (apply to every phase)
 Style should feel premium, timeless, and globally recognizable.
@@ -112,4 +112,41 @@ Color palette with hex values and a type specimen
 A short rationale explaining design choices and brand positioning, including how it communicates [core value] and stands apart from competitors
 
 Give the page print styles (@media print) so each section starts on a new page. Screenshot the finished page in headless Edge and review it, then save it as brand/brand-guidelines.pdf with headless Edge (--print-to-pdf) and check that the pages break cleanly. Also copy the rationale into docs/DESIGN.md under ## Brand Identity > Rationale, and add ## Brand Identity > Usage Guidelines covering usage, misuse, spacing, colors (hex values), and fonts.
+
+Phase 7 (optional): Brand Design showcase page
+
+Once Phases 1 to 6 are done, ask me whether to add a Brand Design page to the project's site, so the team can browse, open, and download every brand file without opening the repository. Skip this phase if the project has no site or app with pages, or if I say no. It changes the project, so it runs only on a yes.
+
+Where it lives
+- Put it next to the other internal or business pages. If the site has a founders-only or admin-only area, put it there and use the same access check. Brand working files are not for the public: if the site has no protected area, tell me and ask where it should go before building anything.
+- Add a nav link or tab named "Brand Design" next to the related internal pages.
+
+What it shows
+- A short intro line: "The files the brand identity work created, from brand/ in the repository. Click a file to open it, or download it."
+- One section per brand folder, in this order, each with a heading and a one-sentence blurb:
+  1. Logo system (brand/logo): the symbol, wordmark, and lockups, with favicons and app icons.
+  2. Brand kit (brand/kit): social images, the email signature, and the color and type tokens.
+  3. Render checks (brand/checks, PNGs only): each logo file rendered to confirm it draws correctly.
+  Match the names to the folders this work actually created, and skip empty folders (or show "No files found.").
+- A responsive grid of tiles in each section (grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)), with a 1rem gap). Each tile has:
+  - A 150px-high preview area. SVG, PNG, ICO, JPG, and WebP files show as an img with object-fit: contain and loading="lazy". Other files (CSS, JSON, webmanifest) show their extension as a large label in the accent color.
+  - Files meant for dark backgrounds (names containing "white" or "reversed") get the brand's dark background in the preview, so white logos stay visible. The rest get white.
+  - The whole preview links to the file, opening in a new tab.
+  - A caption row with the file name (long names wrap) and a Download link with the download attribute.
+- Files listed alphabetically within each section and read from disk when the page is requested, so new brand files appear without code changes.
+
+Serving the files safely
+- Copy the brand folders into the build output (for example a Content/brand folder) so the deployed site has them, since the repository is not on the server. Use the project's own build or deploy step for this.
+- Serve them through one handler protected by the page's access check, in whatever form the framework uses (for example ?handler=File&path=brand/logo/x.svg, or a route like /brand-design/file?path=...). Do not put them in the public static folder.
+- The handler accepts only paths under the brand folders. It rejects "..", absolute paths, and anything that resolves outside those folders after normalizing, and returns 404 for anything else or any missing file.
+- Set the content type from the extension: image/svg+xml, image/png, image/x-icon, image/jpeg, image/webp, text/css, application/json, and application/manifest+json.
+- Add tests in the project's test framework: a real brand file is served; an empty path, a path outside the brand folders, a ../ traversal, a lookalike folder such as brandx/, and a missing file all return 404. If the project has no tests yet, tell me and ask before adding a test setup.
+
+Styling
+- Use the site's existing tokens (surface, line, radius, accent) so the page matches the rest of the site, not the new brand's palette unless the site already uses it. Tiles: a 1px border in the line color, the site's radius, the surface background, and overflow: hidden.
+- It must work at phone width with no horizontal scroll.
+
+Finish
+- Update the project's PRD and patch notes (or changelog) with the new page, and mention it in the README's feature list.
+- Check it locally in a headless browser, never against the live site: every section renders, dark tiles show white logos, a download works, and a signed-out visitor is refused. Run the new tests.
 ```
