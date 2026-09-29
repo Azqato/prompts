@@ -4,6 +4,27 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.102.0 - 2026-09-29
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Added
+
+- Project Defaults prompt, the twentieth, with its share page. It gives a project the Documentation prompt's rules and structure in one quick pass, without reviewing the code or the existing documents:
+  - creates /docs, the four documents, and docs/TODO.md where missing, with every required section as a heading and the line "Not yet written. A Documentation run fills this in.";
+  - writes the standing policies into the PRD (writing style, browser testing, verification environment, testing cadence, repository hygiene, licensing, sharing tags and page titles for a site, deprecation and removal, working practice) plus a verification checklist;
+  - adds robots.txt, LICENSE.md, and sitemap.xml only where missing and where the conditions allow.
+- The project's own rules and documents are the source of truth: existing text is never changed, documents are never moved or merged, and every clash with a default is listed as a numbered question.
+- It fetches the Documentation prompt for the exact wording of each default, so the defaults are kept in one place.
+- PRD Future update 18 records it, built in this version.
+
+### Changed
+
+- README lists the new prompt. Prompt counts in the PRD updated to twenty, and DESIGN.md 1.13.1 updates the focus-stop count (twenty-three on a wide screen, four below 1024px).
+- PRD section 30: the markup row's line counts corrected (`index.html` 52 lines, share pages 29 lines).
+
+---
+
 ## v1.101.0 - 2026-09-29
 
 Updated by: Claude (Opus 5.5), at the author's request.
