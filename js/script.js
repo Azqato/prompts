@@ -129,6 +129,28 @@ function buildSidebar() {
   nav.innerHTML = html;
 }
 
+// Below 1024px the list is a menu, closed by default, so it never covers
+// the prompt. The button is hidden on wider screens, where the list is a
+// sidebar and the open state has no effect. See docs/DESIGN.md.
+function setMenuOpen(open) {
+  const toggle = document.getElementById('nav-toggle');
+  document.querySelector('.sidebar').classList.toggle('nav-open', open);
+  toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function initMenu() {
+  const toggle = document.getElementById('nav-toggle');
+  toggle.addEventListener('click', function () {
+    setMenuOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+      setMenuOpen(false);
+      toggle.focus();
+    }
+  });
+}
+
 function setActiveLink(slug) {
   const links = document.querySelectorAll('#sidebar-nav a');
   links.forEach(function (a) {
@@ -335,6 +357,7 @@ function route() {
     setActiveLink('');
   }
   syncAddress(p);
+  setMenuOpen(false);
   lastRouted = window.location.href;
   window.scrollTo(0, 0);
 }
@@ -356,6 +379,7 @@ function init() {
     return;
   }
   buildSidebar();
+  initMenu();
   window.addEventListener('hashchange', route);
   // Back and forward between rewritten addresses change the path, not
   // necessarily the hash, so hashchange alone would miss them.

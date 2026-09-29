@@ -4,6 +4,24 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.99.0 - 2026-09-29
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Fixed
+
+- On phones and tablets the prompts were hard to read because the navigation filled the screen. Below 1024px the sidebar became a sticky top bar that wrapped all nineteen prompt links, so it grew with every prompt added and stayed pinned over the text. Measured in headless Edge at 477px wide, the bar was 398px tall and the prompt heading began 418px down.
+- The prompt list is now a menu. The top bar holds the logo, a **Prompts** button, and Support, and is 65px tall at every width below 1024px. The button opens the list beneath the bar as one column that scrolls inside itself; picking a prompt or pressing Escape closes it. The button carries `aria-expanded` and `aria-controls`.
+- Found by running the site's Mobile Responsive Audit prompt at 375, 700, 900, 1023, 1150, 1440, and 1920px. No width had horizontal overflow before or after, closed or open, and nothing changed at 1024px and above.
+
+### Changed
+
+- `index.html`, `js/script.js` (`setMenuOpen()`, `initMenu()`), and the 1023px block of `css/style.css`.
+- DESIGN.md 1.12.0: sections 7 and 9 describe the menu. PRD: Future update 17, built; sections 4, 13, and 23 updated.
+- docs/TODO.md reset; its "fix mobile" idea became Future update 17.
+
+---
+
 ## v1.98.0 - 2026-09-29
 
 Updated by: Claude (Opus 5.5), at the author's request.

@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.98.0
+**Version:** 1.99.0
 **Status:** Active
 **Author:** Azqato
 
@@ -116,7 +116,7 @@ Not rendered as navigable pages on the site. These are documentation files for c
 - A prompt whose frontmatter sets `hidden: true` is excluded from both the sidebar and the home list, but its page stays reachable by direct link (`index.html#/<slug>`). This retires a prompt from navigation without breaking any existing link to it
 - Active view is visually distinguished (teal text, 3px left border)
 - The Support button links to `https://azqato.github.io/support.html` and opens in a new tab
-- On mobile (below 1024px), sidebar collapses to a sticky top nav bar; the support button flows inline with the nav links
+- On mobile (below 1024px), sidebar collapses to a sticky top bar holding the logo, a Prompts menu button, and Support. The prompt list is a menu, closed by default, that opens below the bar as one scrollable column and closes when a prompt is picked or Escape is pressed (since v1.99.0)
 - In-page anchors are not used at v1.0
 
 ---
@@ -444,7 +444,7 @@ Checked and confirmed clean on 2026-09-27 during the v1.70.0 audit:
 - All nineteen live share pages carry the six sharing tags with an absolute, unique https `og:url`, descriptions of 112 to 149 characters (Prompt Writing's, at 112, and the Documentation prompt's, at 133, are the only ones under 134), and titles of 29 to 40 characters with no collision in the first 30. Measured by script on 2026-09-28. The one retired page forwards as section 32a describes.
 - `js/script.js` sets the title per route: the site name on home, "<prompt> - Azqato's Prompts" on a prompt page.
 - The section banners of `css/style.css` are in the order `docs/DESIGN.md` section 11 lists, with the two `max-width` breakpoints at 1023px and 767px and the reduced-motion block last.
-- Line counts: `index.html` 51, `css/style.css` 569, `js/script.js` 370, share pages 25, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
+- Line counts: `index.html` 52, `css/style.css` 613, `js/script.js` 394, share pages 25, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
 - The em dash sweep found no violation: one literal and five entities in four files, all the known instances that name the forms they prohibit. No double dash is used as punctuation.
 - No `CLAUDE.md`, no `.dashboard/`, and no `.gitignore` exist.
 
@@ -692,7 +692,7 @@ These are live and are the product as it exists today.
 | Content Security Policy | A meta CSP in `index.html`. Blocks inline and remote scripts, and all network connections, making the no-dependency rule a runtime guarantee. Verified enforced |
 | Mirror check tooling | `tools/prompts-mirror.py`, run by hand. Verifies or resyncs `js/prompts-data.js` against `prompts/*.md`, and validates frontmatter and the prompt fence |
 | Error view | If the prompt data fails to load or parse, the page renders an explanatory panel rather than staying blank |
-| Responsive layout | Sidebar collapses to a sticky top bar below 1024px, with a second breakpoint at 768px |
+| Responsive layout | Sidebar collapses to a sticky top bar with a Prompts menu below 1024px, with a second breakpoint at 768px |
 | Reduced-motion support | All transitions disabled under `prefers-reduced-motion` |
 | Per-view document title | Home shows the site name, a prompt page shows the prompt name followed by the site name. The suffix was added in v1.46.0 |
 | Share pages and link previews | One generated page per visible prompt at `p/<slug>.html`, with Open Graph and Twitter Card tags, forwarding to the prompt. `index.html` carries the same tags for the site. See section 32a |
@@ -1144,6 +1144,20 @@ Based on: the author's ideas list, 2026-09-28, a post listing eight frontend ref
 **Built in v1.97.0**, at the author's request, who asked for both the rules and the audit, and for the notes to stay local (section 20, "Reference notes").
 
 Based on: the author's ideas list, 2026-09-28 ("ingest transcription"), and the author's notes file `tools/llm-fundamentals-video-summary.md`.
+
+#### 17. A collapsible navigation menu on phones and tablets
+
+**What.** Below 1024px, replace the wrapped strip of every prompt link with a Prompts menu button in the top bar. The list opens below the bar as one column, scrolls inside itself, and closes when a prompt is picked or Escape is pressed.
+
+**Why.** The sticky top bar wrapped all nineteen links, so it grew with every prompt and stayed pinned over the text. Measured in headless Edge at the narrowest width it allows (477px wide, 900px tall), the bar was 398px tall and the prompt heading began at 418px, so almost half the screen was navigation. The site's own Mobile Responsive Audit prompt was run for it.
+
+**How.** A `<button class="nav-toggle">` with `aria-expanded` and `aria-controls` in `index.html`, hidden above 1024px; `setMenuOpen()` and `initMenu()` in `js/script.js`, with `route()` closing the menu; the list styles in the 1023px block of `css/style.css`. Nothing changes above 1024px. Details in `docs/DESIGN.md` section 9.
+
+**Size.** Small: three files.
+
+**Built in v1.99.0.** Closed, the bar is 65px at every width below 1024px and the heading begins at 85px to 94px. Open, the list ends at 790px in a 900px window. `scrollWidth` equals `clientWidth` at all seven audit widths, closed and open, and the desktop measurements match the baseline.
+
+Based on: the author's ideas list, 2026-09-29 ("fix mobile"), and the Mobile Responsive Audit prompt.
 
 ### Deferred
 
@@ -2010,6 +2024,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.99.0 | 2026-09-29 | Collapsible navigation below 1024px, Future update 17, from the author's ideas list and a run of the Mobile Responsive Audit prompt. The top bar wrapped every prompt link and, at 477px wide, was 398px tall. It now holds the logo, a Prompts menu button, and Support, 65px tall; the list opens beneath as one scrollable column and closes on a pick or Escape. Desktop unchanged. Sections 4, 13, and 23 follow; the ideas list was reset. |
 | 1.98.0 | 2026-09-29 | Share pages link to the raw Markdown for AI agents. An agent fetching `p/<slug>.html` runs no JavaScript, never follows the `#/` route, and cannot fetch the `.md` from Pages, so it never saw the prompt. `tools/prompts-mirror.py` now writes a `rel="alternate" type="text/markdown"` link in the head and a visible body line with the full `raw.githubusercontent.com` URL on `main`; all nineteen pages resynced. Section 32a gains the rule, section 20's rule list and section 13's line counts follow. |
 | 1.97.0 | 2026-09-28 | Prompt Writing Rules, Future update 16. Section 11 gains nine rules drawn from how language models work (facts from context, investigate before concluding, exact work to tools, a way to say "I don't know", show the output's shape, end on a check, ungameable scoring, focus, and supplying what a model cannot know about itself), and section 12 step 3 checks them. All eighteen prompts were audited: thirteen already met them, and five gained a check by script or a closing report (Add Prompt, GitHub Wiki, Mobile Responsive Audit, Brand Identity, Documentation). Added the Prompt Writing prompt, the nineteenth. Section 20 records the author's notes file, kept local through `.git/info/exclude`. The ideas list was reset. |
 | 1.96.0 | 2026-09-28 | Documentation prompt: description and intro rewritten to lead with the benefits of running it, shorter and less technical. Also: Documentation prompt: TODO.md details moved out of the intro, steps 2 and 5, and the survey paragraph into its own `/docs/TODO.md` section; the opening now only names the file where a step needs it. Also: Documentation prompt: the fetch-the-full-prompt sentence moves to the end of the opening paragraph, in the author's wording. Also: Documentation prompt no longer mentions the progress dashboard: the `/dashboard` line in its folder structure and its ignore-file rule are removed, since setting a dashboard up belongs to its own prompt. Also removed: its instruction to add a Future updates entry proposing a dashboard, and its rule for keeping an existing CLAUDE.md dashboard section and recording it in the PRD's Working Practice; the latter now lives in the Progress Dashboard prompt's standing-rule step. The rules that were only there (never ignored; listed in the docs' folder structure as a project file never merged into the docs) move into the Progress Dashboard prompt. |

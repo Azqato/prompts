@@ -1,6 +1,6 @@
 # DESIGN.md - Prompts
 
-**Version:** 1.11.10
+**Version:** 1.12.0
 **Status:** Active
 **Author:** Azqato
 
@@ -414,11 +414,26 @@ Hover state:
 Opens: https://azqato.github.io/support.html in a new tab (target="_blank" rel="noopener noreferrer")
 ```
 
-On mobile (below 1024px), the support button flows inline with the nav links in the top bar.
+On mobile (below 1024px), the support button sits at the right of the top bar, after the Prompts menu button.
 
 ### Tablet / Mobile (below 1024px)
 
-Sidebar collapses to a sticky top bar with light blur backdrop (`backdrop-filter: blur(12px)`). Active state uses a bottom border instead of a left border.
+Sidebar collapses to a sticky top bar with light blur backdrop (`backdrop-filter: blur(12px)`): the logo on the left, then a **Prompts** menu button and Support on the right. The prompt list is a menu, closed by default, so the bar stays one row (65px) however many prompts there are.
+
+```
+Menu button (.nav-toggle, hidden at 1024px and above):
+  min-height: 36px, padding: 6px 12px, 0.8125rem, weight 600
+  background: --color-surface, border: 1px solid --color-border, radius: 6px
+  chevron: a rotated CSS border, pointing down closed and up open
+  aria-expanded and aria-controls="sidebar-nav"
+
+Open list (.sidebar.nav-open .sidebar-nav):
+  one column under a 1px --color-border rule, links padded 11px 16px
+  max-height: 100dvh - 80px, scrolls inside itself (overscroll contained)
+  active link keeps the desktop left border and tint
+```
+
+It closes when a prompt or Home is picked (`route()` calls `setMenuOpen(false)`) and on Escape, which returns focus to the button. Added in v1.12.0 (site v1.99.0): before it, every link wrapped into the bar, which reached 398px at 477px wide.
 
 ---
 
@@ -444,7 +459,7 @@ There are exactly two breakpoints, both `max-width`, both at the bottom of the s
 
 | Breakpoint | Changes |
 | --- | --- |
-| `< 1024px` | Sidebar becomes top nav bar, backdrop blur, bottom-border active state |
+| `< 1024px` | Sidebar becomes a one-row top bar with backdrop blur; the prompt list becomes a menu behind a Prompts button |
 | `< 768px` | h1 reduces to 1.5rem, h2 reduces to 1.2rem, padding reduces to 20px/16px, code block font-size reduces to 0.8rem |
 
 ### Below 1024px, in full
@@ -461,8 +476,12 @@ The collapse is more than a grid change, and two of these declarations are load-
 | `.sidebar-sticky` | `position: static; max-height: none; overflow: visible` | Undoes the desktop sticky column |
 | `.sidebar-sticky` | `flex-direction: row; flex-wrap: wrap; align-items: center` | Horizontal bar |
 | `.sidebar-nav` | **`flex-basis: 100%`** | **Load-bearing.** Without it the nav shares its flex row with the logo and squeezes into a roughly 150px column, stacking one link per row. This forces it onto its own line beneath the logo, which the logo's `margin-bottom` already implied was the intent |
-| `.sidebar-nav` | `flex-direction: row; flex-wrap: wrap; gap: 4px` | Links flow horizontally and wrap |
-| `.sidebar-nav a` | `border-left: none; border-bottom: 2px solid transparent; padding: 6px 10px` | Active indicator moves to the bottom edge |
+| `.sidebar-logo` | `margin: 0 auto 0 0; padding: 0 16px` | Pushes the menu button and Support to the right |
+| `.nav-toggle` | `display: inline-flex` | The menu button appears |
+| `.sidebar-nav` | `display: none; order: 3; flex-direction: column` | Closed by default, and placed after Support so it opens beneath the whole bar |
+| `.sidebar-nav` | `max-height: calc(100dvh - 80px); overflow-y: auto; overscroll-behavior: contain` | The open list scrolls inside itself rather than running off the screen |
+| `.nav-open .sidebar-nav` | `display: flex` | Opened by the button |
+| `.sidebar-nav a` | `padding: 11px 16px` | Touch-sized rows |
 | `.sidebar-support` | `margin-top: 0; padding: 0 16px 0 4px` | Releases the `margin-top: auto` that pinned it to the bottom on desktop, so it flows inline |
 | `.content` | `padding: 24px 20px; max-width: 100%` | Full width. Note this overrides `--content-max`, so the `max()` formula does not apply below 1024px |
 
@@ -789,6 +808,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.12.0 | 2026-09-29 | The navigation below 1024px is a menu behind a Prompts button (sections 7 and 9), replacing the wrapped strip of links. |
 | 1.11.10 | 2026-09-28 | Updated the focus-stop count in section 10 for nineteen prompts: twenty-two stops before the content area. |
 | 1.11.9 | 2026-09-28 | Updated the focus-stop count in section 10 for eighteen prompts: twenty-one stops before the content area. |
 | 1.11.8 | 2026-09-28 | Updated the focus-stop count in section 10 for seventeen prompts: twenty stops before the content area. |

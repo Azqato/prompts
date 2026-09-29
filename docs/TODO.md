@@ -10,5 +10,5 @@ removed from this file. Never put passwords, keys, or other secrets here.
 
 ## Ideas
 
-- fix mobile
-  - the navigation is taking up too much of the screen to where the prompts arent legible. it needs to be a collapsable list or something that follows mobile best practices. run the mobile audit prompt please we have a reusable prompt on this site which can help
+- <Your idea, in plain language>
+  - <A link, file, or note it refers to>
