@@ -4,11 +4,7 @@ description: Make any project easy to understand, hand over, and keep building, 
 meta: Claude Code Prompt
 ---
 
-Turn a messy, half-documented project into one anyone can pick up and understand. One run gives you four clear documents that explain what the project is, why it exists, how it looks, and what has changed, so you, a teammate, or Claude in a future session can get up to speed without reading the code.
-
-It works with what you already have. Scattered notes are gathered into one place, and your own rules and ideas are kept rather than overwritten. Where the docs and the code disagree, it tells you instead of guessing, and it sets sensible defaults only where you have not already decided.
-
-It costs no more on a large project than on a small one: it checks what it can cheaply now, and leaves a checklist so later work confirms the rest. Every session after that starts from the same shared understanding.
+Turn a messy, half-documented project into one anyone can pick up and understand. One run gives you four clear documents that explain what the project is, why it exists, how it looks, and what has changed, so you, a teammate, or Claude in a future session can get up to speed without reading the code. It works with what you already have. Scattered notes are gathered into one place, and your own rules and ideas are kept rather than overwritten. Where the docs and the code disagree, it tells you instead of guessing, and it sets sensible defaults only where you have not already decided. It costs no more on a large project than on a small one: it checks what it can cheaply now, and leaves a checklist so later work confirms the rest. Every session after that starts from the same shared understanding.
 
 ## Prompt
 
