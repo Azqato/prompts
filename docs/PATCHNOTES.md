@@ -4,6 +4,16 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.95.1 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Documentation prompt: the fetch-first line is now one short sentence that links only the raw file; the `blob` link is gone.
+
+---
+
 ## v1.95.0 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.
