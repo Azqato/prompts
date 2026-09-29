@@ -4,6 +4,16 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.100.1 - 2026-09-29
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Documentation prompt: removed "Fetch the full prompt first, in case this one was cut off: …" from the end of its opening paragraph. Since v1.100.0 the Copy button sends Claude to the prompt's page, which links the full raw Markdown, so the line is no longer needed.
+
+---
+
 ## v1.100.0 - 2026-09-29
 
 Updated by: Claude (Opus 5.5), at the author's request.

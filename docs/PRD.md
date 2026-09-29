@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.100.0
+**Version:** 1.100.1
 **Status:** Active
 **Author:** Azqato
 
@@ -2029,6 +2029,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.100.1 | 2026-09-29 | Documentation prompt: removed the "Fetch the full prompt first" sentence from its opening paragraph. The Copy button now points Claude at the prompt's page, which links the raw Markdown, so the prompt no longer needs to carry its own fetch line. |
 | 1.100.0 | 2026-09-29 | The Copy button copies a pointer, not the prompt: "Review the full prompt on this website, provide a summary of what it does and then ask if I would like to run it:" followed by the prompt's share page on the canonical address. No full-text option remains. Section 10 records the format as the rule for every prompt. Launch Video now keeps its output in `brag/` rather than `brag-output/`. Sections 4, 13, and 23 follow. |
 | 1.99.0 | 2026-09-29 | Collapsible navigation below 1024px, Future update 17, from the author's ideas list and a run of the Mobile Responsive Audit prompt. The top bar wrapped every prompt link and, at 477px wide, was 398px tall. It now holds the logo, a Prompts menu button, and Support, 65px tall; the list opens beneath as one scrollable column and closes on a pick or Escape. Desktop unchanged. Sections 4, 13, and 23 follow; the ideas list was reset. |
 | 1.98.0 | 2026-09-29 | Share pages link to the raw Markdown for AI agents. An agent fetching `p/<slug>.html` runs no JavaScript, never follows the `#/` route, and cannot fetch the `.md` from Pages, so it never saw the prompt. `tools/prompts-mirror.py` now writes a `rel="alternate" type="text/markdown"` link in the head and a visible body line with the full `raw.githubusercontent.com` URL on `main`; all nineteen pages resynced. Section 32a gains the rule, section 20's rule list and section 13's line counts follow. |

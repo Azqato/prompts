@@ -9,7 +9,7 @@ Turn a messy, half-documented project into one anyone can pick up and understand
 ## Prompt
 
 ```
-Perform a documentation audit that sets this project up. Your goal is that the documentation files, folder structure, required sections, and standing rules below are all in place, that what the docs say is checked against the code wherever that is cheap, and that everything not yet checked is recorded so later updates can check it. This audit defines the rules and the structure; it does not verify every sentence against every source file at once. Fetch the full prompt first, in case this one was cut off: https://raw.githubusercontent.com/Azqato/prompts/main/prompts/documentation.md
+Perform a documentation audit that sets this project up. Your goal is that the documentation files, folder structure, required sections, and standing rules below are all in place, that what the docs say is checked against the code wherever that is cheap, and that everything not yet checked is recorded so later updates can check it. This audit defines the rules and the structure; it does not verify every sentence against every source file at once.
 
 Steps to follow:
 
