@@ -9,12 +9,25 @@
 
 const SITE_INTRO =
   'A personal library of reusable Claude Code prompts. Each prompt lives in its own ' +
-  'markdown file: a plain description of what it does and a copyable block with the full ' +
-  'prompt text. Pick one, copy it, drop it into Claude Code.';
+  'markdown file: a plain description of what it does and the full prompt text. Pick one, ' +
+  'copy it, and paste it into Claude Code, which reads the full prompt from this site.';
 
 // The brand, suffixed to every prompt's page title. It matches the one
 // tools/prompts-mirror.py writes into the share pages in p/.
 const SITE_NAME = "Azqato's Prompts";
+
+// The canonical address, recorded in docs/PRD.md section 17 and also written
+// into tools/prompts-mirror.py. The copied pointer always names the live
+// site, even when this page was opened from disk.
+const SITE_URL = 'https://azqato.github.io/prompts/';
+
+// What the Copy button puts on the clipboard, followed by the prompt's
+// public page. Not the prompt text: every tool these prompts are used with
+// can fetch, and the share page names the raw Markdown an agent then
+// follows. See docs/PRD.md section 10.
+const COPY_POINTER =
+  'Review the full prompt on this website, provide a summary of what it does ' +
+  'and then ask if I would like to run it: ';
 
 let PROMPTS = [];
 
@@ -195,14 +208,14 @@ function renderDetail(p) {
   // Before Copy in the DOM as well as visually, so tab order matches reading
   // order. Its click bubbles to the header handler like any other.
   html += '<button class="code-toggle" aria-expanded="false" aria-controls="prompt-body">Expand</button>';
-  html += '<button class="copy-btn" aria-label="Copy prompt to clipboard">Copy</button>';
+  html += '<button class="copy-btn" aria-label="Copy a link to this prompt for Claude Code">Copy</button>';
   html += '</div>';
   html += '</div>';
   html += '<pre id="prompt-body"><code>' + escapeHtml(p.prompt) + '</code></pre>';
   html += '</div>';
   document.getElementById('content').innerHTML = html;
   document.title = p.title + ' - ' + SITE_NAME;
-  wireCopyButton();
+  wireCopyButton(p);
   wireCollapseToggle();
 }
 
@@ -240,7 +253,13 @@ function wireCollapseToggle() {
 
 /* ---------- Copy button ---------- */
 
-function wireCopyButton() {
+/* The prompt's public page: its share page, or for a hidden prompt, which
+   has none, its hash route. */
+function publicUrl(p) {
+  return p.hidden ? SITE_URL + '#/' + p.slug : SITE_URL + 'p/' + p.slug + '.html';
+}
+
+function wireCopyButton(p) {
   const btn = document.querySelector('.copy-btn');
   if (!btn) return;
 
@@ -251,26 +270,25 @@ function wireCopyButton() {
     setTimeout(function () {
       btn.textContent = 'Copy';
       btn.classList.remove(cls);
-      btn.setAttribute('aria-label', 'Copy prompt to clipboard');
+      btn.setAttribute('aria-label', 'Copy a link to this prompt for Claude Code');
     }, 2000);
   }
 
   btn.addEventListener('click', function () {
-    const code = document.querySelector('.code-block-wrapper pre code');
-    if (!code) return;
+    const text = COPY_POINTER + publicUrl(p);
     // The Clipboard API needs a secure context. https:// and file:// both
     // qualify, but a local server on a bare IP does not, and there the
     // property is missing outright rather than returning a rejection.
     // Either way the reader must be told, because the failure is otherwise
     // silent and they will paste whatever was on the clipboard before.
     if (!navigator.clipboard || !navigator.clipboard.writeText) {
-      flash('Copy failed', 'copy-failed', 'Copy failed. Select the prompt text and copy it manually');
+      flash('Copy failed', 'copy-failed', 'Copy failed. Copy the page address instead');
       return;
     }
-    navigator.clipboard.writeText(code.textContent).then(function () {
+    navigator.clipboard.writeText(text).then(function () {
       flash('Copied!', 'copied', 'Copied!');
     }).catch(function () {
-      flash('Copy failed', 'copy-failed', 'Copy failed. Select the prompt text and copy it manually');
+      flash('Copy failed', 'copy-failed', 'Copy failed. Copy the page address instead');
     });
   });
 }

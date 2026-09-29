@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.99.0
+**Version:** 1.100.0
 **Status:** Active
 **Author:** Azqato
 
@@ -85,7 +85,7 @@ Rendered from the matching markdown file in `prompts/`. Each prompt view contain
 
 1. **Title**: the name of the prompt as an `h1`, from the markdown frontmatter
 2. **Description**: one or more paragraphs explaining what the prompt does, when to use it, and any important behavior the user should know before running it
-3. **Code Block**: the full prompt text in a `<pre><code>` block, behind a header bar carrying a collapse toggle and a one-click copy button. The block is collapsed when the page opens; see section 10a
+3. **Code Block**: the full prompt text in a `<pre><code>` block, behind a header bar carrying a collapse toggle and a one-click copy button, which copies a short pointer to the prompt rather than its text (section 10). The block is collapsed when the page opens; see section 10a
 
 No other sections. No decorative content. No padding between the prompt and the rest of the page beyond standard spacing.
 
@@ -124,7 +124,12 @@ Not rendered as navigable pages on the site. These are documentation files for c
 ## 10. Copy Button Behavior
 
 - Each prompt page has exactly one copy button, positioned above the code block
-- On click: copies the full code block contents to clipboard
+- On click: copies a short pointer to the prompt, never the prompt text. Since v1.100.0 there is no full-text copy, because every tool these prompts are used with can fetch a page. The format, for every prompt, now and in future, using Launch Video as the example:
+
+  `Review the full prompt on this website, provide a summary of what it does and then ask if I would like to run it: https://azqato.github.io/prompts/p/launch-video.html`
+
+  The link is the prompt's public share page (`p/<slug>.html`) on the canonical address, even when the site is opened from disk, so the person pasting it can see it goes to this site and nowhere hidden. The agent fetches that page, and the page names the raw Markdown to follow (section 32a). A hidden prompt has no share page, so its pointer links `index.html#/<slug>` on the canonical address instead. The sentence is `COPY_POINTER` and the address `SITE_URL` in `js/script.js`; change the wording there only, and only at the author's request
+- A new prompt needs nothing for this: the pointer is built from its slug. Its share page must exist, which `tools/prompts-mirror.py --sync` guarantees, and must keep the raw Markdown link, which the check enforces
 - Visual feedback: button text changes to "Copied!" for 2 seconds, then resets
 - Requires no external library; uses the native Clipboard API
 - The button sits in the code block header bar and is present whether the block is shown or hidden, so copying never requires expanding first
@@ -444,7 +449,7 @@ Checked and confirmed clean on 2026-09-27 during the v1.70.0 audit:
 - All nineteen live share pages carry the six sharing tags with an absolute, unique https `og:url`, descriptions of 112 to 149 characters (Prompt Writing's, at 112, and the Documentation prompt's, at 133, are the only ones under 134), and titles of 29 to 40 characters with no collision in the first 30. Measured by script on 2026-09-28. The one retired page forwards as section 32a describes.
 - `js/script.js` sets the title per route: the site name on home, "<prompt> - Azqato's Prompts" on a prompt page.
 - The section banners of `css/style.css` are in the order `docs/DESIGN.md` section 11 lists, with the two `max-width` breakpoints at 1023px and 767px and the reduced-motion block last.
-- Line counts: `index.html` 52, `css/style.css` 613, `js/script.js` 394, share pages 25, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
+- Line counts: `index.html` 52, `css/style.css` 613, `js/script.js` 412, share pages 25, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
 - The em dash sweep found no violation: one literal and five entities in four files, all the known instances that name the forms they prohibit. No double dash is used as punctuation.
 - No `CLAUDE.md`, no `.dashboard/`, and no `.gitignore` exist.
 
@@ -683,7 +688,7 @@ These are live and are the product as it exists today.
 | Hash routing | `index.html#/<slug>` addresses each prompt. Switching views does not reload the page. Over http and https the address bar then shows the share address instead, since v1.46.0 |
 | Dependency-free `file://` operation | Prompt text is embedded in `js/prompts-data.js` and loaded by `<script>`, so the site runs by opening the file from disk |
 | Dynamic sidebar | Built from the prompt data at load, with an active-state indicator on the current view |
-| One-click copy | Native Clipboard API, with a two-second "Copied!" confirmation state. Works whether the prompt block is shown or hidden |
+| One-click copy | Copies a one-line pointer to the prompt's share page for Claude Code to fetch (section 10). Native Clipboard API, with a two-second "Copied!" confirmation state. Works whether the prompt block is shown or hidden |
 | Collapsible prompt block | The block is collapsed on arrival. The whole header bar toggles it, and the label names the action. Not persisted. See section 10a |
 | Home list | Card per prompt, title and one-line description, with a hover treatment |
 | Minimal markdown renderer | Headings, paragraphs, bullet lists, inline code, bold, and links in prompt descriptions |
@@ -745,7 +750,7 @@ Decisions taken without full information, accepted as true, and worth revisiting
 The product is working when all of the following hold. These are the conditions that matter; section 28 covers what could be measured and why almost none of it is.
 
 - **Retrieval is faster than rewriting.** The author reaches for the site rather than writing a prompt again from memory. If a prompt gets rewritten from scratch because finding it felt slower than retyping it, the site has failed at its only job.
-- **A copied prompt runs correctly with no edit.** The copy is complete, the text is current, and pasting it into Claude Code produces the intended result without the author first having to fix a stale line.
+- **A copied prompt runs correctly with no edit.** The pointer reaches the current text on `main`, and pasting it into Claude Code produces the intended result without the author first having to fix a stale line.
 - **The two copies never disagree.** `prompts/*.md` and `js/prompts-data.js` are byte-identical, always. Any drift is a defect regardless of whether it has caused a visible problem yet.
 - **Adding a prompt stays a content task.** Writing one markdown file and mirroring it is the whole job. If adding a prompt ever requires touching the renderer or the stylesheet, the architecture has drifted from its purpose.
 - **The `file://` guarantee holds.** Opening `index.html` from disk with no server produces a fully working site. This is the constraint the whole architecture exists to protect, and it is binary.
@@ -2024,6 +2029,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.100.0 | 2026-09-29 | The Copy button copies a pointer, not the prompt: "Review the full prompt on this website, provide a summary of what it does and then ask if I would like to run it:" followed by the prompt's share page on the canonical address. No full-text option remains. Section 10 records the format as the rule for every prompt. Launch Video now keeps its output in `brag/` rather than `brag-output/`. Sections 4, 13, and 23 follow. |
 | 1.99.0 | 2026-09-29 | Collapsible navigation below 1024px, Future update 17, from the author's ideas list and a run of the Mobile Responsive Audit prompt. The top bar wrapped every prompt link and, at 477px wide, was 398px tall. It now holds the logo, a Prompts menu button, and Support, 65px tall; the list opens beneath as one scrollable column and closes on a pick or Escape. Desktop unchanged. Sections 4, 13, and 23 follow; the ideas list was reset. |
 | 1.98.0 | 2026-09-29 | Share pages link to the raw Markdown for AI agents. An agent fetching `p/<slug>.html` runs no JavaScript, never follows the `#/` route, and cannot fetch the `.md` from Pages, so it never saw the prompt. `tools/prompts-mirror.py` now writes a `rel="alternate" type="text/markdown"` link in the head and a visible body line with the full `raw.githubusercontent.com` URL on `main`; all nineteen pages resynced. Section 32a gains the rule, section 20's rule list and section 13's line counts follow. |
 | 1.97.0 | 2026-09-28 | Prompt Writing Rules, Future update 16. Section 11 gains nine rules drawn from how language models work (facts from context, investigate before concluding, exact work to tools, a way to say "I don't know", show the output's shape, end on a check, ungameable scoring, focus, and supplying what a model cannot know about itself), and section 12 step 3 checks them. All eighteen prompts were audited: thirteen already met them, and five gained a check by script or a closing report (Add Prompt, GitHub Wiki, Mobile Responsive Audit, Brand Identity, Documentation). Added the Prompt Writing prompt, the nineteenth. Section 20 records the author's notes file, kept local through `.git/info/exclude`. The ideas list was reset. |

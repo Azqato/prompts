@@ -1,6 +1,6 @@
 # DESIGN.md - Prompts
 
-**Version:** 1.12.0
+**Version:** 1.13.0
 **Status:** Active
 **Author:** Azqato
 
@@ -290,9 +290,9 @@ Transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease
 The default and hover blocks above are shared with the collapse toggle. Only the
 copied and failed states are the copy button's own.
 
-JavaScript behavior: on click, use `navigator.clipboard.writeText()` to copy the `<code>` element's text content. Set the button to "Copied!", then reset after 2000ms.
+JavaScript behavior: on click, use `navigator.clipboard.writeText()` to copy a pointer, not the prompt text: `COPY_POINTER` followed by the prompt's share page on `SITE_URL` (docs/PRD.md section 10 gives the exact wording). Set the button to "Copied!", then reset after 2000ms. Its resting `aria-label` is "Copy a link to this prompt for Claude Code". Since v1.13.0 (site v1.100.0); before it the button copied the `<code>` element's full text.
 
-Both outcomes are reported. If the Clipboard API is unavailable, or the write rejects, the button shows "Copy failed" for the same 2000ms and its `aria-label` becomes "Copy failed. Select the prompt text and copy it manually". Added in v1.28.0: before that a failed copy left the button reading "Copy" and said nothing, so the reader would paste whatever was on the clipboard already, believing it had worked. A silent failure on the site's only action was the worst failure mode it had.
+Both outcomes are reported. If the Clipboard API is unavailable, or the write rejects, the button shows "Copy failed" for the same 2000ms and its `aria-label` becomes "Copy failed. Copy the page address instead". Added in v1.28.0: before that a failed copy left the button reading "Copy" and said nothing, so the reader would paste whatever was on the clipboard already, believing it had worked. A silent failure on the site's only action was the worst failure mode it had.
 
 The two states share one code path and differ only in label, class, and `aria-label`, so they cannot drift apart in timing or reset behaviour.
 
@@ -808,6 +808,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.13.0 | 2026-09-29 | The Copy button copies a pointer to the prompt's share page rather than the prompt text; its `aria-label` and failure text follow (section 7). |
 | 1.12.0 | 2026-09-29 | The navigation below 1024px is a menu behind a Prompts button (sections 7 and 9), replacing the wrapped strip of links. |
 | 1.11.10 | 2026-09-28 | Updated the focus-stop count in section 10 for nineteen prompts: twenty-two stops before the content area. |
 | 1.11.9 | 2026-09-28 | Updated the focus-stop count in section 10 for eighteen prompts: twenty-one stops before the content area. |

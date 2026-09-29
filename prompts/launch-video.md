@@ -6,7 +6,7 @@ meta: Claude Code Prompt
 
 Makes a short, shareable launch video about the project you built, with its own soundtrack, sound effects, and the copy for the post that carries it. It does not build a video tool of its own: it runs `/brag`, an open-source Claude Code plugin (MIT licence, github.com/latent-spaces/brag) that reads your project's code, plans a story specific to it, storyboards it, and renders it with the Hyperframes video framework. It uses the full `/brag` workflow rather than its lighter `/brag-slim` mode.
 
-The first time, it checks whether `/brag` is installed and, after asking you, installs it once for your user account rather than inside the project, so every project on your machine and any other prompt can use it without installing it again. It checks the tools the full workflow needs (Node.js 22 or newer, ffmpeg, and the Hyperframes command line) and asks before installing anything missing. For rendering it installs Hyperframes' own headless Chrome into the Hyperframes cache rather than using the browser already on your machine: the pinned build keeps the output the same everywhere, and Edge does not work as a substitute. Then it asks you once for the tone, format, and length, with a suggestion for each drawn from your project, and runs it. You get a `brag-output/` folder with the plan, the composition brief, the share copy, and the rendered video.
+The first time, it checks whether `/brag` is installed and, after asking you, installs it once for your user account rather than inside the project, so every project on your machine and any other prompt can use it without installing it again. It checks the tools the full workflow needs (Node.js 22 or newer, ffmpeg, and the Hyperframes command line) and asks before installing anything missing. For rendering it installs Hyperframes' own headless Chrome into the Hyperframes cache rather than using the browser already on your machine: the pinned build keeps the output the same everywhere, and Edge does not work as a substitute. Then it asks you once for the tone, format, and length, with a suggestion for each drawn from your project, and runs it. You get a `brag/` folder with the plan, the composition brief, the share copy, and the rendered video.
 
 Use it when you want a launch video that tells the story of a whole project. For a looping animation of one interface morphing through its states in time with a song, use the Motion Design prompt instead.
 
@@ -39,8 +39,9 @@ Run
 - Invoke /brag with --full and the options I chose, for example `/brag --full --tone polished --format vertical`. Always pass --full: on some models /brag otherwise switches to its lighter /brag-slim mode, and I want the full Hyperframes workflow. Add --voice only if I turned voiceover on, and --no-music or --no-sfx if I turned those off. When installed as a plugin the command may be listed as /brag:brag; use whichever form the command list shows.
 - Let /brag do the planning, storyboarding, rendering, and share copy. Answer its questions from my brief, and ask me only what the brief does not cover.
 - If /brag stops on an error, show me the error and what you think caused it, and wait rather than working around the plugin.
+- Keep everything /brag makes in a brag/ folder at the project root. If it has an option for the output folder, pass brag; if it writes to brag-output/ instead, rename that folder to brag/ once it finishes.
 
 Afterwards
 - Tell me where the video and the share copy are, show me the share copy, and say anything /brag flagged.
-- brag-output/ is generated output, not part of the project's source. Tell me it exists and ask whether it should be kept out of version control.
+- brag/ is generated output, not part of the project's source. Tell me it exists and ask whether it should be kept out of version control.
 ```

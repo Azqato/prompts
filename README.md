@@ -1,6 +1,6 @@
 # Azqato's Prompts
 
-A personal library of reusable Claude Code prompts. Each one is a complete, tested instruction you can copy in a single click and paste straight into Claude Code.
+A personal library of reusable Claude Code prompts. Each one is a complete, tested instruction: copy it in a single click, paste it into Claude Code, and Claude reads the full prompt from this site, summarizes it, and asks before running it.
 
 Live site: [azqato.github.io/prompts](https://azqato.github.io/prompts/)
 
@@ -10,7 +10,7 @@ Live site: [azqato.github.io/prompts](https://azqato.github.io/prompts/)
 
 Good prompts get written once and then lost, buried in an old chat thread or a notes app nobody opens again. This site is the fix: a small, permanent shelf for the prompts that turned out to be worth keeping.
 
-Every prompt gets its own page with a plain-language description of what it does, when to reach for it, and what it will change. Below that sits the full prompt text, tucked behind an Expand button so the description is not buried under it. Read the description, press Copy, paste it into Claude Code, and go. You do not need to expand anything first. To send a prompt to someone else, copy the address from your browser: pasted into a chat or a post, it shows that prompt's own title and description.
+Every prompt gets its own page with a plain-language description of what it does, when to reach for it, and what it will change. Below that sits the full prompt text, tucked behind an Expand button so the description is not buried under it. Read the description, press Copy, paste it into Claude Code, and go. Copy gives a one-line pointer to the prompt's page rather than the whole text, so you can see the link goes to this site; Claude fetches the prompt from there, tells you what it does, and asks whether to run it. You do not need to expand anything first. To send a prompt to someone else, copy the address from your browser: pasted into a chat or a post, it shows that prompt's own title and description.
 
 ---
 

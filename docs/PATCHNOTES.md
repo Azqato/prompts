@@ -4,6 +4,23 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.100.0 - 2026-09-29
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- The Copy button on every prompt copies a short pointer instead of the full prompt text. There is no full-text option, since every tool these prompts are used with can fetch a page. For Launch Video it copies:
+
+  `Review the full prompt on this website, provide a summary of what it does and then ask if I would like to run it: https://azqato.github.io/prompts/p/launch-video.html`
+
+  The link is the prompt's public share page, so the person pasting it can see it goes to this site. The agent fetches that page and follows the raw Markdown link it names (v1.98.0). The link always uses the live address, even when the site is opened from disk.
+- `js/script.js`: new `SITE_URL`, `COPY_POINTER`, and `publicUrl()`; the button's `aria-label` and failure text updated. The home page intro and README describe the new behavior.
+- Launch Video prompt: the video, plan, and share copy now go in a `brag/` folder rather than `brag-output/`. If /brag has no option for the folder, Claude renames `brag-output/` to `brag/` when it finishes.
+- PRD section 10 records the pointer format as the rule for every prompt; sections 4, 13, and 23 follow. DESIGN.md 1.13.0, section 7.
+
+---
+
 ## v1.99.0 - 2026-09-29
 
 Updated by: Claude (Opus 5.5), at the author's request.
