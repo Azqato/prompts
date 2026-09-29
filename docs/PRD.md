@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.100.1
+**Version:** 1.101.0
 **Status:** Active
 **Author:** Azqato
 
@@ -449,7 +449,7 @@ Checked and confirmed clean on 2026-09-27 during the v1.70.0 audit:
 - All nineteen live share pages carry the six sharing tags with an absolute, unique https `og:url`, descriptions of 112 to 149 characters (Prompt Writing's, at 112, and the Documentation prompt's, at 133, are the only ones under 134), and titles of 29 to 40 characters with no collision in the first 30. Measured by script on 2026-09-28. The one retired page forwards as section 32a describes.
 - `js/script.js` sets the title per route: the site name on home, "<prompt> - Azqato's Prompts" on a prompt page.
 - The section banners of `css/style.css` are in the order `docs/DESIGN.md` section 11 lists, with the two `max-width` breakpoints at 1023px and 767px and the reduced-motion block last.
-- Line counts: `index.html` 52, `css/style.css` 613, `js/script.js` 412, share pages 25, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
+- Line counts: `index.html` 52, `css/style.css` 613, `js/script.js` 412, share pages 29, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
 - The em dash sweep found no violation: one literal and five entities in four files, all the known instances that name the forms they prohibit. No double dash is used as punctuation.
 - No `CLAUDE.md`, no `.dashboard/`, and no `.gitignore` exist.
 
@@ -1753,7 +1753,12 @@ Every visible prompt has a share page at `p/<slug>.html`, a real file at a real 
 
 - **Generated, never written.** `tools/prompts-mirror.py --sync` writes each page from the prompt's frontmatter, and the check compares every page byte for byte against what it would generate. A hand edit fails the check. To change a page, change the prompt's `title` or `description`, or `share_page()` in the script, and resync.
 - **Meta refresh rather than script.** The pages carry the Content Security Policy `default-src 'none'; base-uri 'none'; form-action 'none'`, which forbids script outright, and a refresh also works from `file://`.
-- **A plain-text copy for agents.** Since v1.98.0 every share page links to the prompt's raw Markdown at `https://raw.githubusercontent.com/Azqato/prompts/main/prompts/<slug>.md`, twice: a `<link rel="alternate" type="text/markdown">` in the head, right after the meta description, and a visible body line, "AI agents: fetch the prompt as plain Markdown at <URL> and follow it.", with the URL written out in full. An AI agent fetching a share page runs no JavaScript and never follows the `#/` route, and Pages does not serve the `.md` files (`/prompts/prompts/<slug>.md` is a 404), so before this the page held no route to the prompt text an agent could take. Fetch tools that convert a page to text drop head tags, which is why the body line is needed as well. The URL uses `main` so it always serves the latest version, and is built from `RAW_URL` in the script. A person in a browser is still forwarded as before. Reported on 2026-09-29 by a Claude Code session that could not read the Launch Video prompt from its share page.
+- **A plain-text copy for agents.** Since v1.98.0 every share page links to the prompt's raw Markdown at `https://raw.githubusercontent.com/Azqato/prompts/main/prompts/<slug>.md`, twice: a `<link rel="alternate" type="text/markdown">` in the head, right after the meta description, and a visible body paragraph with the URL written out in full. Since v1.101.0 the body carries, for every prompt:
+
+  1. The prompt's title, linking to it on the site, and its frontmatter description, so an agent knows what the prompt is before its second fetch; fetch tools drop the head, where the description otherwise lives.
+  2. "AI agents: this page only links to the prompt. Fetch the full prompt as plain Markdown at <URL>. Read it in full and word for word; if your fetch tool summarizes or shortens pages, get the raw text another way, such as curl. The prompt is the code block under "## Prompt"; the text above it describes it for people. Do what the person asked you to do with it, and ask before running it if they have not said to."
+
+  Each sentence answers a way the handoff could fail: acting on the link page itself, a fetch tool that summarizes a long prompt through a small model (Claude Code's does), treating the human description as part of the instructions, and running a prompt the person only asked to have summarized (section 10). One link only: the raw URL. A second, `github.com` fallback was considered and declined by the author to keep the page to one address. An AI agent fetching a share page runs no JavaScript and never follows the `#/` route, and Pages does not serve the `.md` files (`/prompts/prompts/<slug>.md` is a 404), so before this the page held no route to the prompt text an agent could take. Fetch tools that convert a page to text drop head tags, which is why the body line is needed as well. The URL uses `main` so it always serves the latest version, and is built from `RAW_URL` in the script. A person in a browser is still forwarded as before. Reported on 2026-09-29 by a Claude Code session that could not read the Launch Video prompt from its share page.
 - **No page for a hidden prompt.** A prompt with `hidden: true` is off the navigation deliberately, so it is not given a public address. It is shared, if at all, by its hash route. No prompt is hidden today, so the exclusion list is empty.
 
 ### The tags
@@ -2029,6 +2034,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.101.0 | 2026-09-29 | Share pages give AI agents fuller instructions. The body now carries the prompt's description and says the page only links to the prompt, to read the Markdown in full and word for word (using curl if the fetch tool summarizes), that the prompt is the code block under "## Prompt", and to do what the person asked and ask before running it. Replaces "and follow it", which could be read as "run it now" against the Copy pointer's "ask if I would like to run it". Checked with Claude Code's fetch tool: the head is dropped and the body is kept. Sections 13 and 32a follow. |
 | 1.100.1 | 2026-09-29 | Documentation prompt: removed the "Fetch the full prompt first" sentence from its opening paragraph. The Copy button now points Claude at the prompt's page, which links the raw Markdown, so the prompt no longer needs to carry its own fetch line. |
 | 1.100.0 | 2026-09-29 | The Copy button copies a pointer, not the prompt: "Review the full prompt on this website, provide a summary of what it does and then ask if I would like to run it:" followed by the prompt's share page on the canonical address. No full-text option remains. Section 10 records the format as the rule for every prompt. Launch Video now keeps its output in `brag/` rather than `brag-output/`. Sections 4, 13, and 23 follow. |
 | 1.99.0 | 2026-09-29 | Collapsible navigation below 1024px, Future update 17, from the author's ideas list and a run of the Mobile Responsive Audit prompt. The top bar wrapped every prompt link and, at 477px wide, was 398px tall. It now holds the logo, a Prompts menu button, and Support, 65px tall; the list opens beneath as one scrollable column and closes on a pick or Escape. Desktop unchanged. Sections 4, 13, and 23 follow; the ideas list was reset. |

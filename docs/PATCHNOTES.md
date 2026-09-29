@@ -4,6 +4,23 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.101.0 - 2026-09-29
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Every share page gives AI agents clearer instructions. The old line ended "and follow it", which an agent could read as "run it now", against the Copy button's "ask if I would like to run it". The body now:
+  - shows the prompt's description beside its title, since fetch tools drop the head where the description lived;
+  - says the page only links to the prompt, and gives the one raw Markdown URL;
+  - says to read the prompt in full and word for word, and to use curl if the fetch tool summarizes or shortens pages (Claude Code's passes pages through a small model);
+  - says the prompt is the code block under "## Prompt", and the text above it is for people;
+  - says to do what the person asked, and ask before running it if they have not said to.
+- Checked with Claude Code's own fetch tool against the live Launch Video page: the head tags were dropped and the body text, with the URL, was kept.
+- `tools/prompts-mirror.py` writes the new text; all nineteen share pages resynced. PRD sections 13 and 32a updated.
+
+---
+
 ## v1.100.1 - 2026-09-29
 
 Updated by: Claude (Opus 5.5), at the author's request.
