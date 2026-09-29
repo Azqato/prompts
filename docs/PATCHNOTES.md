@@ -10,6 +10,7 @@ Updated by: Claude (Opus 5.5), at the author's request.
 
 ### Changed
 
+- Documentation prompt: description updated to say it sets defaults and to name the ideas list and standing rules; the intro now says the fetch instruction is in the opening paragraph rather than the first line.
 - Documentation prompt: less weight on TODO.md at the start. The intro now mentions it in one clause; steps 2 and 5 no longer name it (step 5's closing sentence about TODO questions and discrepancies is removed); and the survey paragraph only name it and point to its section. The details (never consolidated or moved, moving a list kept elsewhere, not acting on ideas during the audit, reporting whether it was read) now live in the `/docs/TODO.md` section.
 - Documentation prompt: the "Fetch the full prompt first" sentence now ends the opening paragraph, in the author's wording, instead of standing above it.
 - Documentation prompt: removed the progress dashboard. Its folder-structure line and its ignore-file rule are gone, so the prompt sets documentation defaults only. It also no longer adds a Roadmap entry proposing a dashboard, nor keeps a separate rule for an existing dashboard section in CLAUDE.md.

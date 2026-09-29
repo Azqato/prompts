@@ -1,6 +1,6 @@
 ---
 title: Documentation
-description: Set up a project's documentation and rules: a README, plus a detailed PRD, design guide, and changelog in /docs.
+description: Set up a project's documentation defaults: a root README, plus a detailed PRD, design guide, changelog, and ideas list in /docs, with standing rules.
 meta: Claude Code Prompt
 ---
 
@@ -8,7 +8,7 @@ Surveys the codebase first, then audits and consolidates all documentation into 
 
 It also keeps `docs/TODO.md`, your own list of ideas, which it never builds from without asking. Its testing rule keeps tests to headless Edge, run once before a major update ships rather than after every small edit, together with a check of the assumptions the change relies on, and it replaces an older every-change testing rule where it finds one. Projects that are never pushed anywhere run the same checks when a major update is finished.
 
-Because the prompt is long enough that pasting can cut it off, its first line tells Claude to fetch the full version from this site's GitHub repository first. Use it to set a project up: one authoritative doc set, the right folder structure, and the project's standing rules, in a single pass done by Claude itself with no subagents. It checks the docs against the code where that is cheap, and does not read every source file: checking every section against the code in full becomes a Roadmap checklist, worked through as later updates touch each area, so a large project costs no more to set up than a small one. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, records where the docs and the code disagree, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
+Because the prompt is long enough that pasting can cut it off, its opening paragraph tells Claude to fetch the full version from this site's GitHub repository first. Use it to set a project up: one authoritative doc set, the right folder structure, and the project's standing rules, in a single pass done by Claude itself with no subagents. It checks the docs against the code where that is cheap, and does not read every source file: checking every section against the code in full becomes a Roadmap checklist, worked through as later updates touch each area, so a large project costs no more to set up than a small one. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, records where the docs and the code disagree, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
 
 ## Prompt
 
