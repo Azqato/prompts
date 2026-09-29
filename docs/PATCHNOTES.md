@@ -10,7 +10,7 @@ Updated by: Claude (Opus 5.5), at the author's request.
 
 ### Changed
 
-- Documentation prompt: the fetch-first line is now one short sentence that links only the raw file; the `blob` link is gone.
+- Documentation prompt: the fetch-first instruction is now one sentence: fetch the full prompt first, in case the pasted one was cut off, with only the raw file linked. The `blob` link and the fallback wording are gone.
 
 ---
 
