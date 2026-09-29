@@ -4,6 +4,20 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.95.0 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Documentation prompt: pasting it into Claude Code could cut it off, since it is about 70 KB. Its first line now tells Claude to fetch the full, latest version from `https://raw.githubusercontent.com/Azqato/prompts/main/prompts/documentation.md` (the raw form of `https://github.com/Azqato/prompts/blob/main/prompts/documentation.md`, which is also named), follow the fenced block under its "## Prompt" heading, and prefer it wherever it differs from the pasted text. If the fetch fails, Claude carries on with what was pasted and says at the start of its summary that it may be incomplete and where the pasted text ended. The intro explains why.
+
+### Notes
+
+The raw address is used first because the `blob` address returns GitHub's web page around the file rather than the file itself. The prompt now depends on `prompts/documentation.md` staying at that path on `main`, so renaming or moving it should be treated like retiring a public address.
+
+---
+
 ## v1.94.0 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.

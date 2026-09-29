@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.94.0
+**Version:** 1.95.0
 **Status:** Active
 **Author:** Azqato
 
@@ -1975,6 +1975,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.95.0 | 2026-09-28 | Documentation prompt: its first line tells Claude to fetch the full, latest prompt from this repository on GitHub (the raw file, with the `blob` page named too) and follow the fenced block under its "## Prompt" heading, since pasting the roughly 70 KB prompt can cut it off. If the fetch fails it continues with the pasted text and says it may be incomplete. The prompt's `.md` in `main` is therefore a public address other projects depend on: renaming or moving `prompts/documentation.md` now needs the same care as a live page (section 32). |
 | 1.94.0 | 2026-09-28 | Brand Identity prompt: opens with a read-only pass that reads every markdown documentation file in full (README, CLAUDE, PRD, DESIGN, patch notes, and others) for anything that bears on the brand, changes nothing, notes disagreements between documents rather than choosing, and summarizes its findings with their sources before Phase 1 builds on them. |
 | 1.93.0 | 2026-09-28 | Brand Identity prompt: the Brand Design page gains a fourth section, Other brand images, listing every other brand file in the project (the rest of `brand/` and the site's own logos, icons, share images, banners, and manifests), including files from earlier runs or other work, so nothing made over time is missed. Existing files only, never restored from git history; on the gated page they are copied under `brand/other/` so the handler stays inside the brand folders. |
 | 1.92.0 | 2026-09-28 | Brand Identity prompt: Phase 7 always runs instead of asking. A site with a signed-in area gets the gated page as before; a public site with no way to restrict a page, or a project with no site, gets an offline `brand/brand-design.html` instead, self-contained, opened from disk, listing the files as they were when written, and added to `.gitignore` so it is never committed or published. The prompt now has seven phases. |
