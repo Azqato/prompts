@@ -4,6 +4,17 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.96.0 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Documentation prompt: removed the progress dashboard. Its folder-structure line and its ignore-file rule are gone, so the prompt sets documentation defaults only.
+- Progress Dashboard prompt: now carries the two rules moved out of the Documentation prompt: the dashboard is never added to an ignore file, and where the project's docs describe its folder structure, dashboard/ is listed there as a project file that is never merged into the docs.
+
+---
+
 ## v1.95.1 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.

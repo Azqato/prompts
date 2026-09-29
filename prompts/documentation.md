@@ -54,7 +54,6 @@ Make sure to survey the codebase before touching any documentation. Find every m
    ├── .gitignore         ← root only for the repository-wide rule. See below
    ├── .gitattributes     ← root only, where line endings need pinning
    ├── CLAUDE.md          ← root only, where the project has one. Claude Code's standing rules. Never consolidated
-   ├── /dashboard         ← the progress page, where the project keeps one. Public
    └── /docs
        ├── PRD.md
        ├── DESIGN.md
@@ -505,9 +504,6 @@ lockfile, keeps every secret out of history, and names its default branch `main`
   dependency directories, caches, logs, coverage reports, and local editor or
   operating system files. A project that generates nothing says so in the PRD rather
   than carrying an empty file for the look of it.
-- A progress dashboard folder, /dashboard, is project content: it is tracked and
-  published with the project, never ignored, and the docs list it in the folder
-  structure as a Project File that is never consolidated.
 - Lockfiles are committed, never ignored. A lockfile is what makes a build
   reproducible, and ignoring one is the common inversion of this rule: the dependency
   directory is what gets ignored, and the lockfile that pins it is what gets kept.
