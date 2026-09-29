@@ -4,6 +4,24 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.98.0 - 2026-09-29
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Fixed
+
+- AI agents could not read a prompt from its share page. `p/<slug>.html` forwards to `index.html#/<slug>`, where JavaScript loads the prompt, and an agent's fetch runs no JavaScript; the `.md` files are not on Pages either. Every share page now points to the prompt's raw Markdown on GitHub (`main`), in two places:
+  - in the head, a `<link rel="alternate" type="text/markdown">` right after the meta description;
+  - in the body, a visible line: "AI agents: fetch the prompt as plain Markdown at <URL> and follow it.", since text-converting fetch tools drop head tags.
+- People in a browser are still forwarded to the prompt as before.
+
+### Changed
+
+- `tools/prompts-mirror.py` builds the raw URL from each prompt's slug and writes both links; all nineteen share pages resynced.
+- PRD section 32a records the rule; sections 13 and 20 updated.
+
+---
+
 ## v1.97.0 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.

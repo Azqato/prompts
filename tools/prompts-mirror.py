@@ -48,6 +48,10 @@ SITEMAP = os.path.join(ROOT, 'sitemap.xml')
 # be absolute, so it is written here rather than derived from anything.
 SITE_URL = 'https://azqato.github.io/prompts/'
 SITE_NAME = "Azqato's Prompts"
+# Where an agent can fetch a prompt as plain text. Pages does not serve the
+# .md files, so share pages link here; main keeps the link on the latest.
+RAW_URL = 'https://raw.githubusercontent.com/Azqato/prompts/main/prompts/'
+RAW_URL = 'https://raw.githubusercontent.com/Azqato/prompts/main/prompts/'
 
 # A share page left behind by a removed or renamed prompt stays published,
 # because once a link has been pasted it is a public address (PRD 32). The
@@ -123,6 +127,10 @@ def share_page(slug, fields):
     title = fields['title']
     desc = fields['description']
     target = '../index.html#/' + slug
+    # Agents that fetch this page run no JavaScript and never follow the
+    # #/ route, and the .md files are not served by Pages, so the page points
+    # at the raw copy on main (docs/PRD.md section 32a).
+    raw = RAW_URL + slug + '.md'
     return '\n'.join([
         '<!DOCTYPE html>',
         '<html lang="en">',
@@ -132,6 +140,7 @@ def share_page(slug, fields):
         '       edit by hand: change the .md file and run the script with --sync. -->',
         '  <title>%s - %s</title>' % (e(title), e(SITE_NAME)),
         '  <meta name="description" content="%s">' % e(desc),
+        '  <link rel="alternate" type="text/markdown" href="%s" title="%s prompt (Markdown)">' % (e(raw), e(title)),
         '  <meta property="og:title" content="%s">' % e(title),
         '  <meta property="og:description" content="%s">' % e(desc),
         '  <meta property="og:url" content="%s">' % e(SITE_URL + 'p/' + slug + '.html'),
@@ -143,6 +152,9 @@ def share_page(slug, fields):
         '</head>',
         '<body>',
         '  <p><a href="%s">%s</a>, on %s.</p>' % (e(target), e(title), e(SITE_NAME)),
+        '  <p>AI agents: fetch the prompt as plain Markdown at',
+        '    <a href="%s">%s</a>' % (e(raw), e(raw)),
+        '    and follow it.</p>',
         '</body>',
         '</html>',
         '',
