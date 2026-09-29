@@ -11,7 +11,7 @@ Use it when adding any new prompt to the site. Paste the prompt text below the `
 ## Prompt
 
 ```
-Add this new prompt to the website. Make sure to follow the process listed in @README.md @docs/PRD.md @docs/DESIGN.md @docs/PATCHNOTES.md . Update documentation accordingly and patch notes:
+Add this new prompt to the website. Make sure to follow the process listed in @README.md @docs/PRD.md @docs/DESIGN.md @docs/PATCHNOTES.md . Update documentation accordingly and patch notes. When you are done, run the checks the project's docs name for a new prompt and tell me which passed, and count any length limit with a script rather than by eye:
 
 Title: Generate a title based on the prompt that I have provided.
 

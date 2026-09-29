@@ -4,6 +4,30 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.97.0 - 2026-09-28
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Added
+
+- Prompt Writing prompt, the nineteenth: it writes a new prompt, or reviews one already in use, against ten rules drawn from how language models work, then explains each change in a line and offers to try the prompt once on a real case.
+- PRD section 11, Prompt Writing Rules: nine rules for every prompt (facts from the context, not memory; investigate before concluding; exact work goes to tools; a way to say "I don't know"; show the output's shape; end on a check that can pass or fail; scoring that cannot be gamed; a focused prompt; and supplying what a model cannot know about itself). Section 12 step 3 now checks them.
+- PRD section 20, Reference notes: the author's notes on a video about how language models are built, the source of the rules. The file stays local, excluded through `.git/info/exclude`, so it is never published.
+- PRD Future update 16 records the work, built in this version.
+
+### Changed
+
+- Audited all eighteen existing prompts against the new rules. Thirteen already met them. Five were tightened:
+  - Add Prompt: ends by running the project's checks and saying which passed, with length limits counted by script.
+  - GitHub Wiki: a new Step 5 checks by script that every link between pages resolves and every page is in the sidebar, reports what changed and what could not be checked, and says not to push the wiki.
+  - Mobile Responsive Audit: ends with a report of every width and page checked, the measurements, the fixes, and the gaps.
+  - Brand Identity: contrast ratios are computed with a script from the hex values, not estimated.
+  - Documentation: title and sharing-tag lengths are counted by script, and patch-note dates come from the system clock.
+- DESIGN.md section 10: focus-stop count updated for nineteen prompts (twenty-two stops). DESIGN.md is now 1.11.10.
+- docs/TODO.md reset to its empty placeholder; its one idea became Future update 16.
+
+---
+
 ## v1.96.0 - 2026-09-28
 
 Updated by: Claude (Opus 5.5), at the author's request.

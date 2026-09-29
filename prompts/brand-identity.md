@@ -101,7 +101,7 @@ Produce in brand/kit/, rendering each image from SVG with the same tools as Phas
 
 Social images: a 1200x630 link preview (og-image.png), a 400x400 profile picture that still works cropped to a circle, an X header at 1500x500, and a LinkedIn banner at 1584x396. Keep the logo clear of the areas each site covers with the profile picture.
 tokens.css with the palette as CSS custom properties and the typeface with its fallbacks, and tokens.json with the same values
-A contrast table in docs/DESIGN.md under ## Brand Identity > Color Contrast, listing each text and background pair with its WCAG contrast ratio and whether it passes AA
+A contrast table in docs/DESIGN.md under ## Brand Identity > Color Contrast, listing each text and background pair with its WCAG contrast ratio, computed with a script from the hex values rather than estimated, and whether it passes AA
 Email signature logo: a PNG at twice its display size (for example 400x100 to show at 200x50) that reads well in both light and dark mail clients, since most email clients do not display SVG
 site.webmanifest with the brand name, theme color, background color, and the 192 and 512 icons from brand/logo/ (created but not linked from the project, per the scope rule)
 

@@ -166,7 +166,7 @@ Required sections:
 ### /docs/PATCHNOTES.md
 Required format per entry:
 - Version number using semantic versioning (MAJOR.MINOR.PATCH)
-- Date in YYYY-MM-DD format
+- Date in YYYY-MM-DD format, taken from the system clock, never estimated
 - Sections: Added, Changed, Fixed, Removed
 - Each line item is one change, written in past tense
 
@@ -698,7 +698,7 @@ that satisfies the strictest renderer satisfies the rest.
 - Record the checks that decide whether a page complies, so compliance is something
   run rather than argued about. Every page that should carry the tags has all six.
   og:title is 70 characters or fewer, og:description 200 or fewer, og:site_name 20 or
-  fewer, with the actual count reported for anything over the target budgets so a
+  fewer, with the actual count (counted by a script, not by eye) reported for anything over the target budgets so a
   person can judge the borderline cases. Every og:url is absolute, begins with https,
   and is unique across the site, since duplicate values are a bug rather than a style
   choice. No og:title contains the og:site_name string. Where og:image is present,
@@ -769,7 +769,7 @@ longer one in lowercase.
 - Record the checks that decide whether a page complies, so compliance is something
   run rather than argued about. These checks read and report; they do not rewrite.
     - A title exists on every page and is not a placeholder.
-    - Every title is 60 characters or fewer, with the actual count reported.
+    - Every title is 60 characters or fewer, with the actual count reported, counted by a script rather than by eye.
     - The first 30 characters are unique across every page in the project. Report each
       collision as a pair, since a collision is never one page's fault.
     - The separator matches the one the project uses, on every page that has one.

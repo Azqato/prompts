@@ -49,5 +49,5 @@ Before and after each fix, verify no functional/data regression, whatever this s
 ## 6. Documentation
 After the fixes are verified, update this project's changelog/patch-notes file with a dated entry describing what was found and fixed (root cause, not just "fixed mobile bugs"), and update any roadmap/PRD-style planning doc if this project has one. Follow whatever documentation conventions already exist in this repo (check for existing docs before creating new ones).
 
-Work through this systematically: audit first and report what you find across all breakpoints, then ask about any open design questions, then implement and verify, then document.
+Work through this systematically: audit first and report what you find across all breakpoints, then ask about any open design questions, then implement and verify, then document. Finish with a report: each width and page checked, the scrollWidth and clientWidth measured at each, what was fixed, and anything you could not check.
 ```

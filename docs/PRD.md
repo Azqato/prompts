@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.96.0
+**Version:** 1.97.0
 **Status:** Active
 **Author:** Azqato
 
@@ -189,6 +189,20 @@ Prompts on this site are shared publicly and may be reused by anyone. Every prom
 
 Before adding a new prompt, review the full prompt text and remove any language that would cause it to take actions on behalf of a specific person or external service.
 
+### Prompt Writing Rules
+
+Added in v1.97.0, from what a model is and how it fails (section 20, "Reference notes"). The content rules above keep a prompt safe to share; these keep it working. They apply where they fit: a prompt that only writes a line into CLAUDE.md has little to measure, and one that reviews a site has little to write. Every new or edited prompt is checked against them, as step 3 of section 12 asks.
+
+1. **Facts come from the context, not from memory.** A model's trained knowledge is a blurred recollection; what is in its context window is exact. A prompt tells Claude to read what it needs (the project's files, the page, the pasted text) before acting, and never to rely on remembering a fact that can be read.
+2. **Investigate before concluding.** Each token gets a small, fixed amount of thought, so reasoning has to be spread across the answer. Steps are ordered so reading and checking come before findings and decisions, and a prompt never asks for a verdict first with the reasons after.
+3. **Exact work goes to tools.** Models see chunks of text, not letters, and do arithmetic in their heads. Counting, arithmetic, lengths and sizes, dates, exact string matches, and comparisons are done with a command or a script, not by eye.
+4. **A way to say "I don't know".** Models are trained to sound sure, so a prompt says what to do when something cannot be read, found, or checked: stop and ask, or mark it unknown. It never lets a gap be filled from memory or guessed from a title.
+5. **Show the shape of the output.** An example steers harder than a description. Where the format matters, a prompt names the exact columns, sections, or fields, or gives a one-line example.
+6. **End on a check that can pass or fail.** Outputs are sampled and vary from run to run, so a prompt ends with a verifiable finish line (a test passes, every item meets the bar, every file exists) and asks for a report of what was checked and what was not.
+7. **When scoring, the measure cannot be gamed.** A model pushed toward a number will game it. A prompt that scores work fixes the rubric before scoring, judges from the real thing, and forbids raising one number by lowering another.
+8. **Keep the prompt focused.** The context window is finite and shared with the work. The main instruction comes first, long reference material is linked or fetched rather than pasted when Claude can read it, and filler is cut.
+9. **Supply what the model cannot know about itself.** A model knows nothing reliable about its own name, version, or today's date. A prompt that depends on any of them takes it from the system clock or the session, or asks.
+
 ---
 
 ## 12. Adding Prompts
@@ -197,7 +211,7 @@ This is the canonical process for adding a new prompt, and how additions should 
 
 1. Create a new `.md` file in `prompts/` (e.g. `prompts/my-prompt.md`)
 2. Fill in the frontmatter (`title`, `description`, `meta`), the description body, and the prompt inside a fenced code block under a `## Prompt` heading
-3. Audit the prompt text against the Prompt Content Rules in section 11 before publishing. Remove any GitHub push or commit instructions and any account-specific actions. The `.md` file is the readable source of truth
+3. Audit the prompt text against the Prompt Content Rules and the Prompt Writing Rules in section 11 before publishing. Remove any GitHub push or commit instructions and any account-specific actions. The `.md` file is the readable source of truth
 4. Mirror the file's content verbatim into `js/prompts-data.js` as a `{ slug, raw }` entry, appended to the end of the `window.PROMPTS_DATA` array. The array order is the display order, so appending places the new prompt last in the sidebar and home list. Both update automatically with no HTML editing. Run `python tools/prompts-mirror.py --sync` rather than editing by hand: it appends the entry and also writes the prompt's share page, `p/<slug>.html`. The frontmatter `description` is the sharing description too, so keep it to one sentence ending on a full stop, 150 characters or fewer (section 32a)
 5. Add the prompt to the list under "What You Will Find Here" in `README.md`, in one sentence written for a general reader. The README carried a Files table and a file structure tree until v1.26.0 rewrote it for a general audience, and this step named both until v1.42.0 found the instruction had outlived them. See discrepancy 17 in section 18
 6. Add a version entry to `docs/PATCHNOTES.md` using the next semantic version, dated `YYYY-MM-DD`
@@ -251,7 +265,7 @@ The `hidden: true` flag remains supported for retiring a prompt from navigation 
 
 ## 13. Repository Structure
 
-The whole project is 52 files in seven folders. There is no build output and no vendored code. There is no ignore file: v1.71.0 added a `.gitignore` whose only entry was `.dashboard/`, and v1.74.0 removed it when the dashboard became public at `dashboard/` (section 20), leaving nothing to ignore. `.editorconfig` and `.vscode/` are absent, and every file in the working tree is tracked.
+The whole project is 54 files in seven folders. There is no build output and no vendored code. There is no ignore file: v1.71.0 added a `.gitignore` whose only entry was `.dashboard/`, and v1.74.0 removed it when the dashboard became public at `dashboard/` (section 20), leaving nothing to ignore. `.editorconfig` and `.vscode/` are absent, and every file in the working tree is tracked except the author's local notes file, `tools/llm-fundamentals-video-summary.md`, which `.git/info/exclude` keeps out of git (section 20, "Reference notes").
 
 `.gitattributes`, added in v1.36.0, is the only piece of git configuration the repository carries (a `.gitignore` existed from v1.71.0 to v1.74.0). It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to on the machine. The reason is specific to this project's mirror: the repository stores LF, but the `raw` values inside `js/prompts-data.js` hold their line breaks as JSON escapes rather than as real newlines, so git never rewrites them. Before v1.36.0, a checkout on Windows produced CRLF source files under `prompts/` against LF strings in the data file, and any literal comparison of the two reported drift that was not there. `tools/prompts-mirror.py` also normalizes on both sides and still does, which is now defence in depth rather than the only thing standing between the project and a false positive.
 
@@ -273,8 +287,8 @@ The whole project is 52 files in seven folders. There is no build output and no 
 ├── js/
 │   ├── prompts-data.js Hand-maintained mirror of prompts/*.md. Largest file by far.
 │   └── script.js       All client logic: parse, render, route, copy.
-├── prompts/            Eighteen .md files, one per prompt. The readable source.
-├── p/                  Eighteen generated share pages, one per visible prompt, and one retired.
+├── prompts/            Nineteen .md files, one per prompt. The readable source.
+├── p/                  Nineteen generated share pages, one per visible prompt, and one retired.
 │                       Public addresses: retired, never deleted. Section 32a.
 ├── tools/
 │   └── prompts-mirror.py  Maintenance only. Checks or resyncs the mirror
@@ -358,7 +372,7 @@ Every explicit rule found in the documentation, collected in one place. Sources 
 - Em dashes are prohibited in all three forms in all copy, including markdown docs and inline comments. CSS custom properties such as `--color-bg` are exempt (PRD 11). See section 18 for where the docs currently break this.
 - No marketing language, no filler phrases, plain declarative sentences (PRD 11).
 - A prompt page contains exactly three things: title, description, code block. No other sections (PRD 8).
-- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all eighteen prompts, four on 2026-08-23, `prompt-audit`, `brand-identity`, and `ios-simulator` on 2026-09-23, `game-setup` on 2026-09-24, `motion-design` on 2026-09-25, and `progress-dashboard`, `assumption-check`, and `launch-video` on 2026-09-27, and `design-review`, `video-to-prompt`, `score-to-target`, `animation-performance`, `landing-page`, and `frontend-references` on 2026-09-28.
+- Prompt text must never instruct its reader to push, commit, or publish to a remote (PRD 11). Verified clean across all nineteen prompts, four on 2026-08-23, `prompt-audit`, `brand-identity`, and `ios-simulator` on 2026-09-23, `game-setup` on 2026-09-24, `motion-design` on 2026-09-25, and `progress-dashboard`, `assumption-check`, and `launch-video` on 2026-09-27, and `design-review`, `video-to-prompt`, `score-to-target`, `animation-performance`, `landing-page`, `frontend-references`, and `prompt-writing` on 2026-09-28.
 - Prompt text must not reference the author's specific services, accounts, or credentials (PRD 11).
 - The public surface is the deployed page, not the source that builds it. Files under `prompts/` are source, so renaming or removing a prompt is done bare, with no redirect, except for its share page, which is retired (PRD 12, 32a).
 - A genuine public address is retired behind a `REDIRECTS` entry, which is then permanent, never chains, and is never reused for different content (PRD 12).
@@ -426,8 +440,8 @@ Implemented but undocumented at the time of the v1.18.0 pass: the error view (`r
 
 Checked and confirmed clean on 2026-09-27 during the v1.70.0 audit:
 
-- All eighteen `prompts/*.md` files are mirrored in `js/prompts-data.js` with no orphans, and every share page is current, by `tools/prompts-mirror.py`.
-- All eighteen live share pages carry the six sharing tags with an absolute, unique https `og:url`, descriptions of 112 to 149 characters (the Documentation prompt's, at 112, is the only one under 134), and titles of 29 to 40 characters with no collision in the first 30. Measured on 2026-09-28. The one retired page forwards as section 32a describes.
+- All nineteen `prompts/*.md` files are mirrored in `js/prompts-data.js` with no orphans, and every share page is current, by `tools/prompts-mirror.py`.
+- All nineteen live share pages carry the six sharing tags with an absolute, unique https `og:url`, descriptions of 112 to 149 characters (Prompt Writing's, at 112, and the Documentation prompt's, at 133, are the only ones under 134), and titles of 29 to 40 characters with no collision in the first 30. Measured by script on 2026-09-28. The one retired page forwards as section 32a describes.
 - `js/script.js` sets the title per route: the site name on home, "<prompt> - Azqato's Prompts" on a prompt page.
 - The section banners of `css/style.css` are in the order `docs/DESIGN.md` section 11 lists, with the two `max-width` breakpoints at 1023px and 767px and the reduced-motion block last.
 - Line counts: `index.html` 51, `css/style.css` 569, `js/script.js` 370, share pages 21, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
@@ -509,6 +523,12 @@ The approach to take on future tasks here.
 - Confirm which of the two copies of a prompt is being changed. Edit the `.md` file first, then resync `js/prompts-data.js` from it verbatim rather than hand-editing the JSON string.
 - Check whether a change alters a slug. If it does, it is a rename and follows the procedure in section 12. No redirect: prompt files are source.
 - Before deleting anything, ask whether it is source or deployed artifact. Source is deleted outright. Only a live public address is retired behind a redirect. See section 12, "Removing Prompts".
+
+### Reference notes
+
+`tools/llm-fundamentals-video-summary.md` holds the author's notes from a long general-audience video on how large language models are built, added on 2026-09-28: a summary in eleven sections (pre-training, tokenization, fine-tuning into an assistant, hallucinations and their fixes, why models need tokens to think, their jagged edges, reinforcement learning and thinking models, RLHF, and what is coming), a section on applying it to prompts and Claude Code projects, and the full transcript. It is the source of the Prompt Writing Rules in section 11 and of the Prompt Writing prompt.
+
+The file stays on the author's machine. It is excluded through `.git/info/exclude`, a local git setting, so it is never committed or published and the repository still carries no ignore file (section 13). A fresh clone does not have it. Read it for the reasoning behind a rule; the rules themselves live in section 11.
 
 ### Never
 
@@ -684,7 +704,7 @@ Each of these was considered and rejected, with the reason. They are listed so t
 | Not built | Why |
 | --- | --- |
 | Search or filtering | The library is small enough to scan, and the sidebar shows everything at once. Search earns its complexity at a scale this project does not intend to reach |
-| Tags or categories | Same reason. Eighteen prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
+| Tags or categories | Same reason. Nineteen prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
 | Syntax highlighting | Would mean a library, which breaks the no-dependency rule. Prompt text is prose, not code, so highlighting would add noise rather than meaning |
 | A build step | The entire architecture exists to avoid one. See section 7 |
 | Automated `prompts-data.js` generation | Would require Node in the loop and a build convention. The resync is done with a throwaway script per change instead, which keeps the repository free of tooling. This is a real tradeoff and it is recorded as technical debt in section 30 |
@@ -1111,6 +1131,20 @@ The rules come from the source and are kept: the project's own design system and
 
 Based on: the author's ideas list, 2026-09-28, a post listing eight frontend reference sites with a suggested CLAUDE.md section; and the pages of Refero Styles, awesome-design-md, 21st.dev, Component Gallery, Kinetics, whatships, and Impeccable (and its GitHub repository), read with the web fetch tool on 2026-09-28. HyperFrames was not re-read: Launch Video already relies on it. No page was loaded in a browser, under the CLAUDE.md rule that keeps headless Edge to local checks.
 
+#### 16. Prompt writing rules from how models work
+
+**What.** Take what a long general-audience video on how language models are built teaches (trained knowledge is a blurred recollection and context is exact; a model thinks a fixed amount per token; it sees tokens, not letters; it is trained to sound sure; its answers vary; a score it is pushed toward gets gamed) and apply it three ways: as Prompt Writing Rules in section 11, as an audit of every prompt against them, and as a new prompt that writes or reviews a prompt by the same rules.
+
+**Why.** The rules name why prompts fail, so each prompt here can be checked against a reason rather than a taste.
+
+**How.** Nine rules in section 11, checked at step 3 of section 12. The audit found 13 of 18 prompts already met them; Add Prompt, GitHub Wiki, Mobile Responsive Audit, Brand Identity, and Documentation each gained a check done by script or a closing report. The new prompt is Prompt Writing.
+
+**Size.** Medium: PRD rules, five prompt edits, one new prompt.
+
+**Built in v1.97.0**, at the author's request, who asked for both the rules and the audit, and for the notes to stay local (section 20, "Reference notes").
+
+Based on: the author's ideas list, 2026-09-28 ("ingest transcription"), and the author's notes file `tools/llm-fundamentals-video-summary.md`.
+
 ### Deferred
 
 - **Automated mirror generation.** Deferred indefinitely. It would need Node in the loop, which is the dependency the project exists to avoid. A by-hand verification script is the compromise, and it is planned rather than deferred.
@@ -1128,7 +1162,7 @@ Added in v1.75.0, under the Documentation prompt's v1.73.0 rule. Each section th
 | PRD 9 | Navigation | Not yet |  |
 | PRD 10 | Copy Button Behavior | Not yet | Working on the live site per the author, 2026-09-27; the text itself not yet checked against `js/script.js` |
 | PRD 10a | Prompt Collapse Behavior | Not yet |  |
-| PRD 13 | Repository Structure | Verified 2026-09-27 | Tree and count checked against `git ls-files`: 52 files, seven folders, after `frontend-references` was added in v1.89.0 |
+| PRD 13 | Repository Structure | Verified 2026-09-28 | Tree and count checked against `git ls-files`: 54 files, seven folders, after `prompt-writing` was added in v1.97.0 |
 | PRD 14 | Architecture and Flow | Not yet |  |
 | PRD 15 | Code Conventions | Not yet |  |
 | PRD 17 | Stack, Tooling, and Deployment | Not yet |  |
@@ -1371,7 +1405,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 
 | Layer | Technology | Version |
 | --- | --- | --- |
-| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus eighteen generated share pages of 21 lines each and one retired share page |
+| Markup | HTML5 | Living standard. `index.html`, 51 lines, plus nineteen generated share pages of 21 lines each and one retired share page |
 | Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 569 lines, no `@import` |
 | Logic | JavaScript, ES5-flavoured with `const` and `let` | No transpiler. Runs as written. 370 lines |
 | Maintenance tooling | Python 3, standard library only | `tools/prompts-mirror.py`. Never runs in a browser, never required to build or serve |
@@ -1975,6 +2009,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.97.0 | 2026-09-28 | Prompt Writing Rules, Future update 16. Section 11 gains nine rules drawn from how language models work (facts from context, investigate before concluding, exact work to tools, a way to say "I don't know", show the output's shape, end on a check, ungameable scoring, focus, and supplying what a model cannot know about itself), and section 12 step 3 checks them. All eighteen prompts were audited: thirteen already met them, and five gained a check by script or a closing report (Add Prompt, GitHub Wiki, Mobile Responsive Audit, Brand Identity, Documentation). Added the Prompt Writing prompt, the nineteenth. Section 20 records the author's notes file, kept local through `.git/info/exclude`. The ideas list was reset. |
 | 1.96.0 | 2026-09-28 | Documentation prompt: description and intro rewritten to lead with the benefits of running it, shorter and less technical. Also: Documentation prompt: TODO.md details moved out of the intro, steps 2 and 5, and the survey paragraph into its own `/docs/TODO.md` section; the opening now only names the file where a step needs it. Also: Documentation prompt: the fetch-the-full-prompt sentence moves to the end of the opening paragraph, in the author's wording. Also: Documentation prompt no longer mentions the progress dashboard: the `/dashboard` line in its folder structure and its ignore-file rule are removed, since setting a dashboard up belongs to its own prompt. Also removed: its instruction to add a Future updates entry proposing a dashboard, and its rule for keeping an existing CLAUDE.md dashboard section and recording it in the PRD's Working Practice; the latter now lives in the Progress Dashboard prompt's standing-rule step. The rules that were only there (never ignored; listed in the docs' folder structure as a project file never merged into the docs) move into the Progress Dashboard prompt. |
 | 1.95.1 | 2026-09-28 | Documentation prompt: the fetch-first instruction shortened to one sentence that links only the raw file, with no fallback wording. |
 | 1.95.0 | 2026-09-28 | Documentation prompt: its first line tells Claude to fetch the full, latest prompt from this repository on GitHub (the raw file, with the `blob` page named too) and follow the fenced block under its "## Prompt" heading, since pasting the roughly 70 KB prompt can cut it off. If the fetch fails it continues with the pasted text and says it may be incomplete. The prompt's `.md` in `main` is therefore a public address other projects depend on: renaming or moving `prompts/documentation.md` now needs the same care as a live page (section 32). |

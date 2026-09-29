@@ -37,4 +37,8 @@ Rewrite internal/planning language into visitor-facing explanations; drop intern
 Step 4: Sidebar
 
 Maintain a _Sidebar.md reflecting the full current page structure.
+
+Step 5: Check before finishing
+
+With a script rather than by eye, check that every link between wiki pages points to a page that exists, and that every page appears in _Sidebar.md. Fix any failure, then list the pages created, updated, and removed, and anything you could not check. If a source doc could not be read, say so rather than filling in the page from memory. Do not push the wiki; I decide when it goes live.
 ```
