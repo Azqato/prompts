@@ -1,14 +1,14 @@
 ---
 title: Documentation
-description: Set up a project's documentation defaults: a root README, plus a detailed PRD, design guide, changelog, and ideas list in /docs, with standing rules.
+description: Make any project easy to understand, hand over, and keep building, with four clear documents and sensible defaults set up in one run.
 meta: Claude Code Prompt
 ---
 
-Surveys the codebase first, then audits and consolidates all documentation into four core files: README.md at the root, and PRD.md, DESIGN.md, and PATCHNOTES.md inside `/docs`, plus a LICENSE.md beside the README where the project has no licence of its own. A CLAUDE.md at the root, where the project has one, stays there: its rules are recorded in the PRD, never moved into it. Missing files are created and the correct folder structure is enforced. The PRD absorbs everything else, with required sections for Tenets, Roadmap, Metrics, Runbook, Technical Requirements, Conventions, Writing Style, Browser Testing, Verification Environment, Security, Repository Hygiene, Licensing, Social Sharing Tags, Page Titles, Deprecation and Removal, Documentation Versus Reality, Risks and Open Questions, Working Practice, a Press Release, and an FAQ, so the entire project can be understood from `/docs` alone without reading any code.
+Turn a messy, half-documented project into one anyone can pick up and understand. One run gives you four clear documents that explain what the project is, why it exists, how it looks, and what has changed, so you, a teammate, or Claude in a future session can get up to speed without reading the code.
 
-It also keeps `docs/TODO.md`, your own list of ideas, which it never builds from without asking. Its testing rule keeps tests to headless Edge, run once before a major update ships rather than after every small edit, together with a check of the assumptions the change relies on, and it replaces an older every-change testing rule where it finds one. Projects that are never pushed anywhere run the same checks when a major update is finished.
+It works with what you already have. Scattered notes are gathered into one place, and your own rules and ideas are kept rather than overwritten. Where the docs and the code disagree, it tells you instead of guessing, and it sets sensible defaults only where you have not already decided.
 
-Because the prompt is long enough that pasting can cut it off, its opening paragraph tells Claude to fetch the full version from this site's GitHub repository first. Use it to set a project up: one authoritative doc set, the right folder structure, and the project's standing rules, in a single pass done by Claude itself with no subagents. It checks the docs against the code where that is cheap, and does not read every source file: checking every section against the code in full becomes a Roadmap checklist, worked through as later updates touch each area, so a large project costs no more to set up than a small one. Rather than spreading detail across a suite of ten or more separate documents, it folds that full depth into a single comprehensive PRD, so there are only ever four files to keep current. It also derives the house conventions from the code, records where the docs and the code disagree, records risks and open questions, and enforces the writing style, so a project does not need a separate onboarding or style pass. Every policy it writes is a default, applied only where the project does not already state a rule of its own.
+It costs no more on a large project than on a small one: it checks what it can cheaply now, and leaves a checklist so later work confirms the rest. Every session after that starts from the same shared understanding.
 
 ## Prompt
 
