@@ -13,7 +13,9 @@ Because the prompt is long enough that pasting can cut it off, its first line te
 ## Prompt
 
 ```
-Pasting can cut this prompt off, so first fetch the full version: https://raw.githubusercontent.com/Azqato/prompts/main/prompts/documentation.md Follow the instructions inside the fenced block under its "## Prompt" heading, and treat that version as the one to follow wherever it differs from what was pasted here. If you cannot fetch it, continue with the text below, and tell me at the start of your summary that it may be incomplete and where the pasted text ended.
+Pasting can cut this prompt off, so first fetch the full version and follow the fenced block under its "## Prompt" heading wherever it differs from this text:
+https://raw.githubusercontent.com/Azqato/prompts/main/prompts/documentation.md
+If the fetch fails, continue with the text below and tell me it may be incomplete.
 
 Perform a documentation audit that sets this project up. Your goal is that the documentation files, folder structure, required sections, and standing rules below are all in place, that what the docs say is checked against the code wherever that is cheap, and that everything not yet checked is recorded so later updates can check it. This audit defines the rules and the structure; it does not verify every sentence against every source file at once.
 Steps to follow:
