@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.103.0
+**Version:** 1.104.0
 **Status:** Active
 **Author:** Azqato
 
@@ -148,6 +148,17 @@ Added in v1.29.0. Numbered `10a` rather than inserted as a new section 11, becau
 - There is no animation on the collapse. It is a display change, not a transition. `docs/DESIGN.md` section 12b forbids transitioning height or transform, which rules out both an animated open and a rotating chevron.
 
 ---
+
+## 10b. Search Behavior
+
+Added in v1.104.0, when the library passed twenty prompts (open question 11). Numbered `10b` for the reason section 10a gives.
+
+- One search box, `#prompt-search`, at the top of the prompt list: above the links in the sidebar on a wide screen, and inside the Prompts menu below 1024px, so it is hidden until the menu opens.
+- It filters as the reader types, with no button. It matches a prompt's `title` and frontmatter `description`, ignoring case. Every word typed must appear, in any order, so "audit mobile" finds Mobile Audit. It does not search the prompt text itself: the description is written to say what a prompt is for, and the full text would match nearly every query on common words.
+- It filters the sidebar links and, when the home view is showing, the home cards, by setting `hidden` on each. Home stays in the sidebar whatever is typed. When nothing matches, "No prompts match "<query>"." appears in a `role="status"` line in the sidebar and on the home view, so a screen reader announces it.
+- Enter opens the first match. Escape clears the box; with the box already empty, Escape closes the phone menu as before. The native clear button of a search input also clears it.
+- The query is kept across navigation, so a reader can open several results in turn, and it is re-applied whenever the home view is rendered. It is not persisted: a reload starts empty, for the reason section 10a gives.
+- No index, no library, and no network: 21 short strings are filtered in place on every keystroke. `applySearch()` and `initSearch()` in `js/script.js`.
 
 ## 11. Writing Style
 
@@ -449,7 +460,7 @@ Checked and confirmed clean on 2026-09-27 during the v1.70.0 audit:
 - All twenty-one live share pages carry the six sharing tags with an absolute, unique https `og:url`, descriptions of 112 to 149 characters (Prompt Writing's, at 112, and the Documentation prompt's, at 133, are the only ones under 134), and titles of 29 to 40 characters with no collision in the first 30. Measured by script on 2026-09-28. The one retired page forwards as section 32a describes.
 - `js/script.js` sets the title per route: the site name on home, "<prompt> - Azqato's Prompts" on a prompt page.
 - The section banners of `css/style.css` are in the order `docs/DESIGN.md` section 11 lists, with the two `max-width` breakpoints at 1023px and 767px and the reduced-motion block last.
-- Line counts: `index.html` 52, `css/style.css` 613, `js/script.js` 412, share pages 29, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
+- Line counts: `index.html` 56, `css/style.css` 676, `js/script.js` 470, share pages 29, the retired page 22. The project is 34 tracked files, 67 commits on one branch, `main`, matching `origin/main`.
 - The em dash sweep found no violation: one literal and five entities in four files, all the known instances that name the forms they prohibit. No double dash is used as punctuation.
 - No `CLAUDE.md`, no `.dashboard/`, and no `.gitignore` exist.
 
@@ -502,7 +513,7 @@ Numbered so they can be answered by reference. An answered question is folded in
 
 9. **Should this site carry a `sitemap.xml`?** Raised by the v1.70.0 audit. The standard puts one at the root of a project that serves a site, and finding 2 of the self-audit in section 27 argued it would list a single URL. Since v1.46.0 there are eleven share pages, real addresses a sitemap at `/prompts/sitemap.xml` could list, all under its own path. Default applied meanwhile: none created, since adding one is a decision about how the site is indexed. Recommendation: add it, listing the site root and every live share page, and have `tools/prompts-mirror.py --sync` write it so it cannot drift. **Answered in v1.71.0**, as recommended. See section 32.
 10. **May headless Edge load a link an idea points to?** Raised in v1.86.0. The `CLAUDE.md` default rules say headless Edge is used only for local checks; step 2 of the ideas list in section 20 allows one headless Edge load, with a normal user agent, of a link in `docs/TODO.md`. Both texts are kept until the author decides which holds. **Answered 2026-09-28: allowed.** One headless Edge load per link, when the web fetch tool cannot read it, never signed in. `CLAUDE.md` names the exception, so both texts now agree.
-11. **Is it time for search, now there are twenty-one prompts?** Raised in v1.103.0. The Search milestone in section 27 is set for "when the library passes roughly twenty prompts", and the prompt-count metric in section 26 is "kept under roughly twenty". LinkedIn Audit, the twenty-first, passes both. Default applied meanwhile: nothing built, since the collapsible menu added in v1.99.0 keeps the list out of the way on small screens. Should search be built now, or the threshold raised?
+11. **Is it time for search, now there are twenty-one prompts?** Raised in v1.103.0. The Search milestone in section 27 is set for "when the library passes roughly twenty prompts", and the prompt-count metric in section 26 is "kept under roughly twenty". LinkedIn Audit, the twenty-first, passes both. Default applied meanwhile: nothing built, since the collapsible menu added in v1.99.0 keeps the list out of the way on small screens. Should search be built now, or the threshold raised? **Answered 2026-09-29:** build it. Built in v1.104.0; see section 10b.
 
 Answered on 2026-08-24:
 
@@ -690,6 +701,7 @@ These are live and are the product as it exists today.
 | Dependency-free `file://` operation | Prompt text is embedded in `js/prompts-data.js` and loaded by `<script>`, so the site runs by opening the file from disk |
 | Dynamic sidebar | Built from the prompt data at load, with an active-state indicator on the current view |
 | One-click copy | Copies a one-line pointer to the prompt's share page for Claude Code to fetch (section 10). Native Clipboard API, with a two-second "Copied!" confirmation state. Works whether the prompt block is shown or hidden |
+| Search | Filters the sidebar and the home cards by title and description as the reader types; Enter opens the first match. See section 10b |
 | Collapsible prompt block | The block is collapsed on arrival. The whole header bar toggles it, and the label names the action. Not persisted. See section 10a |
 | Home list | Card per prompt, title and one-line description, with a hover treatment |
 | Minimal markdown renderer | Headings, paragraphs, bullet lists, inline code, bold, and links in prompt descriptions |
@@ -709,7 +721,7 @@ Each of these was considered and rejected, with the reason. They are listed so t
 
 | Not built | Why |
 | --- | --- |
-| Search or filtering | The library is small enough to scan, and the sidebar shows everything at once. Search earns its complexity at a scale this project does not intend to reach |
+| Search or filtering | Reversed in v1.104.0: past twenty prompts the list stopped being quick to scan, so a title-and-description filter was built (section 10b). Full-text search, tags, and ranking remain out of scope |
 | Tags or categories | Same reason. Twenty-one prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
 | Syntax highlighting | Would mean a library, which breaks the no-dependency rule. Prompt text is prose, not code, so highlighting would add noise rather than meaning |
 | A build step | The entire architecture exists to avoid one. See section 7 |
@@ -822,7 +834,7 @@ Since v1.61.0 new work can also arrive through the author's ideas list, `docs/TO
 | Ideas list and its Roadmap process | September 2026 | Complete (v1.61.0 to v1.62.0) |
 | First ideas-list batch: five updates, two new prompts | September 2026 | Complete (v1.64.0 to v1.66.0) |
 | Skip-to-content link and copy-result live region | Next session (author, 2026-09-28) | Planned |
-| Search | When the library passes roughly twenty prompts | Planned (moved from Deferred in v1.85.0) |
+| Search | When the library passes roughly twenty prompts | Complete (v1.104.0) |
 | Next prompt added | On demand | Ongoing |
 
 ### Scoped: self-audit against the v1.37.0 documentation standard
@@ -1255,7 +1267,7 @@ Analytics would mean a third-party script, which violates tenet 1 and the no-ext
 | Metric | Method | Cadence | Target |
 | --- | --- | --- | --- |
 | Mirror integrity | Manual check that `prompts/*.md` matches `js/prompts-data.js` byte for byte | Every prompt edit | 100 percent, always. Any drift is a defect |
-| Prompt count | `ls prompts/` | Per release | Kept under roughly twenty. Growth is not a goal |
+| Prompt count | `ls prompts/` | Per release | No fixed ceiling since search was added in v1.104.0 (section 10b). Growth is still not a goal |
 | Prompt Content Rules compliance | Read the prompt text against section 11 before publishing | Every new or edited prompt | Zero violations |
 | Documentation drift | The discrepancy table in section 18, refreshed by a full audit | Per audit | Open items trending down |
 | Release discipline | Every change has a patch note entry and a version history row | Per release | 100 percent |
@@ -1453,7 +1465,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 
 | Layer | Technology | Version |
 | --- | --- | --- |
-| Markup | HTML5 | Living standard. `index.html`, 52 lines, plus twenty-one generated share pages of 29 lines each and one retired share page |
+| Markup | HTML5 | Living standard. `index.html`, 56 lines, plus twenty-one generated share pages of 29 lines each and one retired share page |
 | Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 569 lines, no `@import` |
 | Logic | JavaScript, ES5-flavoured with `const` and `let` | No transpiler. Runs as written. 370 lines |
 | Maintenance tooling | Python 3, standard library only | `tools/prompts-mirror.py`. Never runs in a browser, never required to build or serve |
@@ -2015,7 +2027,7 @@ Yes. The site has no runtime dependencies and makes no network calls, so once th
 
 ### Why is there no search?
 
-The library is small enough that the sidebar shows everything at once, which is faster than typing. Search will be added if the library grows past roughly twenty prompts, and not before.
+Yes, since v1.104.0. A search box at the top of the prompt list filters by title and description as you type, and Enter opens the first match. On a phone it is inside the Prompts menu.
 
 ### How is this different from a prompt marketplace?
 
@@ -2063,6 +2075,7 @@ Nowhere ambitious, deliberately. The site is feature-complete and the roadmap in
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.104.0 | 2026-09-29 | Search, answering open question 11: a box at the top of the prompt list, inside the Prompts menu on phones, filters the sidebar and home cards by title and description as the reader types; Enter opens the first match and Escape clears. New section 10b; sections 4, 5, 13, 23, 27, and the FAQ updated. Also fixed the v1.99.0 menu chevron, which transitioned `transform` against DESIGN 12b: it now flips instantly. |
 | 1.103.0 | 2026-09-29 | Added the LinkedIn Audit prompt, the twenty-first, Future update 19, from a post of seven LinkedIn prompts the author pasted: a scored audit, then rewrites of every profile section, a month of posts, and two recommendation requests, under the section 11 rules. Counts in sections 13, 16, 23, and 30 updated. The library now passes the roughly twenty prompts at which the Search milestone and the prompt-count metric were set; see open question 11. |
 | 1.102.0 | 2026-09-29 | Added the Project Defaults prompt, the twentieth, Future update 18: the Documentation prompt's rules and structure applied without its review, with the project's own rules and documents as the source of truth. It fetches the Documentation prompt for the policy wording, so the defaults live in one place. Counts in sections 13, 16, and 23 updated; a stale markup row in section 30 corrected. |
 | 1.101.0 | 2026-09-29 | Share pages give AI agents fuller instructions. The body now carries the prompt's description and says the page only links to the prompt, to read the Markdown in full and word for word (using curl if the fetch tool summarizes), that the prompt is the code block under "## Prompt", and to do what the person asked and ask before running it. Replaces "and follow it", which could be read as "run it now" against the Copy pointer's "ask if I would like to run it". Checked with Claude Code's fetch tool: the head is dropped and the body is kept. Sections 13 and 32a follow. |

@@ -164,6 +164,61 @@ function initMenu() {
   });
 }
 
+/* ---------- Search ---------- */
+
+/* Filters the prompt list in the sidebar, and the cards when the home view
+   is showing, by title and description. Every word typed must appear, in
+   any order and any case. Home stays in the sidebar whatever is typed. The
+   query is kept across navigation and re-applied when the home view is
+   rendered. See docs/PRD.md section 10b. */
+function searchText(p) {
+  return (p.title + ' ' + p.description).toLowerCase();
+}
+
+function matches(slug, words) {
+  const p = findPrompt(slug);
+  if (!p) return true;
+  const text = searchText(p);
+  return words.every(function (w) { return text.indexOf(w) !== -1; });
+}
+
+function applySearch() {
+  const input = document.getElementById('prompt-search');
+  const query = input.value.trim().toLowerCase();
+  const words = query ? query.split(/\s+/) : [];
+  let shown = 0;
+  document.querySelectorAll('#sidebar-nav a').forEach(function (a) {
+    const slug = a.getAttribute('data-slug');
+    const show = !slug || matches(slug, words);
+    a.hidden = !show;
+    if (show && slug) shown++;
+  });
+  document.querySelectorAll('.prompt-list-item').forEach(function (card) {
+    card.hidden = !matches(card.getAttribute('data-slug'), words);
+  });
+  const message = words.length && !shown ? 'No prompts match "' + input.value.trim() + '".' : '';
+  document.getElementById('search-empty').textContent = message;
+  const homeEmpty = document.getElementById('home-empty');
+  if (homeEmpty) homeEmpty.textContent = message;
+}
+
+function initSearch() {
+  const input = document.getElementById('prompt-search');
+  input.addEventListener('input', applySearch);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      const first = document.querySelector('#sidebar-nav a[data-slug]:not([data-slug=""]):not([hidden])');
+      if (first) window.location.hash = first.getAttribute('href');
+      e.preventDefault();
+    } else if (e.key === 'Escape' && input.value) {
+      // Clears the box first; a second Escape closes the menu as usual.
+      input.value = '';
+      applySearch();
+      e.stopPropagation();
+    }
+  });
+}
+
 function setActiveLink(slug) {
   const links = document.querySelectorAll('#sidebar-nav a');
   links.forEach(function (a) {
@@ -181,14 +236,16 @@ function renderHome() {
   html += '<div class="prompt-list">';
   PROMPTS.forEach(function (p) {
     if (p.hidden) return; // hidden prompts stay reachable by direct link, but off the home list
-    html += '<a class="prompt-list-item" href="#/' + escapeHtml(p.slug) + '">';
+    html += '<a class="prompt-list-item" href="#/' + escapeHtml(p.slug) + '" data-slug="' + escapeHtml(p.slug) + '">';
     html += '<span class="prompt-list-title">' + escapeHtml(p.title) + '</span>';
     html += '<span class="prompt-list-desc">' + escapeHtml(p.description) + '</span>';
     html += '</a>';
   });
   html += '</div>';
+  html += '<p class="search-empty" id="home-empty" role="status"></p>';
   document.getElementById('content').innerHTML = html;
   document.title = SITE_NAME;
+  applySearch();
 }
 
 function renderDetail(p) {
@@ -398,6 +455,7 @@ function init() {
   }
   buildSidebar();
   initMenu();
+  initSearch();
   window.addEventListener('hashchange', route);
   // Back and forward between rewritten addresses change the path, not
   // necessarily the hash, so hashchange alone would miss them.

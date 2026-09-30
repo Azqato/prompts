@@ -1,6 +1,6 @@
 # DESIGN.md - Prompts
 
-**Version:** 1.13.2
+**Version:** 1.14.0
 **Status:** Active
 **Author:** Azqato
 
@@ -416,6 +416,24 @@ Opens: https://azqato.github.io/support.html in a new tab (target="_blank" rel="
 
 On mobile (below 1024px), the support button sits at the right of the top bar, after the Prompts menu button.
 
+### Search box
+
+At the top of the prompt list, above Home. Added in v1.14.0 (site v1.104.0); behavior in docs/PRD.md section 10b.
+
+```
+Wrapper (.sidebar-search): padding 0 24px 12px on desktop
+Input (#prompt-search, type="search", placeholder "Search prompts"):
+  width: 100%, min-height: 36px, padding: 7px 10px, 0.875rem
+  color: --color-text-primary, background: --color-bg
+  border: 1px solid --color-border, radius: 6px
+  focus: border-color --color-accent, plus the global focus outline
+  no transition
+No-match line (.search-empty, role="status"): --color-text-secondary, 0.875rem,
+  hidden while empty; one in the sidebar, one under the home cards
+```
+
+Filtered-out links and cards carry the `hidden` attribute, backed by an explicit `display: none` so no later rule can show them.
+
 ### Tablet / Mobile (below 1024px)
 
 Sidebar collapses to a sticky top bar with light blur backdrop (`backdrop-filter: blur(12px)`): the logo on the left, then a **Prompts** menu button and Support on the right. The prompt list is a menu, closed by default, so the bar stays one row (65px) however many prompts there are.
@@ -481,6 +499,8 @@ The collapse is more than a grid change, and two of these declarations are load-
 | `.sidebar-nav` | `display: none; order: 3; flex-direction: column` | Closed by default, and placed after Support so it opens beneath the whole bar |
 | `.sidebar-nav` | `max-height: calc(100dvh - 80px); overflow-y: auto; overscroll-behavior: contain` | The open list scrolls inside itself rather than running off the screen |
 | `.nav-open .sidebar-nav` | `display: flex` | Opened by the button |
+| `.sidebar-search` | `display: none; order: 3; flex-basis: 100%`, top border | The search box heads the open menu, above the list; shown by `.nav-open` |
+| `.sidebar-nav` | `order: 4; max-height: calc(100dvh - 140px)` | Below the search box, with room left for it |
 | `.sidebar-nav a` | `padding: 11px 16px` | Touch-sized rows |
 | `.sidebar-support` | `margin-top: 0; padding: 0 16px 0 4px` | Releases the `margin-top: auto` that pinned it to the bottom on desktop, so it flows inline |
 | `.content` | `padding: 24px 20px; max-width: 100%` | Full width. Note this overrides `--content-max`, so the `max()` formula does not apply below 1024px |
@@ -529,7 +549,7 @@ Expected behaviour, and what is actually there.
 
 - All interactive elements are native `<a>` and `<button>` elements, so they are in the tab order by default. There is no `tabindex` anywhere, positive or negative, and no custom key handler. Tab, Shift-Tab, Enter, and Space all behave natively.
 - Tab order follows the DOM: logo, then each nav link in order, then the Support button, then into the content area, reaching the collapse toggle and then the copy button after the description. The toggle is before Copy in the DOM as well as visually, so tab order matches reading order.
-- **Known gap: there is no skip-to-content link.** On a prompt page a keyboard user must tab past the logo, every nav link, and the Support button before reaching the copy button, which is the primary action. With twenty-one prompts that is twenty-four stops on a wide screen; below 1024px the list is behind the Prompts menu button, so it is four. This is the most significant accessibility shortfall on the site and it grows with every prompt added. Adding one would mean a visually-hidden anchor as the first focusable element in `<body>`, targeting `#content`, which needs a `tabindex="-1"` to be focusable as a heading target.
+- **Known gap: there is no skip-to-content link.** On a prompt page a keyboard user must tab past the logo, every nav link, and the Support button before reaching the copy button, which is the primary action. With twenty-one prompts and the search box that is twenty-five stops on a wide screen; below 1024px the list is behind the Prompts menu button, so with the menu closed it is three (logo, Prompts, Support). This is the most significant accessibility shortfall on the site and it grows with every prompt added. Adding one would mean a visually-hidden anchor as the first focusable element in `<body>`, targeting `#content`, which needs a `tabindex="-1"` to be focusable as a heading target.
 - **Known gap: the copy button's result is announced only via the `aria-label` change.** That is a reasonable signal but not a guaranteed one across screen readers; a live region would be more reliable. This applies to the failure state added in v1.28.0 as well as to success, and it matters more there, since a reader who does not notice the failure will paste the wrong thing.
 
 ### Deliberately not addressed
@@ -808,6 +828,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.14.0 | 2026-09-29 | Search box spec in section 7 and its phone-menu rows in section 9; focus-stop count in section 10 (twenty-five wide, three with the phone menu closed). The menu chevron no longer transitions `transform`, which section 12b forbids. |
 | 1.13.2 | 2026-09-29 | Focus-stop count in section 10 for twenty-one prompts: twenty-four on a wide screen. |
 | 1.13.1 | 2026-09-29 | Focus-stop count in section 10 for twenty prompts: twenty-three on a wide screen, four below 1024px where the list is a menu. |
 | 1.13.0 | 2026-09-29 | The Copy button copies a pointer to the prompt's share page rather than the prompt text; its `aria-label` and failure text follow (section 7). |

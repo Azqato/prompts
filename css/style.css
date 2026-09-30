@@ -136,6 +136,49 @@ a:hover {
   background: var(--color-accent-light);
 }
 
+/* Search box, above the prompt list. */
+.sidebar-search {
+  padding: 0 24px 12px;
+}
+
+.sidebar-search input {
+  width: 100%;
+  min-height: 36px;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+
+.sidebar-search input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.sidebar-search input:focus-visible {
+  border-color: var(--color-accent);
+}
+
+.sidebar-nav a[hidden],
+.prompt-list-item[hidden] {
+  display: none;
+}
+
+.search-empty {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+.search-empty:empty {
+  display: none;
+}
+
+.sidebar .search-empty {
+  padding: 8px 24px;
+}
+
 /* The menu button exists only below 1024px, where the list collapses. */
 .nav-toggle {
   display: none;
@@ -539,24 +582,44 @@ code {
     border-right: 2px solid currentColor;
     border-bottom: 2px solid currentColor;
     transform: translateY(-2px) rotate(45deg);
-    transition: transform 0.15s ease;
   }
 
   .nav-open .nav-toggle::after {
     transform: translateY(2px) rotate(-135deg);
   }
 
-  .sidebar-nav {
+  .sidebar-search {
     display: none;
     order: 3;
     flex-basis: 100%;
+    margin-top: 12px;
+    padding: 12px 16px 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .nav-open .sidebar-search {
+    display: block;
+  }
+
+  .sidebar .search-empty {
+    order: 5;
+    flex-basis: 100%;
+    padding: 8px 16px;
+  }
+
+  .sidebar:not(.nav-open) .search-empty {
+    display: none;
+  }
+
+  .sidebar-nav {
+    display: none;
+    order: 4;
+    flex-basis: 100%;
     flex-direction: column;
     gap: 0;
-    margin-top: 12px;
     padding: 4px 0 0;
-    border-top: 1px solid var(--color-border);
-    max-height: calc(100vh - 80px);
-    max-height: calc(100dvh - 80px);
+    max-height: calc(100vh - 140px);
+    max-height: calc(100dvh - 140px);
     overflow-y: auto;
     overscroll-behavior: contain;
   }

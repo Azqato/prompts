@@ -4,6 +4,30 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.104.0 - 2026-09-29
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Added
+
+- Search. With twenty-one prompts the list was no longer quick to scan, so a search box now sits at the top of the prompt list, and inside the Prompts menu on phones.
+  - It filters the sidebar links, and the home cards when the home view is showing, by title and description as you type. Every word must appear, in any order and any case.
+  - Enter opens the first match. Escape clears the box, and a second Escape closes the phone menu.
+  - With no match, "No prompts match" is shown and announced to screen readers.
+  - The query is kept while you move between prompts, and not saved across a reload.
+- PRD section 10b describes it.
+
+### Fixed
+
+- The Prompts menu chevron added in v1.99.0 animated its rotation, which DESIGN.md section 12b forbids (only color, border, background, and opacity may transition). It now flips instantly.
+- DESIGN.md's focus-stop count below 1024px, which said four with the menu closed; it is three.
+
+### Changed
+
+- PRD: open question 11 answered; the Search milestone complete; the non-goal on search reversed; the prompt-count metric has no fixed ceiling; the FAQ, feature list, and line counts updated. DESIGN.md 1.14.0.
+
+---
+
 ## v1.103.0 - 2026-09-29
 
 Updated by: Claude (Opus 5.5), at the author's request.
