@@ -4,6 +4,29 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.105.0 - 2026-09-30
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Added
+
+- `tools/dashboard.py` builds this repository's progress dashboard from its sources, with the standard library only. Steps, questions, and stuck items come from the new `dashboard/state.json`; the latest results from git; the latest release from this file; the roadmap from PRD section 27. `tools/dashboard.css` holds the styles it inlines.
+- The dashboard's Roadmap now shows everything: every milestone with its scoped findings, every Future update, every deferred item, and every verification checklist row, with completed items dimmed.
+- A "May be stale" banner, shown by one small inline script when no progress has been recorded for 30 minutes and the task is not finished.
+- Under each section, the source it reads. A source that cannot be read is named rather than shown as empty.
+
+### Changed
+
+- The Progress Dashboard prompt is rewritten around a generated page: one source per section, a small generator in the project's own language, atomic writes only on change, honest times (last recorded in the top bar, generated in the footer), the stale banner, the full roadmap, folding any existing status page in, and a verify step. New description and intro.
+- `CLAUDE.md`: the dashboard rule now says to update `state.json` and run the generator after every step, and never edit the page by hand.
+- PRD sections 13, 20, and 27; Future update 20 added.
+
+### Fixed
+
+- The dashboard never highlighted the step in progress: the page used a class the stylesheet did not define.
+
+---
+
 ## v1.104.0 - 2026-09-29
 
 Updated by: Claude (Opus 5.5), at the author's request.

@@ -1,0 +1,35 @@
+{
+  "task": "Progress Dashboard: generated, never hand-kept",
+  "summary": "Done. The Progress Dashboard prompt now has Claude generate the page with a small script from a state file, git, and the docs, never editing it by hand. This site's dashboard works the same way, with the full roadmap and a stale banner. Released as v1.105.0.",
+  "start_commit": "a4b17b5",
+  "stale_minutes": 30,
+  "steps": [
+    {
+      "name": "Generator for this site, tools/dashboard.py",
+      "status": "done",
+      "at": "2026-09-30 09:59"
+    },
+    {
+      "name": "Revised Progress Dashboard prompt",
+      "status": "done",
+      "at": "2026-09-30 10:00"
+    },
+    {
+      "name": "CLAUDE.md rule and PRD working practice",
+      "status": "done",
+      "at": "2026-09-30 10:02"
+    },
+    {
+      "name": "Verify: stable double run, 390px, source change",
+      "status": "done",
+      "at": "2026-09-30 10:02"
+    },
+    {
+      "name": "PRD, DESIGN, README, and patch notes",
+      "status": "done",
+      "at": "2026-09-30 10:02"
+    }
+  ],
+  "questions": [],
+  "stuck": []
+}
