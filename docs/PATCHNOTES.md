@@ -4,6 +4,25 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.103.0 - 2026-09-29
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Added
+
+- LinkedIn Audit prompt, the twenty-first, with its share page, built from a post of seven LinkedIn prompts the author pasted. The seven are merged into one run written to a single offer:
+  - it asks for the profile (LinkedIn's "Save to PDF" export, or pasted text) and the offer, audience, proof, and posting rate, and never signs in to LinkedIn or fetches the profile;
+  - it scores photo, banner, headline, about, featured, experience, and recommendations out of ten against tests fixed before scoring, lists what confuses a stranger, and names the one fix that matters most;
+  - it then writes ten headlines (the best three explained, one to test first), an about summary, three featured items, experience bullets that start with a result, a banner line, twelve post ideas over four weeks with a comment strategy, and two recommendation requests;
+  - it uses only results the person gives, leaves `[number]` placeholders rather than inventing figures, counts character limits (220, 2,600, 2,000) by script, and ends with a scorecard table and the counts.
+- PRD Future update 19 records it, and open question 11 asks whether to build search now that the library passes roughly twenty prompts.
+
+### Changed
+
+- README lists the new prompt. PRD prompt and file counts updated (twenty-one prompts, 58 files). DESIGN.md 1.13.2 updates the focus-stop count to twenty-four on a wide screen.
+
+---
+
 ## v1.102.0 - 2026-09-29
 
 Updated by: Claude (Opus 5.5), at the author's request.
