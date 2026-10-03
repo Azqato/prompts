@@ -1,53 +1,33 @@
 {
-  "task": "Condense Docs: first run on this repository",
-  "summary": "Done. Docs condensed in v1.107.0; the prompt was revised from the run in v1.108.0.",
-  "start_commit": "1b85a9b",
+  "task": "SEO Audit prompt",
+  "summary": "Adding an SEO Audit prompt from a pasted checklist post.",
+  "start_commit": "8680ec0",
   "stale_minutes": 30,
   "steps": [
     {
-      "name": "Read every doc and measure it",
+      "name": "Write the SEO Audit prompt",
       "status": "done",
-      "at": "2026-10-03 09:55"
+      "at": "2026-10-03 11:32"
     },
     {
-      "name": "Find scripts that read the docs, and their formats",
+      "name": "Check it against section 11 rules",
       "status": "done",
-      "at": "2026-10-03 09:55"
+      "at": "2026-10-03 11:32"
     },
     {
-      "name": "Build the ledger and questions",
+      "name": "Sync mirror, share page, sitemap",
       "status": "done",
-      "at": "2026-10-03 09:55"
+      "at": "2026-10-03 11:32"
     },
     {
-      "name": "Wait for the author's yes on the ledger",
+      "name": "README, PRD, PATCHNOTES",
       "status": "done",
-      "at": "2026-10-03 09:58"
+      "at": "2026-10-03 11:32"
     },
     {
-      "name": "Rewrite, one file at a time",
-      "status": "done",
-      "at": "2026-10-03 10:04"
-    },
-    {
-      "name": "Prove by script: ledger rows, links, parsed formats",
-      "status": "done",
-      "at": "2026-10-03 10:04"
-    },
-    {
-      "name": "Report",
-      "status": "done",
-      "at": "2026-10-03 10:04"
-    },
-    {
-      "name": "Propose updates to the Condense Docs prompt",
-      "status": "done",
-      "at": "2026-10-03 10:06"
-    },
-    {
-      "name": "Apply the prompt updates (v1.108.0)",
-      "status": "done",
-      "at": "2026-10-03 10:58"
+      "name": "Commit, push, verify live",
+      "status": "progress",
+      "at": "2026-10-03 11:32"
     }
   ],
   "questions": [],

@@ -4,6 +4,24 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.109.0 - 2026-10-03
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Added
+
+- SEO Audit, the twenty-third prompt. It measures a built site against the technical search checklist (rendering, robots.txt, sitemap, noindex, redirects, 404s, canonicals, titles and descriptions, one H1, structured data, breadcrumbs, orphan pages, images, Core Web Vitals), shows a plan and waits for a yes, fixes what code can fix, reruns every check, and lists what only the reader can do. Description 145 characters. Checked against the Prompt Content Rules: it forbids committing, pushing, and deploying, and names no account of the author's.
+
+### Changed
+
+- README lists the new prompt. PRD counts and Future update 22; DESIGN.md's focus-stop count (1.15.1).
+
+### Notes
+
+From a pasted post listing twenty SEO fixes. Two facts were checked by web search on 2026-10-03, because they postdate or may postdate the model's training: Google retired FAQ rich results for all sites on 2026-05-07 (FAQPage markup is still read but earns no rich result), and the Core Web Vitals thresholds are LCP 2.5s, INP 200ms, and CLS 0.1. The post's "load in under 2 seconds" and "add FAQ schema" were adjusted to match.
+
+---
+
 ## v1.108.0 - 2026-10-03
 
 Updated by: Claude (Opus 5.5), at the author's request.
