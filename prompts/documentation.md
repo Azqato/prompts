@@ -858,7 +858,7 @@ Written as concrete instructions, not principles.
 - Where to look first for each kind of change, as a table mapping the kind of work
   to the file to open.
 - How to verify a change, including the exact command or manual check, and what to
-  update afterwards (patch notes, version history). Follow the Testing Cadence:
+  update afterwards (patch notes, and the version line). Follow the Testing Cadence:
   an assumption check and a browser test only right before a major update
   ships (or is finished, where the project is not pushed anywhere).
 - The docs/TODO.md rule from its specification above: before pushing (or when a

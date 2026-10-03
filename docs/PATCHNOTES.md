@@ -4,6 +4,27 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.108.0 - 2026-10-03
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Condense Docs prompt, revised from its first run (v1.107.0):
+  - A new step 0 makes the pass undoable. It checks git status, records the starting commit, and stops if a doc has uncommitted changes. It never commits, stashes, or resets. Outside git, it copies the docs elsewhere first. The report says how to review or restore each file. The author suggested this.
+  - Read finds the docs' own rules about keeping history (keep resolved rows, never delete, completeness first) and raises each as a question. On this site three such rules were found only by chance.
+  - Read also runs the scripts that read the docs and saves their counts, to compare afterwards.
+  - The ledger allows one row for a repeating pattern, with its count. It adds "dated audit result" as a kind.
+  - It treats a version table that repeats the changelog as a duplicate.
+  - It lists instructions that write to a structure being removed, and updates them. Ones in files it must leave alone become questions.
+  - A standing question asks whether conflicts are fixed to what the code shows. With a yes, it may read just enough code to settle a number.
+  - Proof gains three checks: every version in removed history has a changelog entry, section references resolve across documents, and term matching ignores case.
+  - The report adds the undo commands and each file's difference from its estimate.
+- Documentation prompt: "update afterwards (patch notes, version history)" now says "(patch notes, and the version line)". It never required a version table; this site's PRD did.
+- `js/prompts-data.js` resynced.
+
+---
+
 ## v1.107.0 - 2026-10-03
 
 Updated by: Claude (Opus 5.5), at the author's request.

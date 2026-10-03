@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.107.0
+**Version:** 1.108.0
 **Status:** Active
 **Author:** Azqato
 
@@ -925,7 +925,7 @@ Based on: the author's pasted report from their Financial Education wiki project
 
 #### 21. Condense Docs prompt
 
-**Built in v1.106.0**, at the author's request, kept separate from the Documentation prompt. First run on this repository in v1.107.0.
+**Built in v1.106.0**, at the author's request, kept separate from the Documentation prompt. First run on this repository in v1.107.0; revised from that run in v1.108.0.
 
 Based on: the author's idea, 2026-10-03, refined in conversation (the ledger table was the author's pick of the suggestions).
 

@@ -1,6 +1,6 @@
 {
   "task": "Condense Docs: first run on this repository",
-  "summary": "Docs condensed (PRD 45,500 to 26,000 words), every ledger row checked by script. Proposing updates to the prompt.",
+  "summary": "Done. Docs condensed in v1.107.0; the prompt was revised from the run in v1.108.0.",
   "start_commit": "1b85a9b",
   "stale_minutes": 30,
   "steps": [
@@ -41,8 +41,13 @@
     },
     {
       "name": "Propose updates to the Condense Docs prompt",
-      "status": "progress",
-      "at": "2026-10-03 10:04"
+      "status": "done",
+      "at": "2026-10-03 10:06"
+    },
+    {
+      "name": "Apply the prompt updates (v1.108.0)",
+      "status": "done",
+      "at": "2026-10-03 10:58"
     }
   ],
   "questions": [],
