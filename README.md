@@ -18,7 +18,7 @@ To find one, type in the search box at the top of the list: it narrows the promp
 
 The library covers recurring maintenance work, the kind of task that is tedious to describe from scratch every time:
 
-- **Documentation** rebuilds a project's entire documentation set in one pass. It reads the whole codebase first, then consolidates everything into four files and folds the full depth of a larger doc suite into a single detailed product document.
+- **Documentation** rebuilds a project's entire documentation set in one pass. It surveys the codebase first, then consolidates everything into four files and folds the full depth of a larger doc suite into a single detailed product document.
 - **Project Defaults** gives a project its house rules and a ready docs folder in one quick pass, without the full review, keeping every rule and document it already has.
 - **Mobile Audit** checks every page of a site at seven screen widths for layout bugs and overflow, fixes the underlying cause rather than the symptom, and confirms the fix by measuring the real page instead of trusting a screenshot.
 - **GitHub Wiki** builds a project's GitHub wiki from its existing documentation, or diffs an existing wiki against the current docs and tells you what has gone stale before changing anything.

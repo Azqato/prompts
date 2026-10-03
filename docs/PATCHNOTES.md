@@ -4,6 +4,24 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.107.0 - 2026-10-03
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+The first run of the Condense Docs prompt on this repository. The docs were condensed and nothing was removed: every cut passage was mapped to where its information lives, and a script checked each one.
+
+### Changed
+
+- `docs/PRD.md` 45,500 words to about 26,000. Sections 18 and 19 keep only open items; their resolved rows and answered questions are recorded in the patch notes of the releases that resolved them. Section 27's built Future updates and finished Scoped sections keep their titles, `**Built in vX**` lines, differing decisions, and sources; the full proposals are in their releases' patch notes. Section 36 is now a link to this file instead of a table repeating it, and section 30's folder tree a link to section 13's. About sixty "since vX" phrases became present-tense statements.
+- Three project rules changed, on the author's answers: tenet 4 and section 18 no longer keep resolved rows; section 19 removes an answered question once it is folded in; section 33's "Completeness beats brevity" became "Every fact kept once, in its home". Releases now bump the PRD version line instead of adding a version history row.
+- `docs/DESIGN.md` 1.15.0: history phrasing moved here, two "Corrected in v1.28.0" paragraphs and a duplicated bullet removed.
+
+### Fixed
+
+Seventeen conflicts between copies, each resolved to what the code shows: search described as absent in PRD sections 5, 21, 26, and 35; share pages 29 lines, not 21; `index.html` 56 lines, `css/style.css` 676, `js/script.js` 470; section 30's tree of 52 files and 18 prompts (63 and 22); the mirror called hand-maintained and unenforced; twenty-six focus stops, not fourteen; section 10b's 21 strings; "mandatory" browser checks after every change in PRD 29 and DESIGN 12c, against section 20; section 14 saying DESIGN does not describe the error view; section 16's "four places" and "exactly four files"; the stale debt row on DESIGN's template; DESIGN's two `.sidebar-nav` max-heights (`100dvh - 140px`) and its old Copy `aria-label`; and the README calling the Documentation prompt a whole-codebase read.
+
+---
+
 ## v1.106.0 - 2026-10-03
 
 Updated by: Claude (Opus 5.5), at the author's request.

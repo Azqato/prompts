@@ -1,6 +1,6 @@
 # DESIGN.md - Prompts
 
-**Version:** 1.14.1
+**Version:** 1.15.0
 **Status:** Active
 **Author:** Azqato
 
@@ -35,8 +35,8 @@ All colors are defined as CSS custom properties in `:root`.
 | `--color-text-primary` | `#eef3f7` | Body copy, headings |
 | `--color-text-secondary` | `#cbdae6` | Subtitles, captions, sidebar inactive links |
 | `--color-positive` | `#3fb950` | Success state (copy button "Copied!" feedback) |
-| `--color-negative` | `#f85149` | Error states. In use since v1.28.0 by the copy button's failed state |
-| `--color-warning` | `#ffa657` | Caution callouts. Reserved, referenced nowhere in the stylesheet as of v1.28.0 |
+| `--color-negative` | `#f85149` | Error states. Used by the copy button's failed state |
+| `--color-warning` | `#ffa657` | Caution callouts. Reserved, referenced nowhere in the stylesheet |
 | `--color-purple` | `#bc8cff` | Gradient accent on card hover top border |
 
 `--color-warning` is held deliberately rather than deleted: it is part of the shared Azqato palette, and a caution state added later should use the brand value rather than inventing one.
@@ -92,7 +92,7 @@ Persistent on desktop. Contains:
 - Site logo (`Azqato's Prompts.` with teal dot accent)
 - A Home link plus one nav link per prompt, built dynamically from the prompt data
 - A Support button pinned to the bottom of the sidebar, linking to `https://azqato.github.io/support.html` in a new tab
-- No in-page anchor links at v1.0
+- No in-page anchor links
 
 **Sidebar width:** 220px
 **Sidebar background:** `--color-surface` (`#161b22`)
@@ -114,7 +114,7 @@ The content block is capped at `--content-max` plus its 56px of horizontal paddi
 
 **Base unit: 2px. Preferred rhythm: 4px.**
 
-There is no spacing token in `:root`. Every value is written literally in the rule that uses it, which is a deliberate consequence of the project's size: a token indirection for spacing would cost more in lookup than it saves in consistency across a single 569-line stylesheet. The scale below is therefore descriptive, derived from the values actually in use, not a set of variables to reference.
+There is no spacing token in `:root`. Every value is written literally in the rule that uses it, which is a deliberate consequence of the project's size: a token indirection for spacing would cost more in lookup than it saves in consistency across a single 676-line stylesheet. The scale below is therefore descriptive, derived from the values actually in use, not a set of variables to reference.
 
 | Step | Value | Used for |
 | --- | --- | --- |
@@ -290,9 +290,9 @@ Transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease
 The default and hover blocks above are shared with the collapse toggle. Only the
 copied and failed states are the copy button's own.
 
-JavaScript behavior: on click, use `navigator.clipboard.writeText()` to copy a pointer, not the prompt text: `COPY_POINTER` followed by the prompt's share page on `SITE_URL` (docs/PRD.md section 10 gives the exact wording). Set the button to "Copied!", then reset after 2000ms. Its resting `aria-label` is "Copy a link to this prompt for Claude Code". Since v1.13.0 (site v1.100.0); before it the button copied the `<code>` element's full text.
+JavaScript behavior: on click, use `navigator.clipboard.writeText()` to copy a pointer, not the prompt text: `COPY_POINTER` followed by the prompt's share page on `SITE_URL` (docs/PRD.md section 10 gives the exact wording). Set the button to "Copied!", then reset after 2000ms. Its resting `aria-label` is "Copy a link to this prompt for Claude Code".
 
-Both outcomes are reported. If the Clipboard API is unavailable, or the write rejects, the button shows "Copy failed" for the same 2000ms and its `aria-label` becomes "Copy failed. Copy the page address instead". Added in v1.28.0: before that a failed copy left the button reading "Copy" and said nothing, so the reader would paste whatever was on the clipboard already, believing it had worked. A silent failure on the site's only action was the worst failure mode it had.
+Both outcomes are reported. If the Clipboard API is unavailable, or the write rejects, the button shows "Copy failed" for the same 2000ms and its `aria-label` becomes "Copy failed. Copy the page address instead". A silent failure would have the reader paste whatever was on the clipboard already, believing it had worked.
 
 The two states share one code path and differ only in label, class, and `aria-label`, so they cannot drift apart in timing or reset behaviour.
 
@@ -418,7 +418,7 @@ On mobile (below 1024px), the support button sits at the right of the top bar, a
 
 ### Search box
 
-At the top of the prompt list, above Home. Added in v1.14.0 (site v1.104.0); behavior in docs/PRD.md section 10b.
+At the top of the prompt list, above Home. Behavior in docs/PRD.md section 10b.
 
 ```
 Wrapper (.sidebar-search): padding 0 24px 12px on desktop
@@ -447,11 +447,11 @@ Menu button (.nav-toggle, hidden at 1024px and above):
 
 Open list (.sidebar.nav-open .sidebar-nav):
   one column under a 1px --color-border rule, links padded 11px 16px
-  max-height: 100dvh - 80px, scrolls inside itself (overscroll contained)
+  max-height: 100dvh - 140px, scrolls inside itself (overscroll contained)
   active link keeps the desktop left border and tint
 ```
 
-It closes when a prompt or Home is picked (`route()` calls `setMenuOpen(false)`) and on Escape, which returns focus to the button. Added in v1.12.0 (site v1.99.0): before it, every link wrapped into the bar, which reached 398px at 477px wide.
+It closes when a prompt or Home is picked (`route()` calls `setMenuOpen(false)`) and on Escape, which returns focus to the button. A menu rather than wrapped links, because wrapping every link made the bar 398px tall at 477px wide.
 
 ---
 
@@ -482,7 +482,7 @@ There are exactly two breakpoints, both `max-width`, both at the bottom of the s
 
 ### Below 1024px, in full
 
-The collapse is more than a grid change, and two of these declarations are load-bearing bug fixes rather than styling. **Removing either one silently reintroduces a shipped bug.** Both were added in v1.11.0 after the Mobile Audit prompt was run against the live site.
+The collapse is more than a grid change, and two of these declarations are load-bearing bug fixes rather than styling. **Removing either one silently reintroduces a shipped bug.** Both came from running the Mobile Audit prompt against the live site.
 
 | Rule | Declaration | Why |
 | --- | --- | --- |
@@ -497,7 +497,7 @@ The collapse is more than a grid change, and two of these declarations are load-
 | `.sidebar-logo` | `margin: 0 auto 0 0; padding: 0 16px` | Pushes the menu button and Support to the right |
 | `.nav-toggle` | `display: inline-flex` | The menu button appears |
 | `.sidebar-nav` | `display: none; order: 3; flex-direction: column` | Closed by default, and placed after Support so it opens beneath the whole bar |
-| `.sidebar-nav` | `max-height: calc(100dvh - 80px); overflow-y: auto; overscroll-behavior: contain` | The open list scrolls inside itself rather than running off the screen |
+| `.sidebar-nav` | `overflow-y: auto; overscroll-behavior: contain` | The open list scrolls inside itself rather than running off the screen |
 | `.nav-open .sidebar-nav` | `display: flex` | Opened by the button |
 | `.sidebar-search` | `display: none; order: 3; flex-basis: 100%`, top border | The search box heads the open menu, above the list; shown by `.nav-open` |
 | `.sidebar-nav` | `order: 4; max-height: calc(100dvh - 140px)` | Below the search box, with room left for it |
@@ -530,7 +530,7 @@ Rule: never place `--color-text-secondary` on anything lighter than `--color-sur
 
 ### Implemented
 
-- Copy button carries `aria-label="Copy prompt to clipboard"`, updated to `"Copied!"` on activation so the state change is announced rather than only shown in the visible label.
+- Copy button carries `aria-label="Copy a link to this prompt for Claude Code"` (section 5), updated to `"Copied!"` on activation so the state change is announced rather than only shown in the visible label.
 - The collapse toggle is a real `<button>` carrying `aria-expanded` and `aria-controls="prompt-body"`, which resolves to the `<pre>`. Both are kept in step with the visible label on every toggle. The header bar it sits in is also clickable, but the bar is a `div` and is deliberately not given a role: the button inside it is the accessible control, and duplicating that on the container would announce the same action twice.
 - The collapsed prompt uses `display: none`, so it is removed from the accessibility tree as well as from the page. A screen reader is not offered several hundred lines of text the reader has not asked for.
 - `#content` carries `aria-live="polite"`, so a view change on hash navigation is announced. This matters because routing never reloads the page and there is no other signal that the content changed.
@@ -550,7 +550,7 @@ Expected behaviour, and what is actually there.
 - All interactive elements are native `<a>` and `<button>` elements, so they are in the tab order by default. There is no `tabindex` anywhere, positive or negative, and no custom key handler. Tab, Shift-Tab, Enter, and Space all behave natively.
 - Tab order follows the DOM: logo, then each nav link in order, then the Support button, then into the content area, reaching the collapse toggle and then the copy button after the description. The toggle is before Copy in the DOM as well as visually, so tab order matches reading order.
 - **Known gap: there is no skip-to-content link.** On a prompt page a keyboard user must tab past the logo, every nav link, and the Support button before reaching the copy button, which is the primary action. With twenty-two prompts and the search box that is twenty-six stops on a wide screen; below 1024px the list is behind the Prompts menu button, so with the menu closed it is three (logo, Prompts, Support). This is the most significant accessibility shortfall on the site and it grows with every prompt added. Adding one would mean a visually-hidden anchor as the first focusable element in `<body>`, targeting `#content`, which needs a `tabindex="-1"` to be focusable as a heading target.
-- **Known gap: the copy button's result is announced only via the `aria-label` change.** That is a reasonable signal but not a guaranteed one across screen readers; a live region would be more reliable. This applies to the failure state added in v1.28.0 as well as to success, and it matters more there, since a reader who does not notice the failure will paste the wrong thing.
+- **Known gap: the copy button's result is announced only via the `aria-label` change.** That is a reasonable signal but not a guaranteed one across screen readers; a live region would be more reliable. This applies to the failure state as well as to success, and it matters more there, since a reader who does not notice the failure will paste the wrong thing.
 
 ### Deliberately not addressed
 
@@ -587,8 +587,6 @@ css/style.css structure (in order):
   Reduced motion (prefers-reduced-motion)
 ```
 
-Corrected in v1.28.0. This list previously named a `.site-layout` class that has never existed, described `.site-wrapper` as flex when it is the grid, listed the blocks in an order the file does not use, and omitted four blocks entirely. It was flagged as a discrepancy in v1.27.0 and corrected once the author confirmed there was no intended design being preserved in it.
-
 Two notes for anyone adding a block. There is no spacing section, because spacing is written literally at each use rather than tokenized; see section 4a. And `body` is the flex column that pins the footer, while `.site-wrapper` is the grid inside it, which is the distinction the old list got backwards.
 
 ---
@@ -597,7 +595,7 @@ Two notes for anyone adding a block. There is no spacing section, because spacin
 
 ### Single Shell
 
-There is one HTML file, `index.html`. It is a static shell: sidebar, empty content area, footer. All views (home and each prompt) are rendered into the content area by `script.js` based on the URL hash. There are no per-prompt views. The share pages in `p/`, added in v1.10, are not views: each is a generated stub carrying one prompt's sharing tags and forwarding to this shell, with no content and no styling of its own. See `docs/PRD.md` section 32a.
+There is one HTML file, `index.html`. It is a static shell: sidebar, empty content area, footer. All views (home and each prompt) are rendered into the content area by `script.js` based on the URL hash. There are no per-prompt views. The share pages in `p/` are not views: each is a generated stub carrying one prompt's sharing tags and forwarding to this shell, with no content and no styling of its own. See `docs/PRD.md` section 32a.
 
 ```html
 <!DOCTYPE html>
@@ -635,13 +633,13 @@ There is one HTML file, `index.html`. It is a static shell: sidebar, empty conte
 </html>
 ```
 
-Corrected in v1.28.0. The previous template omitted the `.sidebar-sticky` wrapper, and **rebuilding the shell from it would have broken the sidebar layout**: that div is what carries `position: sticky`, `height: 100vh`, and the `display: flex; flex-direction: column` that lets `margin-top: auto` pin the Support button to the bottom. It also omitted the meta description, the nav `aria-label`, and the `aria-live` region. Flagged as a discrepancy in v1.27.0 and fixed once the author confirmed it was a stale transcription rather than an intended design.
+**Rebuilding the shell without the `.sidebar-sticky` wrapper breaks the sidebar layout**: that div is what carries `position: sticky`, `height: 100vh`, and the `display: flex; flex-direction: column` that lets `margin-top: auto` pin the Support button to the bottom.
 
 Three things in this template are load-bearing and are not stylistic:
 
 - **`.sidebar-sticky` must wrap all three sidebar children.** See above.
 - **`prompts-data.js` must load before `script.js`.** It defines `window.PROMPTS_DATA`, an array of `{ slug, raw }` objects where `raw` is the verbatim text of a `prompts/*.md` file. Reverse the order and the page renders the error view.
-- **The Content Security Policy must keep `script-src 'self'`.** It is what makes the project's no-dependency rule a runtime guarantee rather than a written one: a CDN script or a `fetch()` added later fails in the browser instead of silently shipping. Verified enforced on `file://`. See `docs/PRD.md` section 31. It defines `window.PROMPTS_DATA`, an array of `{ slug, raw }` objects where `raw` is the verbatim text of a `prompts/*.md` file.
+- **The Content Security Policy must keep `script-src 'self'`.** It is what makes the project's no-dependency rule a runtime guarantee rather than a written one: a CDN script or a `fetch()` added later fails in the browser instead of silently shipping. Verified enforced on `file://`. See `docs/PRD.md` section 31.
 
 ### Prompt Markdown Template
 
@@ -666,7 +664,7 @@ hidden: true   # optional; omit for normal prompts
 
 ### Rendered Prompt View
 
-The DOM produced for a prompt view matches the original component specs:
+The DOM produced for a prompt view, collapsed on arrival:
 
 ```html
 <div class="prompt-header">
@@ -674,12 +672,15 @@ The DOM produced for a prompt view matches the original component specs:
   <span class="prompt-meta">[meta]</span>
 </div>
 <div class="prompt-description"> ... </div>
-<div class="code-block-wrapper">
+<div class="code-block-wrapper collapsed">
   <div class="code-block-header">
     <span class="code-label">Prompt</span>
-    <button class="copy-btn" aria-label="Copy prompt to clipboard">Copy</button>
+    <div class="code-block-actions">
+      <button class="code-toggle" aria-expanded="false" aria-controls="prompt-body">Expand</button>
+      <button class="copy-btn" aria-label="Copy a link to this prompt for Claude Code">Copy</button>
+    </div>
   </div>
-  <pre><code>[Full prompt text]</code></pre>
+  <pre id="prompt-body"><code>[Full prompt text]</code></pre>
 </div>
 ```
 
@@ -794,7 +795,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 **Restraint is the design, not the absence of one.** There is one accent colour, one radius scale, one transition duration, one interaction idiom, and no imagery. A change that adds a second of any of those is a larger change than it appears, even when it looks locally reasonable. The correct instinct when something seems to need a new value is to check whether an existing one can carry it.
 
-**The code block is the product, and since v1.29.0 it starts hidden.** That reads like a contradiction and is not. The page's job is to deliver one copyable block, and Copy works whether the block is shown or not, so the primary action is still one click from arrival. What collapsing removes is the several hundred lines of prompt text that used to sit between the reader and the description explaining what they were about to copy. The rule that still holds without qualification is the one that matters: **the header bar must be visible without scrolling on desktop**, and it now always is, on every prompt, at every length. Anything that pushes it down (a longer description treatment, an added metadata row, a callout) is working against the page's only job.
+**The code block is the product, and it starts hidden.** That reads like a contradiction and is not. The page's job is to deliver one copyable block, and Copy works whether the block is shown or not, so the primary action is still one click from arrival. What collapsing removes is the several hundred lines of prompt text that used to sit between the reader and the description explaining what they were about to copy. The rule that still holds without qualification is the one that matters: **the header bar must be visible without scrolling on desktop**, and it now always is, on every prompt, at every length. Anything that pushes it down (a longer description treatment, an added metadata row, a callout) is working against the page's only job.
 
 **Two rules are bug fixes wearing styling clothes.** `height: auto` on `.sidebar-sticky` and `flex-basis: 100%` on `.sidebar-nav`, both in the `max-width: 1023px` block, look like ordinary declarations and are not. Section 9 records what each one prevents. Do not tidy either away.
 
@@ -802,11 +803,11 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 **`overflow: hidden` on the prompt card is structural.** It clips the gradient pseudo-element to the 10px radius. Removing it leaves a square bar overhanging two rounded corners.
 
-**The CSS structure list in section 11 and the shell template in section 12 were both wrong until v1.28.0** and are now read from the files. They are the two blocks most likely to go stale again, because nothing checks them, so verify against `index.html` and `css/style.css` before relying on either.
+**The CSS structure list in section 11 and the shell template in section 12 are read from the files.** They are the two blocks most likely to go stale, because nothing checks them, so verify against `index.html` and `css/style.css` before relying on either.
 
-**Where to change what.** A colour, font, or width: the `:root` block in `css/style.css`, and check the token is documented in section 2 of this file. A component: find its `/* Section */` banner in the stylesheet; the file is ordered by component and has no imports. Responsive behaviour: the two media queries at the bottom, and read section 9 first. Anything structural: `index.html`, all 51 lines of it.
+**Where to change what.** A colour, font, or width: the `:root` block in `css/style.css`, and check the token is documented in section 2 of this file. A component: find its `/* Section */` banner in the stylesheet; the file is ordered by component and has no imports. Responsive behaviour: the two media queries at the bottom, and read section 9 first. Anything structural: `index.html`, all 56 lines of it.
 
-**Verification.** There is no test, no linter, and no visual regression check. The only way to confirm a change is to open `index.html` from disk and look at it: the home list, one prompt page, the copy button, and both breakpoints. `docs/PRD.md` section 20 makes this mandatory rather than advisory.
+**Verification.** There is no test, no linter, and no visual regression check. The only way to confirm a visual change is to open `index.html` from disk and look at it: the home list, one prompt page, the copy button, and both breakpoints. `docs/PRD.md` section 20 sets when: once, before any change to the stylesheet, script, or shell ships.
 
 ---
 
@@ -816,8 +817,8 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 - No gradient backgrounds (only gradient is the 2px top border on card hover)
 - No external font loading (system fonts only)
 - No external JavaScript libraries
-- No syntax highlighting libraries (plain monospace text only at v1.0)
-- No animations beyond: copy button state transition, sidebar link hover, prompt card hover (background, border, and gradient bar fade)
+- No syntax highlighting libraries (plain monospace text only)
+- No motion beyond what section 12b allows
 - No em dashes in any copy (see PRD.md Writing Style section)
 - No decorative images or illustrations
 - Do not deviate from the `#00d4a0` teal accent. It is the cross-site brand color
@@ -828,6 +829,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.15.0 | 2026-10-03 | Condensed (site v1.107.0): history phrasing moved to the patch notes, two "Corrected in v1.28.0" paragraphs and a duplicated bullet removed. Fixed: stylesheet 676 lines, `index.html` 56 lines, `.sidebar-nav` max-height `100dvh - 140px`, the Copy `aria-label` in sections 10 and 12, the rendered prompt view now shows the toggle, and section 12c's verification follows PRD section 20. Nothing else removed. |
 | 1.14.1 | 2026-10-03 | Focus-stop count in section 10 for twenty-two prompts: twenty-six on a wide screen. |
 | 1.14.0 | 2026-09-29 | Search box spec in section 7 and its phone-menu rows in section 9; focus-stop count in section 10 (twenty-five wide, three with the phone menu closed). The menu chevron no longer transitions `transform`, which section 12b forbids. |
 | 1.13.2 | 2026-09-29 | Focus-stop count in section 10 for twenty-one prompts: twenty-four on a wide screen. |
