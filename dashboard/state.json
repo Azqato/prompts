@@ -1,35 +1,46 @@
 {
-  "task": "Progress Dashboard: generated, never hand-kept",
-  "summary": "Done. The Progress Dashboard prompt now has Claude generate the page with a small script from a state file, git, and the docs, never editing it by hand. This site's dashboard works the same way, with the full roadmap and a stale banner. Released as v1.105.0.",
-  "start_commit": "a4b17b5",
+  "task": "Condense Docs prompt",
+  "summary": "Done. Condense Docs is the twenty-second prompt, released as v1.106.0. It shows a ledger of every cut and where its information goes, waits for a yes, then proves by script that nothing was lost. Next: test it on this repository's docs.",
+  "start_commit": "c29819e",
   "stale_minutes": 30,
   "steps": [
     {
-      "name": "Generator for this site, tools/dashboard.py",
+      "name": "Draft prompts/condense-docs.md",
       "status": "done",
-      "at": "2026-09-30 09:59"
+      "at": "2026-10-03 09:25"
     },
     {
-      "name": "Revised Progress Dashboard prompt",
+      "name": "Sync mirror, share page, sitemap",
       "status": "done",
-      "at": "2026-09-30 10:00"
+      "at": "2026-10-03 09:25"
     },
     {
-      "name": "CLAUDE.md rule and PRD working practice",
+      "name": "README, PRD, DESIGN counts",
       "status": "done",
-      "at": "2026-09-30 10:02"
+      "at": "2026-10-03 09:25"
     },
     {
-      "name": "Verify: stable double run, 390px, source change",
+      "name": "Patch notes and version rows",
       "status": "done",
-      "at": "2026-09-30 10:02"
+      "at": "2026-10-03 09:25"
     },
     {
-      "name": "PRD, DESIGN, README, and patch notes",
+      "name": "Checks: mirror, PRD 11 wording, description length",
       "status": "done",
-      "at": "2026-09-30 10:02"
+      "at": "2026-10-03 09:25"
+    },
+    {
+      "name": "Regenerate dashboard",
+      "status": "done",
+      "at": "2026-10-03 09:25"
     }
   ],
-  "questions": [],
+  "questions": [
+    {
+      "q": "Should the prompt show its move-and-cut plan and wait, or run in one pass?",
+      "default": "Show the plan and wait for a yes, since it deletes text",
+      "answered": true
+    }
+  ],
   "stuck": []
 }

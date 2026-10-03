@@ -4,6 +4,20 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.106.0 - 2026-10-03
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Added
+
+- Condense Docs, the twenty-second prompt. It shortens a project's documentation without losing information: docs describe the present, each fact lives in one place with links from the others, history moves to the changelog, finished roadmap items become a short Done list, and the reasons behind decisions stay. Before removing anything it shows a ledger of every cut passage and where its information will live, and waits for a yes; afterwards a script checks every row. Kept separate from the Documentation prompt, which checks the docs against the code.
+
+### Changed
+
+- README lists the new prompt. PRD counts and Future update 21; DESIGN.md's focus-stop count (1.14.1).
+
+---
+
 ## v1.105.0 - 2026-09-30
 
 Updated by: Claude (Opus 5.5), at the author's request.

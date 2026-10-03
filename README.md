@@ -38,6 +38,7 @@ The library covers recurring maintenance work, the kind of task that is tedious 
 - **Frontend References** gives Claude a standing rule for when to use proven outside design references for style, components, motion, and demo videos, asking before installing anything.
 - **Prompt Writing** writes a new prompt, or tightens one you already use, so it works with how models actually read, reason, and fail.
 - **LinkedIn Audit** scores your LinkedIn profile part by part, then rewrites your headline, about summary, featured posts, and experience around one clear offer, with a month of post ideas to follow.
+- **Condense Docs** shortens your project's documentation to what is true now, with each fact kept in one place and history moved to the patch notes, and proves with a table that nothing was lost.
 - **Add Prompt** is the one that maintains this site. Hand it a raw prompt and it writes the title and description and files everything in the right places.
 
 Each page is deliberately the same shape, so once you have read one you know exactly where to look on all the others.
