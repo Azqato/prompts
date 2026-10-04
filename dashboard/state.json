@@ -31,12 +31,12 @@
     },
     {
       "name": "Commit, push, verify live",
-      "status": "progress",
+      "status": "done",
       "at": "2026-10-04 15:45"
     },
     {
       "name": "Test run on Template Interface",
-      "status": "todo",
+      "status": "progress",
       "at": "2026-10-04 15:44"
     }
   ],
