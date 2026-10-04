@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.109.0
+**Version:** 1.110.0
 **Status:** Active
 **Author:** Azqato
 
@@ -934,6 +934,12 @@ Based on: the author's idea, 2026-10-03, refined in conversation (the ledger tab
 **Built in v1.109.0**, at the author's request. The post's twenty items became checks measured on the built site, a plan shown for a yes, fixes, and a rerun of every check. Changed from the post: server rendering is proposed with its cost rather than done; a noindex is removed only if it looks accidental; FAQ markup is added only for a real FAQ, since Google retired FAQ rich results on 2026-05-07; the speed target is the Core Web Vitals (LCP 2.5s, CLS 0.1, INP 200ms) rather than "under 2 seconds"; nothing is invented; and the Search Console submission, author bio, backlinks, and copy rewrites are left to the reader. "Rank #1 by Friday" is answered with no ranking promise.
 
 Based on: a post pasted by the author on 2026-10-03, author not named in the paste ("Every vibe coder's SEO prompt"); the FAQ retirement and Core Web Vitals thresholds confirmed by web search the same day.
+
+#### 23. Brand Identity: a client deck at brand/index.html
+
+**Built in v1.110.0**, at the author's request. A new Phase 8 builds `brand/index.html`, the front page of `brand/`: the whole project as a strategy consultancy would present it to a board. It is a 16:9 slide deck (keys, buttons, a slide counter, a progress bar, and `#slide-n` links) with a "Read as report" switch that stacks the same slides as a scrolling page, and phones open in that view. Every slide has a full-sentence action title, a section tracker, a footer, and a source line, and its figures, colors, and files come from the docs and a listing of `brand/`. Fourteen slides run from the title and executive summary to next steps and an appendix. It links to `presentation.html` and does not replace it. Unlike the offline Brand Design page, it is committed, so it holds nothing private and never links that page. It ends on a headless Edge check of every slide in both views, the keys, the hash links, the remembered view, and print. The author chose a separate committed page, both views, and a test run on their Template Interface site.
+
+Based on: the author's Template Interface TODO item of 2026-09-27 ("an index.html page under /brand that showcases everything that was created from running this prompt ... presented as major consulting presentation format"), and their answers on 2026-10-04.
 
 ### Deferred
 

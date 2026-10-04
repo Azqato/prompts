@@ -1,33 +1,43 @@
 {
-  "task": "SEO Audit prompt",
-  "summary": "Adding an SEO Audit prompt from a pasted checklist post.",
-  "start_commit": "8680ec0",
+  "task": "Brand Identity prompt: brand/index.html deck (M21 of Template Interface)",
+  "summary": "Adding Phase 8 to the Brand Identity prompt: a committed brand/index.html consulting-style deck with a report view.",
+  "start_commit": "7709219",
   "stale_minutes": 30,
   "steps": [
     {
-      "name": "Write the SEO Audit prompt",
+      "name": "Read the prompt and section 11 rules",
       "status": "done",
-      "at": "2026-10-03 11:32"
+      "at": "2026-10-04 15:44"
     },
     {
-      "name": "Check it against section 11 rules",
+      "name": "Write Phase 8 and update the description",
       "status": "done",
-      "at": "2026-10-03 11:32"
+      "at": "2026-10-04 15:45"
     },
     {
-      "name": "Sync mirror, share page, sitemap",
+      "name": "Check against section 11 rules",
       "status": "done",
-      "at": "2026-10-03 11:32"
+      "at": "2026-10-04 15:45"
+    },
+    {
+      "name": "Sync mirror and share page",
+      "status": "done",
+      "at": "2026-10-04 15:45"
     },
     {
       "name": "README, PRD, PATCHNOTES",
       "status": "done",
-      "at": "2026-10-03 11:32"
+      "at": "2026-10-04 15:45"
     },
     {
       "name": "Commit, push, verify live",
       "status": "progress",
-      "at": "2026-10-03 11:32"
+      "at": "2026-10-04 15:45"
+    },
+    {
+      "name": "Test run on Template Interface",
+      "status": "todo",
+      "at": "2026-10-04 15:44"
     }
   ],
   "questions": [],

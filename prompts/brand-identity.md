@@ -1,14 +1,16 @@
 ---
 title: Brand Identity
-description: Build a complete logo system for a project: a brand brief, three SVG concepts to choose from, every lockup and icon size, and a presentation page.
+description: Build a complete logo system for a project: a brand brief, three SVG concepts, every lockup and icon size, a presentation, and a client deck.
 meta: Claude Code Prompt
 ---
 
-Runs a full brand identity project in seven phases, the way a branding agency would. It starts with a read-only pass, reading every markdown documentation file in the project (the README, `CLAUDE.md`, `PRD.md`, `DESIGN.md`, the patch notes, and any others) for anything that bears on the brand, and summarizes what it found with the source of each point. It then reads `package.json`, landing page copy, and any existing brand or style files, and fills in a brand brief, asking once for anything it cannot work out, including, optionally, a few brands, sites, or images you like as references. Next it studies five to eight competitors in the project's industry and lists the visual clichés the logo must avoid, draws three concept directions as hand-written SVG (luxury minimalism, typography first, and a symbolic mark), and stops for you to pick one or combine them. If the project already has a brand, a fourth concept evolves it, while the other three treat it only as a starting suggestion.
+Runs a full brand identity project in eight phases, the way a branding agency would. It starts with a read-only pass, reading every markdown documentation file in the project (the README, `CLAUDE.md`, `PRD.md`, `DESIGN.md`, the patch notes, and any others) for anything that bears on the brand, and summarizes what it found with the source of each point. It then reads `package.json`, landing page copy, and any existing brand or style files, and fills in a brand brief, asking once for anything it cannot work out, including, optionally, a few brands, sites, or images you like as references. Next it studies five to eight competitors in the project's industry and lists the visual clichés the logo must avoid, draws three concept directions as hand-written SVG (luxury minimalism, typography first, and a symbolic mark), and stops for you to pick one or combine them. If the project already has a brand, a fourth concept evolves it, while the other three treat it only as a starting suggestion.
 
 The chosen concept becomes a full logo system in `brand/logo/`: horizontal and stacked lockups, the symbol and the wordmark on their own, black, white, and full-color versions, a favicon, app icons, and a single-color version for print, embroidery, and stickers. Every concept and every file is rendered in headless Microsoft Edge and checked by eye for legibility at 16px, in grayscale, and on light and dark backgrounds, rather than judged from the SVG code. A brand kit follows in `brand/kit/`: social media images (a link preview, a profile picture, and X and LinkedIn banners), the colors and type as CSS and JSON files with a contrast table, an email signature logo, and a web app manifest. The favicon also switches to a lighter version in dark mode so it stays visible on dark tab bars. It finishes with `brand/presentation.html`, a single page that reveals the logo and shows it on business cards, packaging, a website, a billboard, an app icon, and merchandise, with the color palette, a type specimen, and the design rationale. The logo files themselves are always SVG, the master every other format is made from. For the mockups, put your own photos in `brand/mockups/` and it places the logo on them; without photos it builds the mockups in CSS and SVG, with perspective, shadows, and textures so they read as physical objects. The presentation is also saved as `brand/brand-guidelines.pdf`, the file to send to a printer, a freelancer, or a client.
 
 Nothing in the project itself is changed: no favicon is linked and no header logo is swapped. Everything stays in `brand/` for you to use however you decide. The one exception is a Brand Design page where your team can preview, open, and download every brand file without opening the repository. If your site has a sign-in area for internal pages, the page goes there, with the files served through one handler that accepts only paths inside the brand folders and tests for path tricks. If the site is public with no way to restrict a page, or there is no site, it becomes an offline page, `brand/brand-design.html`, that opens by double-click and is listed in `.gitignore`, so it is never committed or published. Written documentation goes into a `## Brand Identity` section of `docs/PRD.md` (the brief, competitive analysis, and deliverables checklist) and of `docs/DESIGN.md` (the concepts, logo system specs, rationale, and usage guidelines), and anything already in either file is left alone.
+
+It ends with `brand/index.html`, the front page of the brand folder: the whole project presented as a strategy consultancy would present it to a board, as a 16:9 slide deck with a switch to a scrolling report. Each slide states its conclusion as a full-sentence title, and every figure, color, and file on it comes from the docs and `brand/`, with a source line. It runs from an executive summary through the brief, the competitors, the concepts, the chosen logo system, color, type, the mockups, and the deliverables, to next steps, and links to the presentation and the PDF. It is committed with the rest of `brand/`, so it holds nothing private, and it prints one slide per page.
 
 ## Prompt
 
@@ -155,4 +157,39 @@ Styling
 Finish
 - Update the project's PRD and patch notes (or changelog) with the new page. Mention a gated page in the README's feature list; for an offline page, record in the PRD that it exists, where, and that it is ignored.
 - Check it locally in a headless browser, never against the live site: every section renders, dark tiles show white logos, and a download works. For a gated page, also check that a signed-out visitor is refused, and run the new tests. For an offline page, also check it works opened straight from disk and that git status does not list it.
+
+Phase 8: Brand overview deck (brand/index.html)
+
+Last, build brand/index.html: the front page of brand/, presenting the whole project the way a top strategy consultancy presents to a client's board. It summarizes everything this work created and links to presentation.html for the full reveal; it does not replace it. It is committed with the rest of brand/, so it holds nothing private: no internal addresses, no link to a gated page, and no names of people the docs do not already publish.
+
+Read before writing: the ## Brand Identity sections of docs/PRD.md and docs/DESIGN.md, and a listing of brand/ made with a command. Every number, hex value, file name, and claim on the page comes from those. Leave out anything you cannot find rather than filling it in.
+
+Format: a 16:9 slide deck by default, with a "Read as report" switch that shows the same content as one scrolling page.
+- Deck view: one slide at a time, scaled to fit the window at 16:9, letterboxed, never cropped or scrolled. Left and Right arrows, Page Up and Page Down, Space, Home, and End move between slides, and on-screen Previous and Next buttons do the same. Show "n / total" and a thin progress bar. The address hash records the slide (#slide-4), so a link opens on it and the Back button works.
+- Report view: the same slides stacked as full-width sections, readable at 375px wide with no horizontal scroll. The switch is a button with aria-pressed, the choice is remembered in localStorage (inside try/catch), and screens under 700px wide open in report view.
+- Print: one slide per landscape page, with the controls hidden.
+
+Slide style, as in consulting decks:
+- Every slide has an action title: one full sentence stating the slide's conclusion, such as "The mark stays legible from a 16px tab to a billboard", never a topic label such as "Scalability".
+- A small tracker in the top corner names the section. A footer carries the brand name, "Brand identity", and the slide number. A source line under each exhibit names the doc or file it came from.
+- One idea per slide, generous white space, and the brand's own palette and typeface from brand/kit/tokens.css (inlined, with the same Google Fonts link presentation.html uses). No decoration without a job.
+- Exhibits are real: logos are the SVG files from brand/, swatches show hex values and the contrast table's ratios, and comparisons are tables rather than prose.
+
+Slides, in this order. Skip one only when its source does not exist, and say which:
+1. Title: the logo, the brand name, "Brand identity", and today's date from the system clock.
+2. Executive summary: three to five full-sentence conclusions covering the challenge, the chosen direction, why it wins, and what was delivered.
+3. The brief: core value, audience, mission, and industry in a 2x2 grid.
+4. Competitive landscape: a table of the Phase 2 competitors with their shapes, colors, and type, the clichés to avoid, and the one-sentence positioning.
+5. Concepts explored: the concepts side by side, each with its intent in one line and the chosen one marked.
+6. The chosen direction: the logo large, with the rationale as three numbered points.
+7. Logo system: the lockups, symbol, and wordmark on light and dark.
+8. Scalability: the mark at 16, 32, and 512px and in grayscale, from the render checks.
+9. Color: the palette with hex values and the AA results from the contrast table.
+10. Typography: a specimen with the typeface, its license, and its fallbacks.
+11. In use: two or three mockups from presentation.html, with a link to it.
+12. Deliverables: the checklist from docs/PRD.md as a table of item, file, and status, including anything that could not be produced and why.
+13. Next steps: three to five recommendations for rolling out the identity (for example linking the favicon or swapping the header logo), each with its effort, and each marked as my decision under the scope rule.
+14. Appendix: links to presentation.html, brand-guidelines.pdf, tokens.css, tokens.json, and site.webmanifest. Never link brand/brand-design.html, which is not committed.
+
+Check it before reporting: open brand/index.html from disk in headless Edge at 1920x1080 and 1280x720 in deck view and at 375px wide in report view, screenshot every slide, and look at each one. Nothing overflows its slide, every action title fits on two lines, every logo and swatch renders, and all text meets WCAG AA against its background, with the ratios computed by a script. Then check that the keys move the slides, a #slide-n link opens that slide, the switch changes the view and is remembered after a reload, and printing to PDF gives one slide per page. Fix and re-check anything that fails. Record the page in docs/DESIGN.md under ## Brand Identity > Brand Overview and in the deliverables checklist in docs/PRD.md, then report what you checked and anything you could not check.
 ```

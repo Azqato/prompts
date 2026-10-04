@@ -4,6 +4,21 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.110.0 - 2026-10-04
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Brand Identity gains Phase 8: `brand/index.html`, a committed client deck that presents the whole brand project in a consulting style. It is 16:9 slides with action titles, section trackers, footers, and source lines, with a switch to a scrolling report view and one slide per printed page. Fourteen slides run from the title and executive summary to next steps and an appendix, all drawn from the docs and `brand/`. It links to `presentation.html` and never to the uncommitted offline Brand Design page. It ends on a headless Edge check of both views. The description now mentions the deck (141 characters), and the intro paragraph says eight phases.
+- README's Brand Identity line mentions the deck. PRD Future update 23.
+
+### Notes
+
+From the author's Template Interface TODO list, item 2 (2026-09-27), with their answers on 2026-10-04: a separate front page rather than a replacement for `presentation.html`, both a deck and a report view, committed, and tested by running the prompt on Template Interface. Checked against the Prompt Content Rules: no push or publish instruction, and no account of the author's.
+
+---
+
 ## v1.109.0 - 2026-10-03
 
 Updated by: Claude (Opus 5.5), at the author's request.
