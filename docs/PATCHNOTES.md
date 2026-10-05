@@ -4,6 +4,21 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.111.0 - 2026-10-04
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Changed
+
+- Brand Identity, Phase 3: after the render checks it builds `brand/concepts/index.html`, a page that shows every concept side by side on light and dark, with the lockup, the symbol at 16, 32, and 96px, a one-line intent, and a link to the render check. It gives the page's path before asking for a pick, and adds any new concept or color variation asked for at the pick.
+- PRD Future update 24.
+
+### Notes
+
+Found in the M21 test run on Template Interface (v0.18.0 there): the prompt asked for a pick with no way to see the concepts together, and the author asked for one. The full run otherwise worked as written: all eight phases, the offline Brand Design page, and a 14-slide deck that passed its checks. Checked against the Prompt Content Rules: no push or publish instruction, and no account of the author's.
+
+---
+
 ## v1.110.0 - 2026-10-04
 
 Updated by: Claude (Opus 5.5), at the author's request.

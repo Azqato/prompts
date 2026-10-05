@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.110.0
+**Version:** 1.111.0
 **Status:** Active
 **Author:** Azqato
 
@@ -940,6 +940,12 @@ Based on: a post pasted by the author on 2026-10-03, author not named in the pas
 **Built in v1.110.0**, at the author's request. A new Phase 8 builds `brand/index.html`, the front page of `brand/`: the whole project as a strategy consultancy would present it to a board. It is a 16:9 slide deck (keys, buttons, a slide counter, a progress bar, and `#slide-n` links) with a "Read as report" switch that stacks the same slides as a scrolling page, and phones open in that view. Every slide has a full-sentence action title, a section tracker, a footer, and a source line, and its figures, colors, and files come from the docs and a listing of `brand/`. Fourteen slides run from the title and executive summary to next steps and an appendix. It links to `presentation.html` and does not replace it. Unlike the offline Brand Design page, it is committed, so it holds nothing private and never links that page. It ends on a headless Edge check of every slide in both views, the keys, the hash links, the remembered view, and print. The author chose a separate committed page, both views, and a test run on their Template Interface site.
 
 Based on: the author's Template Interface TODO item of 2026-09-27 ("an index.html page under /brand that showcases everything that was created from running this prompt ... presented as major consulting presentation format"), and their answers on 2026-10-04.
+
+#### 24. Brand Identity: a concept comparison page
+
+**Built in v1.111.0**, from the test run on Template Interface. Phase 3 now builds `brand/concepts/index.html`, one page with every concept on light and dark, at three sizes, with its intent and a link to its render check, and asks for the pick only after giving its path. New concepts and colour variations requested at the pick are added to the same page.
+
+Based on: the author's question during the test run on 2026-10-04 ("where is the brand summary index page where i can view all the concepts on one page?"); the page was made by hand in that run.
 
 ### Deferred
 
