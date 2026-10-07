@@ -1,6 +1,6 @@
 # PRD.md - Prompts
 
-**Version:** 1.111.0
+**Version:** 1.112.0
 **Status:** Active
 **Author:** Azqato
 
@@ -155,7 +155,7 @@ Not rendered as navigable pages on the site. These are documentation files for c
 - It filters the sidebar links and, when the home view is showing, the home cards, by setting `hidden` on each. Home stays in the sidebar whatever is typed. When nothing matches, "No prompts match "<query>"." appears in a `role="status"` line in the sidebar and on the home view, so a screen reader announces it.
 - Enter opens the first match. Escape clears the box; with the box already empty, Escape closes the phone menu as before. The native clear button of a search input also clears it.
 - The query is kept across navigation, so a reader can open several results in turn, and it is re-applied whenever the home view is rendered. It is not persisted: a reload starts empty, for the reason section 10a gives.
-- No index, no library, and no network: 23 short strings are filtered in place on every keystroke. `applySearch()` and `initSearch()` in `js/script.js`.
+- No index, no library, and no network: 24 short strings are filtered in place on every keystroke. `applySearch()` and `initSearch()` in `js/script.js`.
 
 ---
 
@@ -280,7 +280,7 @@ The `hidden: true` flag is supported for retiring a prompt from navigation witho
 
 ## 13. Repository Structure
 
-The whole project is 65 files in seven folders. There is no build output and no vendored code. There is no ignore file, because the project generates nothing it does not publish. `.editorconfig` and `.vscode/` are absent, and every file in the working tree is tracked except the author's local notes file, `tools/llm-fundamentals-video-summary.md`, which `.git/info/exclude` keeps out of git (section 20, "Reference notes").
+The whole project is 67 files in seven folders. There is no build output and no vendored code. There is no ignore file, because the project generates nothing it does not publish. `.editorconfig` and `.vscode/` are absent, and every file in the working tree is tracked except the author's local notes file, `tools/llm-fundamentals-video-summary.md`, which `.git/info/exclude` keeps out of git (section 20, "Reference notes").
 
 `.gitattributes` is the only piece of git configuration the repository carries. It pins `* text=auto eol=lf`, so a checkout produces LF whatever `core.autocrlf` is set to. The reason is the mirror: the `raw` values inside `js/prompts-data.js` hold line breaks as JSON escapes, which git never rewrites, so a CRLF checkout of `prompts/` would make a literal comparison report drift that is not there, and the natural response, running `--sync`, would rewrite a correct file. `tools/prompts-mirror.py` also normalizes both sides, as defence in depth.
 
@@ -304,8 +304,8 @@ The whole project is 65 files in seven folders. There is no build output and no 
 ├── js/
 │   ├── prompts-data.js Mirror of prompts/*.md, written by prompts-mirror.py --sync.
 │   └── script.js       All client logic: parse, render, route, copy.
-├── prompts/            Twenty-three .md files, one per prompt. The readable source.
-├── p/                  Twenty-three generated share pages, one per visible prompt, and one retired.
+├── prompts/            Twenty-four .md files, one per prompt. The readable source.
+├── p/                  Twenty-four generated share pages, one per visible prompt, and one retired.
 │                       Public addresses: retired, never deleted. Section 32a.
 ├── tools/
 │   ├── prompts-mirror.py  Maintenance only. Checks or resyncs the mirror
@@ -660,7 +660,7 @@ Each of these was considered and rejected, with the reason. They are listed so t
 | Not built | Why |
 | --- | --- |
 | Full-text search and ranking | The title-and-description filter (section 10b) is enough; prompt text would match nearly every query |
-| Tags or categories | Same reason. Twenty-three prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
+| Tags or categories | Same reason. Twenty-four prompts do not need a taxonomy, and one imposed early tends to outlive its usefulness |
 | Syntax highlighting | Would mean a library, which breaks the no-dependency rule. Prompt text is prose, not code, so highlighting would add noise rather than meaning |
 | A build step | The entire architecture exists to avoid one. See section 7 |
 | A build step that generates `prompts-data.js` | Would require a build convention the site must not depend on. `tools/prompts-mirror.py --sync` writes it instead, as maintenance tooling (section 7). Recorded as technical debt in section 30 |
@@ -675,7 +675,7 @@ Not committed and not scheduled. Recorded so the ideas are not lost.
 
 - A copy confirmation that survives a page change, so a copy made just before navigating is still visibly acknowledged.
 - A "last updated" date per prompt, derived from the patch notes rather than from file metadata, which would let a reader tell a revised prompt from an original one.
-- A skip-to-content link, so a keyboard user reaching a prompt page does not pass twenty-seven focus stops before the copy button. See the accessibility section of `docs/DESIGN.md`. This is now the largest known gap in the project.
+- A skip-to-content link, so a keyboard user reaching a prompt page does not pass twenty-eight focus stops before the copy button. See the accessibility section of `docs/DESIGN.md`. This is now the largest known gap in the project.
 - A live region for the copy button's result, which is currently announced only through an `aria-label` change.
 - Remembering the collapse state across a navigation, which is deliberately not built today because it would mean introducing browser storage. Recorded so the reason is visible if it is ever reconsidered rather than the idea simply reappearing.
 
@@ -947,6 +947,12 @@ Based on: the author's Template Interface TODO item of 2026-09-27 ("an index.htm
 
 Based on: the author's question during the test run on 2026-10-04 ("where is the brand summary index page where i can view all the concepts on one page?"); the page was made by hand in that run.
 
+#### 25. E-commerce Site prompt
+
+**Built in v1.112.0**, at the author's request, for a friend. It combines three templates from the author's Template Interface wireframe library, rated the best fits on 2026-10-07: E-commerce Product Page (9/10), Landing Page (8), and E-commerce Storefront (7). Its readers cannot see those templates, so the prompt describes every feature and behavior in its own words, with no reference to them: one product data file, a cart drawer shared by every page, a landing page that asks for one action twice, a catalogue with filters, chips, sort, quick view and "Show more", and a product page with radio-group options, visible sold-out states, and assurances under the button. Renewal terms beside a subscribe button came from the Legal Audit idea in `docs/TODO.md`.
+
+Based on: the `ecommerce-product`, `landing-page`, and `ecommerce-storefront` templates' READMEs in the author's local wireframe repository, read on 2026-10-07.
+
 ### Deferred
 
 - **A build step for the mirror.** Deferred indefinitely: it would need a toolchain the site must not depend on. `tools/prompts-mirror.py --sync` does the job as maintenance tooling.
@@ -965,7 +971,7 @@ Each section that describes the code, and whether it has been checked in full ag
 | PRD 10 | Copy Button Behavior | Not yet | Working on the live site per the author, 2026-09-27; the text itself not yet checked against `js/script.js` |
 | PRD 10a | Prompt Collapse Behavior | Not yet |  |
 | PRD 10b | Search Behavior | Verified 2026-09-29 | Written from `js/script.js` in v1.104.0 and exercised in headless Edge |
-| PRD 13 | Repository Structure | Verified 2026-10-03 | Tree and count checked against `git ls-files`: 65 files, seven folders, after `seo-audit` and its share page were added in v1.109.0 |
+| PRD 13 | Repository Structure | Verified 2026-10-03 | Tree and count checked against `git ls-files`: 67 files, seven folders, after `ecommerce-site` and its share page were added in v1.112.0 |
 | PRD 14 | Architecture and Flow | Not yet |  |
 | PRD 15 | Code Conventions | Not yet |  |
 | PRD 17 | Stack, Tooling, and Deployment | Not yet |  |
@@ -1204,7 +1210,7 @@ There is no client-server boundary because there is no server. GitHub Pages is a
 
 | Layer | Technology | Version |
 | --- | --- | --- |
-| Markup | HTML5 | Living standard. `index.html`, 56 lines, plus twenty-three generated share pages of 29 lines each and one retired share page of 22 |
+| Markup | HTML5 | Living standard. `index.html`, 56 lines, plus twenty-four generated share pages of 29 lines each and one retired share page of 22 |
 | Styling | CSS3, custom properties, Grid, Flexbox | No preprocessor, no framework, 676 lines, no `@import` |
 | Logic | JavaScript, ES5-flavoured with `const` and `let` | No transpiler. Runs as written. 470 lines |
 | Maintenance tooling | Python 3, standard library only | `tools/prompts-mirror.py`. Never runs in a browser, never required to build or serve |

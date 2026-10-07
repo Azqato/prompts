@@ -1,6 +1,6 @@
 # DESIGN.md - Prompts
 
-**Version:** 1.15.1
+**Version:** 1.15.2
 **Status:** Active
 **Author:** Azqato
 
@@ -549,7 +549,7 @@ Expected behaviour, and what is actually there.
 
 - All interactive elements are native `<a>` and `<button>` elements, so they are in the tab order by default. There is no `tabindex` anywhere, positive or negative, and no custom key handler. Tab, Shift-Tab, Enter, and Space all behave natively.
 - Tab order follows the DOM: logo, then each nav link in order, then the Support button, then into the content area, reaching the collapse toggle and then the copy button after the description. The toggle is before Copy in the DOM as well as visually, so tab order matches reading order.
-- **Known gap: there is no skip-to-content link.** On a prompt page a keyboard user must tab past the logo, every nav link, and the Support button before reaching the copy button, which is the primary action. With twenty-three prompts and the search box that is twenty-seven stops on a wide screen; below 1024px the list is behind the Prompts menu button, so with the menu closed it is three (logo, Prompts, Support). This is the most significant accessibility shortfall on the site and it grows with every prompt added. Adding one would mean a visually-hidden anchor as the first focusable element in `<body>`, targeting `#content`, which needs a `tabindex="-1"` to be focusable as a heading target.
+- **Known gap: there is no skip-to-content link.** On a prompt page a keyboard user must tab past the logo, every nav link, and the Support button before reaching the copy button, which is the primary action. With twenty-four prompts and the search box that is twenty-eight stops on a wide screen; below 1024px the list is behind the Prompts menu button, so with the menu closed it is three (logo, Prompts, Support). This is the most significant accessibility shortfall on the site and it grows with every prompt added. Adding one would mean a visually-hidden anchor as the first focusable element in `<body>`, targeting `#content`, which needs a `tabindex="-1"` to be focusable as a heading target.
 - **Known gap: the copy button's result is announced only via the `aria-label` change.** That is a reasonable signal but not a guaranteed one across screen readers; a live region would be more reliable. This applies to the failure state as well as to success, and it matters more there, since a reader who does not notice the failure will paste the wrong thing.
 
 ### Deliberately not addressed
@@ -829,6 +829,7 @@ Context that is obvious to someone who has read the whole stylesheet and invisib
 
 | Version | Date | Summary |
 | --- | --- | --- |
+| 1.15.2 | 2026-10-07 | Focus-stop count in section 10 for twenty-four prompts: twenty-eight on a wide screen. |
 | 1.15.1 | 2026-10-03 | Focus-stop count in section 10 for twenty-three prompts: twenty-seven on a wide screen. |
 | 1.15.0 | 2026-10-03 | Condensed (site v1.107.0): history phrasing moved to the patch notes, two "Corrected in v1.28.0" paragraphs and a duplicated bullet removed. Fixed: stylesheet 676 lines, `index.html` 56 lines, `.sidebar-nav` max-height `100dvh - 140px`, the Copy `aria-label` in sections 10 and 12, the rendered prompt view now shows the toggle, and section 12c's verification follows PRD section 20. Nothing else removed. |
 | 1.14.1 | 2026-10-03 | Focus-stop count in section 10 for twenty-two prompts: twenty-six on a wide screen. |

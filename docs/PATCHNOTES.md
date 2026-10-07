@@ -4,6 +4,21 @@ All notable changes to this project are documented here. Entries are listed in r
 
 ---
 
+## v1.112.0 - 2026-10-07
+
+Updated by: Claude (Opus 5.5), at the author's request.
+
+### Added
+
+- E-commerce Site prompt (`prompts/ecommerce-site.md`, share page `p/ecommerce-site.html`). It builds a landing page, a filterable catalogue, product pages, and a cart drawer from one product data file. Every feature is described in the prompt itself: sold-out options kept visible and labelled, delivery and returns under Add to cart, a free-delivery threshold in the cart, removable filter chips, and where focus lands after each action. It asks about the shop first, never invents proof, keeps payment keys in environment variables, and shows a plain notice instead of checkout when no provider is chosen.
+- README line, mirror, sitemap. PRD Future update 25; DESIGN 1.15.2 (focus-stop count).
+
+### Notes
+
+Combined from three of the author's wireframe templates (E-commerce Product Page, Landing Page, E-commerce Storefront), chosen from a rating of the whole library. Readers cannot see the templates, so nothing in the prompt refers to them. Checked against the Prompt Content Rules: no push or publish instruction, and no account of the author's.
+
+---
+
 ## v1.111.0 - 2026-10-04
 
 Updated by: Claude (Opus 5.5), at the author's request.
