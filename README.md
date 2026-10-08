@@ -1,5 +1,7 @@
 # Azqato's Prompts
 
+> **Azqato's Prompts has moved to [https://azqato.com/codes/prompts/](https://azqato.com/codes/prompts/).** This repository is archived and kept as a record. The old site's pages now redirect to their new addresses on azqato.com.
+
 A personal library of reusable Claude Code prompts. Each one is a complete, tested instruction: copy it in a single click, paste it into Claude Code, and Claude reads the full prompt from this site, summarizes it, and asks before running it.
 
 Live site: [azqato.github.io/prompts](https://azqato.github.io/prompts/)
